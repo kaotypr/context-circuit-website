@@ -1,0 +1,29 @@
+---
+title: CLI commands
+description: Find the deterministic Context Circuit command groups and the work each one owns.
+section: Reference
+order: 3
+audience: [contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+The agent normally invokes `context-circuit-cli` for you. The command surface is
+grouped around deterministic bookkeeping:
+
+- `workspace`, `repository`, and `member` manage workspace identity and local bindings.
+- `record` allocates and updates intents and plans.
+- `context` retrieves and validates durable knowledge.
+- `worktree` prepares and reports isolated working copies.
+- `agent` maintains host role definitions and dispatch specifications.
+- `check` reports workspace consistency without acting as an implementation gate.
+
+Run `context-circuit-cli help` or follow the version-pinned source link below
+for the complete command surface.

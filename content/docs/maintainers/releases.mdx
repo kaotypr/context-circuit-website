@@ -1,0 +1,32 @@
+---
+title: Release boundaries
+description: Prepare workspace-template and CLI releases without collapsing their tags, repositories, or licenses.
+section: Maintainers
+order: 2
+audience: [maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: CHANGELOG.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.1.0.md
+---
+
+The workspace template is published from `context-circuit` under 0BSD with
+`v*` tags. The native CLI is built from `context-circuit-source` under
+Apache-2.0 with `cli-v*` tags.
+
+## Documentation rule
+
+Major releases receive selectable versioned collections. Minor and patch
+releases stay in the matching track changelog and receive a release page only
+when the change needs more explanation. Every source link uses the exact tag
+and repository for its track.

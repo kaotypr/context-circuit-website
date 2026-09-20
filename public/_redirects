@@ -1,0 +1,3 @@
+# Redirects are explicit because a Next.js static export has no runtime redirects.
+/docs/getting-started /docs/get-started/ 301
+/docs/start /docs/get-started/ 301

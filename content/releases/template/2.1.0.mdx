@@ -1,0 +1,26 @@
+---
+title: Workspace template 2.1.0
+description: Release notes for Context Circuit workspace template 2.1.0.
+section: Template releases
+order: 1
+audience: [adopter, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: CHANGELOG.md
+---
+
+Template 2.1.0 adds the optional `cli_registry` workspace setting. Its `source`,
+`repository`, and `api` fields let the bundled installation skill obtain the
+CLI from an explicitly selected GitHub or GitLab registry. A workspace without
+the setting behaves exactly as it did in 2.0.0.
+
+## Documentation
+
+Read the [template guide](/docs/template/v2/getting-started) or the complete
+[template changelog](/changelog/template).
