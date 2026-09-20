@@ -1,30 +1,50 @@
 ---
-title: Documentation
-description: Find the right path through Context Circuit concepts, workflows, references, and maintainer guidance.
+title: "Documentation"
+description: "A shared understanding of the project, from the first request to the next change."
 section: Documentation
-order: 1
+order: 0
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: current
-  cli: current
-sidebar_label: Overview
+  template: 2.1.0
+  cli: 2.1.0
 redirects: []
-sources: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
 ---
 
-Use the guided path when Context Circuit is new to you, or jump directly to an
-exact command, file, or release boundary.
+These guides describe Context Circuit workspace template 2.1.0 and CLI 2.1.0. Each page names the tagged source it is verified against. The two products can share a version number without sharing a release identity.
 
-## Reader paths
+Start with [what the product is](/docs/understand) if you have not used a workspace yet. Create one from [template 2.1.0](/docs/get-started/install) when you are ready to work.
 
-- [Get started](/docs/get-started) with a workspace and the CLI.
-- Learn the [core concepts](/docs/concepts) behind human-controlled changes.
-- Follow an [end-to-end workflow](/docs/workflows).
-- Look up [files and commands](/docs/reference).
-- Maintain and release the product with the [maintainer guide](/docs/maintainers).
+## How the guides are organized
 
-## Versioned collections
+**Understand** explains the product in its own words: what it is, why a locally correct change can still be wrong, and how knowledge, intents, plans, and people fit together.
 
-- [Workspace template v2](/docs/template/v2/getting-started)
-- [Context Circuit CLI v2](/docs/cli/v2/getting-started)
+**Get started** is the installation path: create the workspace folder, install the pinned CLI, initialize identity, connect repositories, and take one change through the lifecycle.
+
+**Prompt cookbook** shows what to say for workspace setup, knowledge, designs, changes, execution, review, delivery, completion, maintenance, and recovery. You do not need commands or record IDs.
+
+**Concepts** and **workflows** cover the same ground from two angles. Concepts name the records and decisions. Workflows show the conversation and commands, with the human gate at each step.
+
+**Template** and **CLI** describe the two products separately. **Reference** is for exact fields and command signatures. **Maintainers** is for people who change product source and cut releases.
+
+<TopicList>
+<Topic href="/docs/understand" title="Understand Context Circuit">What it is, why it exists, and how the parts fit together.</Topic>
+<Topic href="/docs/prompts" title="Prompt cookbook">Ordinary-language prompts for every supported v2 case.</Topic>
+<Topic href="/docs/get-started" title="Get started">Create a workspace, connect repositories, and run the first workflow.</Topic>
+<Topic href="/docs/concepts" title="Concepts">Durable records, working copies, and the decisions behind each change.</Topic>
+<Topic href="/docs/workflows" title="Workflows">The conversation and commands, with explicit human decisions.</Topic>
+<Topic href="/docs/template" title="Workspace template">Shared instructions, skills, and project files.</Topic>
+<Topic href="/docs/cli" title="Context Circuit CLI">Bookkeeping and Git mechanics. The agent supplies judgment.</Topic>
+<Topic href="/docs/reference" title="Reference">Fields, command signatures, branches, and release identities.</Topic>
+<Topic href="/docs/maintainers" title="Maintainers">Change source, validate outputs, and release each product.</Topic>
+<Topic href="/docs/releases" title="Releases">Independent template and CLI history.</Topic>
+</TopicList>

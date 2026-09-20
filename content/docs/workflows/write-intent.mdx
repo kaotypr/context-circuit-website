@@ -1,0 +1,39 @@
+---
+title: "Write and approve an intent"
+description: "Make the understood outcome visible before code investigation."
+section: Workflows
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## State the request
+
+Explain the user-visible outcome and constraints. The agent retrieves relevant product knowledge and writes the goal, non-goals, success criteria, repository scope, and numbered open questions.
+
+```sh
+context-circuit-cli record create --kind intent --slug invoice-download --title "Download an invoice"
+```
+
+The CLI reserves an ID; the agent writes meaningful content. Use the returned ID, not an example copied from a guide.
+
+## Answer and approve
+
+Read the written intent, answer by question number, and approve when it matches your outcome. The agent records your actual words with `record approve --id ID --text TEXT`. The command records consent already given; running it is not a substitute for consent.
+
+## Continue into planning
+
+Approval returns `planning_required`. The agent now investigates code and creates linked plans. If investigation reveals a materially different outcome, it returns to the intent instead of hiding the decision inside a plan.

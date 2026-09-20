@@ -1,0 +1,39 @@
+---
+title: "Version pinning"
+description: "Run the CLI a workspace expects, not whichever launcher changed most recently."
+section: CLI
+order: 3
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/skills/cc-cli/SKILL.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.0.0.md
+---
+
+## Two independent pins
+
+`.context-circuit/VERSION` records the template the workspace received. `.context-circuit/CLI_VERSION` records its expected executable version. Updating one product does not imply updating the other.
+
+## Resolve the executable
+
+1. Read the workspace's CLI pin.
+2. Locate the installer's version store from its report or shared launcher.
+3. Use the executable under the matching version, OS, and architecture.
+4. If missing, install that exact version and use the reported versioned command.
+
+The shared launcher on PATH points at the last installed version. A mismatched CLI warns on stderr; resolve the correct executable rather than rewriting the workspace to silence it.
+
+## Upgrade deliberately
+
+The installer verifies checksums and embedded version before switching the launcher. Old versions remain available. Installation never initializes or migrates workspace records. An older CLI may reject fields introduced after it, which is why the workspace pin matters.
+
+See [versioning and release tags](/docs/reference/versioning).

@@ -1,0 +1,37 @@
+---
+title: "Worktrees"
+description: "An isolated Git checkout for each repository a plan touches."
+section: Concepts
+order: 5
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/worktrees.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Where implementation happens
+
+An execution request covers worktree preparation. Default branches are `cc/<plan-id>/<repository-id>`, under `.worktrees/<plan-id>/<repository-id>`. A person may instead request direct work in a bound checkout, preserving its branch and existing work.
+
+The starting point is this machine's base branch unless an explicit start or dependency requires another reference. No fetch happens implicitly. Reusing a branch does not reset it.
+
+## Environment reuse is not setup
+
+Preparation can clone ignored dependencies and environment files using native copy-on-write, with independent copies as fallback. It reports reused, skipped, and mismatched entries without exposing contents. The agent still follows repository setup instructions and runs checks.
+
+## Preserve working copies
+
+Git's inventory is authoritative; the local plan association is a convenience. Inspect actual branches and diffs on resume. Completion removes neither worktrees nor branches. Removal preserves dirty, untracked, and ignored files unless disposal was explicitly authorized.
+
+See [worktree commands](/docs/cli/repositories-worktrees).

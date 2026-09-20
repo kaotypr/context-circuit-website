@@ -1,29 +1,36 @@
 ---
-title: Context Circuit CLI changelog
-description: Follow changes to the independently released Context Circuit CLI.
+title: "Context Circuit CLI changelog"
+description: "Release history for the independently versioned cli product."
 section: Changelog
 order: 2
 audience: [adopter, contributor, maintainer]
 tracks: [cli]
 versions:
-  cli: current
+  cli: 2.1.0
 redirects: []
 sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.0.0.md
   - track: cli
     repository: context-circuit-source
     ref: cli-v2.1.0
     path: release/requests/cli/2.1.0.md
 ---
 
-## 2.1.0
+## 2.1.0 — registry-aware installers
 
-CLI 2.1.0 adds installer support for GitHub or GitLab registries while
-preserving checksum verification, side-by-side versions, and offline archive
-installation. The current CLI release is documented on the
-[2.1.0 release page](/releases/cli/2.1.0).
+Installers accept GitHub or GitLab registry settings through flags or environment variables. GitLab requires a token. Checksum and embedded-version verification remain in place.
 
-## 2.0.0
+[Read CLI 2.1.0](/releases/cli/2.1.0)
 
-The first native CLI release replaced the v1 shell runtime with a Go binary for
-deterministic workspace records, repository bindings, worktrees, ordering, and
-diagnostics.
+## 2.0.0 — first native executable
+
+The first native CLI provides workspace records, bindings, worktrees, ordering, diagnostics, and dispatch specifications. It begins at 2.0.0 alongside the template; no native CLI 1.x exists.
+
+[Read CLI 2.0.0](/releases/cli/2.0.0)
+
+## Coverage
+
+This timeline includes verified stable releases 2.0.0 and 2.1.0. No patch entries are inferred. The [major-version policy](/docs/releases/major-versions) distinguishes guides from release notes and identifies unavailable historical documentation.

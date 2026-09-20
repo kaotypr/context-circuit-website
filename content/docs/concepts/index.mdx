@@ -1,25 +1,50 @@
 ---
-title: Concepts
-description: Understand the workspace, the CLI boundary, release tracks, and human control points.
+title: "Concepts"
+description: "Understand the durable records, working copies, and decisions behind each change."
 section: Concepts
-order: 1
+order: 0
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: current
-  cli: current
-sidebar_label: Overview
+  template: 2.1.0
+  cli: 2.1.0
 redirects: []
-sources: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
 ---
 
-Context Circuit keeps project understanding close to the work while making the
-consequential decisions visible to a person.
+A Context Circuit workspace keeps two kinds of writing apart. **Product knowledge** describes what is true about the project: architecture, domain rules, conventions, decisions, vocabulary, and repository relationships. **Records** describe a particular change: the intended outcome, the plans that implement it, and the decisions a person made along the way.
 
-## Core ideas
+Knowledge survives a task, a session, and a machine. It is English, with domain names and code identifiers kept in their own spelling. A note never names an intent, a plan, or a raw source file as its durable authority. Completion is what brings a note back in line with the code that actually changed.
 
-- A [workspace](/docs/concepts/product-boundaries) coordinates repositories but
-  does not replace them.
-- An intent settles an outcome before detailed implementation planning.
-- Plans record intended work; code and commits record what actually happened.
-- Durable knowledge is reconciled only when a person marks work complete.
+## Records and working copies
+
+An **intent** writes the outcome a person can approve before detailed code investigation: goal, non-goals, constraints, success criteria, rough repository scope, and numbered open questions. The original request is not approval of that derived outcome. Approval records the person's words and authorizes planning only.
+
+A **plan** is code-grounded implementation work linked to that approved outcome. There is no plan approval gate. Implementation waits until a person asks for execution after the plans exist.
+
+A **worktree** is an isolated Git checkout for a repository a plan touches. It is not a record of approval. Completion removes neither worktrees nor branches. Optional **workers** receive bounded assignments; they do not replace the person's decisions.
+
+## Decisions that stay with you
+
+Approving an intent, asking for execution, authorizing delivery, requesting completion, and requesting cleanup are separate choices. A record preserves a decision. It never makes one. A person can bypass intent and planning for an already-specified change; commits in a bound checkout, delivery, and deletion still need authorization.
+
+<TopicList>
+<Topic href="/docs/concepts/product-knowledge" title="Product knowledge">Accepted project understanding that survives a task and a machine.</Topic>
+<Topic href="/docs/concepts/relationships" title="Context and repository relationships">How repositories depend on each other, as project knowledge.</Topic>
+<Topic href="/docs/concepts/intents" title="Intents">A written outcome a person can approve before code investigation.</Topic>
+<Topic href="/docs/concepts/plans" title="Plans">Code-grounded implementation work linked to an approved outcome.</Topic>
+<Topic href="/docs/concepts/worktrees" title="Worktrees">Isolated checkouts where a plan is implemented.</Topic>
+<Topic href="/docs/concepts/workers" title="Worker agents">Bounded assignments beside the main implementation path.</Topic>
+<Topic href="/docs/concepts/delivery" title="Delivery">Push, pull request, merge, and publication as explicit requests.</Topic>
+<Topic href="/docs/concepts/completion" title="Completion and reconciliation">The note, then the knowledge the change actually altered.</Topic>
+<Topic href="/docs/concepts/human-control" title="Human control boundaries">What each of your decisions authorizes next.</Topic>
+<Topic href="/docs/concepts/product-boundaries" title="Product boundaries">What the template, CLI, and website each own.</Topic>
+</TopicList>

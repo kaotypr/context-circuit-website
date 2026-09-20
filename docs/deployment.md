@@ -15,6 +15,7 @@ pnpm lint
 pnpm typecheck
 pnpm content:check
 pnpm test -- --runInBand
+pnpm theme:check
 NEXT_PUBLIC_DEPLOYMENT_ENV=preview pnpm build
 pnpm static:check
 ```
@@ -71,3 +72,8 @@ deployment in Cloudflare, leaving its artifact available until the replacement
 has passed review. A failed build or deployment must not replace that known-good
 deployment. Record the failed deployment, rollback target, and follow-up issue
 outside this repository according to the project's operational process.
+
+
+## Browser acceptance
+
+Run `pnpm dev --port 3100` and `pnpm browser:check` for route, computed-theme, search, mobile, focus, and axe checks. Install Chromium with `pnpm exec playwright install chromium`. Set `DOCS_URL` to test a served static artifact and `DOCS_REPORT_DIR` to choose its evidence directory. Every incomplete accessibility result needs investigation; the script reports these separately from violations. See `redesign-audit.md` for the recorded investigation and source verification.

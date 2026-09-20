@@ -1,0 +1,37 @@
+---
+title: "Delivery"
+description: "Move implemented work outward through the actions a person authorizes."
+section: Concepts
+order: 7
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Delivery is explicit
+
+Pushes, pull or merge requests, merges into a base branch, deployment, and external publication require authorization. Reuse authorization already given; successful checks are not consent.
+
+The agent uses ordinary Git and provider tools. The CLI supplies repository, branch, and base information and never silently delivers.
+
+## Choose the correct target
+
+The default target is this machine's `base_branch`, falling back to the shared `default_branch` when none is recorded. A stacked run delivers chain ends per repository, accounting for dependency work integrated into those branches.
+
+## Keep completion separate
+
+A pull request or merge does not mark a plan complete. Completion includes a separately requested note and knowledge reconciliation. Drift or conflicts are reported; they do not start an automatic rebase and verification loop.
+
+Follow [deliver changes](/docs/workflows/deliver).

@@ -1,0 +1,28 @@
+---
+title: "Context Circuit CLI 2.0.0"
+description: "The first stable v2 cli release."
+section: CLI releases
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.0.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.0.0
+    path: release/requests/cli/2.0.0.md
+---
+
+## First native CLI
+
+The Go executable supplies stable record IDs, structured file edits, repository bindings, worktrees, dependency ordering, diagnostics, and dispatch specifications. It carries no model credentials and makes no product judgments.
+
+The CLI starts at 2.0.0 because it was introduced alongside workspace v2. No native 1.x or 0.x release preceded it.
+
+## Installation and compatibility
+
+Native archives cover macOS, Linux, and Windows on amd64 and arm64. Versions coexist in a local store. Records from 2.0.0-rc.4 and later remain readable; initialization does not migrate v1.
+
+See the [CLI changelog](/changelog/cli) for the separately released registry support in 2.1.0.

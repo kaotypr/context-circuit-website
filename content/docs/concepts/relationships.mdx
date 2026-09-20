@@ -1,0 +1,35 @@
+---
+title: "Context and repository relationships"
+description: "Find the product rules and dependencies that make a local change part of a larger system."
+section: Concepts
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Retrieve before investigating
+
+Read the catalog and choose notes relevant to the request. Do not scan every repository or note just because it exists. A relationship such as “web consumes api” helps the agent see when work crosses repositories; it does not prescribe plan order.
+
+## Shared knowledge repositories
+
+A workspace can mount an organization's knowledge under `knowledge_repositories`. Retrieval searches its index alongside the local catalog and labels which side each match came from. Borrowed entries are never copied into local context or offered as locally reconcilable obligations.
+
+Sync fetches and fast-forwards only a clean checkout on the shared branch. It does not merge, reset, or discard local changes. Obtaining the checkout disables its push URL; corrections go upstream from a separate checkout.
+
+## From relationships to plans
+
+The agent decides scope after understanding the request. Plan dependencies describe execution order; repository relationships describe how the product fits together. See the [relationship schema](/docs/reference/relationships).

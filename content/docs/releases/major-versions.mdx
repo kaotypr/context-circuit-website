@@ -1,0 +1,38 @@
+---
+title: "Major-version documentation"
+description: "Read the major guide for the model and release notes for the exact changes."
+section: Releases
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: CHANGELOG.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.0.0.md
+---
+
+## Available guides
+
+<CardGrid>
+<DocCard href="/docs/template/v2/getting-started" title="Workspace template v2" description="The human-controlled workspace model, verified at template 2.1.0." />
+<DocCard href="/docs/cli/v2/getting-started" title="Context Circuit CLI v2" description="The native command-line product, verified at CLI 2.1.0." />
+</CardGrid>
+
+## Minor and patch changes
+
+The [template changelog](/changelog/template) and [CLI changelog](/changelog/cli) are independent timelines. Exact release pages preserve the changes for 2.0.0 and 2.1.0. A future patch belongs to its own product's timeline; the website does not invent entries for unreleased versions.
+
+## Historical availability
+
+No v1 documentation collection is published here. The available v2 release notes describe the retirement of v1 machinery, but they are not a reconstructed v1 manual. The native CLI is new in v2 and has no 1.x release line.
+
+The major v2 guides identify 2.1.0 as their evidence baseline. Selecting 2.0.0 opens its release notes, not a falsely relabeled 2.1.0 guide.

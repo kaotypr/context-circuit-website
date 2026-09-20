@@ -1,0 +1,36 @@
+---
+title: "Releases"
+description: "Two products. Independent versions. Traceable changes."
+section: Releases
+order: 0
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: CHANGELOG.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.0.0.md
+---
+
+The workspace template and the CLI are released independently. Choose the product, then the version. The selectors never couple the two version numbers. These guides describe the v2 model at the evidence baseline named on each page. Minor and patch releases are recorded in each changelog.
+
+<ReleasePicker />
+
+## Major-version guides
+
+<TopicList>
+<Topic href="/docs/template/v2/getting-started" title="Template v2">Workspace instructions, records, and the human-controlled lifecycle.</Topic>
+<Topic href="/docs/cli/v2/getting-started" title="CLI v2">Installation, version pins, commands, and Git mechanics.</Topic>
+<Topic href="/changelog/template" title="Template changelog">Changes to the workspace you copy into a project.</Topic>
+<Topic href="/changelog/cli" title="CLI changelog">Changes to the executable installed on each machine.</Topic>
+</TopicList>
+
+[Historical coverage and version policy](/docs/releases/major-versions) explains what is available and what is not.

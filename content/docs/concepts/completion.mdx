@@ -1,0 +1,35 @@
+---
+title: "Completion and reconciliation"
+description: "Record the result and make the next change start from accurate knowledge."
+section: Concepts
+order: 8
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Two parts of one request
+
+When a person marks a plan complete, the CLI appends their note and stamps `completed_at`. It returns catalog candidates scoped to the plan's repositories as `reconcile_required` when applicable.
+
+The agent compares those notes with the actual change. It updates affected notes and catalog entries together, including their reviewed dates. If no durable concept changed, it reports that explicitly. Recording a timestamp alone does not finish the request.
+
+## Complete against real work
+
+The plan is intended work; the branch and diff show what happened. Complete only when the work has actually landed. Dependency ordering uses completion to release dependents. Reconcile several completed plans across their combined effect.
+
+Borrowed knowledge remains read-only and is not a local obligation. Worktrees and branches remain after completion; removing them needs a separate request.
+
+Follow [complete plans and update knowledge](/docs/workflows/complete).

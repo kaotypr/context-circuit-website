@@ -1,0 +1,38 @@
+---
+title: "Skills"
+description: "Load the procedure needed for the current stage without expanding authorization."
+section: Template
+order: 3
+audience: [adopter, contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .agents/skills/cc-dispatch/SKILL.md
+---
+
+## Skill families
+
+| Concern | Skills |
+| --- | --- |
+| Setup | `cc-cli`, `cc-workspace` |
+| Knowledge and design | `cc-knowledge`, `cc-system-design` |
+| Outcome and plan | `cc-intent`, `cc-plan` |
+| Execution | `cc-worktree`, `cc-dispatch`, `cc-stacked` |
+| Requested review | `cc-review` |
+| Delivery and closure | `cc-deliver`, `cc-complete` |
+| Explicit direct work | `cc-direct` |
+
+## Skills and native roles differ
+
+A skill is a procedure read by an agent. A native role definition is a host-local configuration for a subagent. `agent setup` creates ignored role files for the supported hosts; it does not execute a skill or launch a worker.
+
+Skills carry stage-specific details. Root instructions carry standing boundaries. Read only the procedures relevant to the task, then use host tools for actions already authorized by the person.

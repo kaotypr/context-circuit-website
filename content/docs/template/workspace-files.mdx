@@ -1,0 +1,30 @@
+---
+title: "Workspace files"
+description: "Readable records separate project facts from this machine\u2019s working state."
+section: Template
+order: 4
+audience: [adopter, contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/workspace.md
+---
+
+## Start with identity
+
+`workspace.yaml` describes the project, implementation repositories, relationships, workspace repository, and any borrowed knowledge. `members.yaml` describes the shared roster and record language or tone.
+
+## Keep the work traceable
+
+Intent and plan files preserve the approved outcome and implementation approach. The permanent ID ledger prevents reuse even after archival. Knowledge notes capture the durable result rather than task history.
+
+## Resolve local state
+
+`repositories.local.yaml` binds logical IDs to checkout paths and base branches. `member.local.yaml` selects the active member. Native role files, worktree associations, locks, and ignored runtime files belong to the machine.
+
+Use the [configuration reference](/docs/reference/workspace-files) for file-level ownership and [record reference](/docs/reference/records) for frontmatter fields.

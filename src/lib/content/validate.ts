@@ -1,4 +1,5 @@
 import path from "node:path";
+import inventory from "./source-inventory.json";
 import type { Link } from "mdast";
 import { visit } from "unist-util-visit";
 import { loadDocuments } from "./load";
@@ -67,6 +68,10 @@ function addDocumentRules(document: ContentDocument, errors: string[]): void {
         `${file}: sources.${index}.repository: expected ${release.repository} for ${source.track} ${release.version}`,
       );
     }
+    const evidence = (inventory as Record<string, { commit: string; paths: string[] }>)[source.repository + "@" + source.ref];
+    if (!evidence?.paths.includes(source.path)) {
+      errors.push(file + ": sources." + index + ".path: absent from pinned Git tree: " + source.path);
+    }
     if (source.ref !== release.ref) {
       errors.push(`${file}: sources.${index}.ref: expected immutable ref ${release.ref}`);
     }
@@ -89,7 +94,17 @@ function resolveLinkRoute(documentRoute: string, href: string): { route: string;
 
 function validateLinks(graph: ContentGraph, errors: string[]): void {
   for (const document of graph.documents) {
-    visit(document.tree, "link", (node: Link) => {
+    const links: Link[] = [];
+    visit(document.tree, "link", (node: Link) => { links.push(node); });
+    visit(document.tree, (node) => {
+      const element = node as unknown as { type: string; attributes?: { type: string; name: string; value: unknown }[] };
+      if (element.type === "mdxJsxFlowElement" || element.type === "mdxJsxTextElement") {
+        for (const attribute of element.attributes ?? []) {
+          if (attribute.name === "href" && typeof attribute.value === "string") links.push({ type: "link", url: attribute.value, children: [] });
+        }
+      }
+    });
+    links.forEach((node) => {
       if (/^(?:[a-z]+:|\/\/)/i.test(node.url)) return;
       let resolved: { route: string; fragment?: string };
       try {

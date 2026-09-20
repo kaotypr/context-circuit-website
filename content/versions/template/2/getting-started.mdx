@@ -1,13 +1,13 @@
 ---
-title: Workspace template v2
-description: Create and operate a Context Circuit v2 workspace.
+title: "Workspace template v2"
+description: "The v2 product model, documented against template release 2.1.0."
 section: Template v2
 order: 1
-audience: [adopter, maintainer]
+audience: [adopter, contributor, maintainer]
 tracks: [template]
 versions:
   template: 2.1.0
-sidebar_label: Getting started
+sidebar_label: "v2 guide"
 redirects: []
 sources:
   - track: template
@@ -16,20 +16,16 @@ sources:
     path: AGENTS.md
 ---
 
-The workspace template stores project identity, intent, plans, and durable
-knowledge in reviewable files.
+## What v2 provides
 
-Create a workspace from the tagged release, then ask the agent to initialize it
-for your project and connect the repositories it coordinates. The workspace's
-root instructions keep authorization boundaries active in every session, while
-stage-specific skills load only when their procedure is needed.
+The workspace preserves product knowledge, intended outcomes, plans, and human decisions in ordinary Markdown and YAML. Root instructions keep authorization boundaries active; skills carry stage-specific procedures. The native CLI provides deterministic mechanics.
 
-## Release line
+## Start using it
 
-This guide is pinned to template release 2.1.0. See its
-[release page](/releases/template/2.1.0).
+Follow [install the template](/docs/get-started/install), [initialize a workspace](/docs/get-started/initialize), and [connect repositories](/docs/get-started/connect-repositories). Then take one change through the [first workflow](/docs/get-started/first-workflow).
 
-## Next steps
+## Version baseline
 
-Read [workspace files](/docs/reference/workspace-files) or follow the
-[change lifecycle](/docs/workflows/change-lifecycle).
+This major guide is verified against template 2.1.0, which adds the optional CLI registry setting. For the exact change, read [2.1.0 release notes](/releases/template/2.1.0). The [template changelog](/changelog/template) preserves 2.0.0 and 2.1.0 separately.
+
+No v1 guide is available here. Applying a template upgrade uses the tag delta and preserves the project's own files.

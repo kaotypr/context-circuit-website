@@ -1,0 +1,37 @@
+---
+title: "Plans"
+description: "Code-grounded implementation work linked to an approved outcome."
+section: Concepts
+order: 4
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Plan after approval
+
+A plan records the approach, tasks and order, repositories, dependencies, risks, and expected checks. The agent investigates real code after approval. One plan can name several repositories; one plan per repository is not required.
+
+## Execution is a separate request
+
+Plans are presented once they exist. Reading them is optional and there is no plan approval gate, but implementation waits until a person asks for execution. An earlier “implement this” request does not cross that boundary automatically.
+
+## Dependencies and resumption
+
+`record order` derives waves or a linear chain from dependencies. It reports starting references and integration merges; it does not run the work. Completed plans drop out of the order.
+
+The plan stays as written during execution. Results go to the person, then into the requested completion note. Resume by inspecting real branches and diffs; a plan states intention and cannot prove implementation.
+
+See [record reference](/docs/reference/records).

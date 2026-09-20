@@ -1,24 +1,36 @@
 ---
-title: Reference
-description: Look up workspace files, CLI commands, release identities, and exact behavior.
+title: "Reference"
+description: "Look up exact fields, command signatures, branch meanings, and release identities."
 section: Reference
-order: 1
-audience: [contributor, maintainer]
+order: 0
+audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: current
-  cli: current
-sidebar_label: Overview
+  template: 2.1.0
+  cli: 2.1.0
 redirects: []
-sources: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
 ---
 
-Reference pages preserve exact names and boundaries. Choose the product track
-before copying a command or comparing a release number.
+Use these pages when you need the exact shape of a file or command, not an explanation of why it exists. Schema, record fields, relationship entries, version tags, configuration files, and CLI signatures are verified against template 2.1.0 and CLI 2.1.0.
 
-## Reference pages
+Workspace identity uses schema version 2. Intent and plan records use canonical ISO 8601 UTC timestamps for instants and calendar dates everywhere else. IDs are workspace-global and are never reused.
 
-- [Workspace files](/docs/reference/workspace-files)
-- [CLI commands](/docs/reference/cli-commands)
-- [Template changelog](/changelog/template)
-- [CLI changelog](/changelog/cli)
+If you are looking for the product model rather than a field list, start at [Understand](/docs/understand).
+
+<TopicList>
+<Topic href="/docs/reference/workspace-schema" title="Workspace schema">Shared project identity and repository definitions.</Topic>
+<Topic href="/docs/reference/records" title="Intent and plan records">Fields, timestamps, and what approval actually records.</Topic>
+<Topic href="/docs/reference/relationships" title="Repository relationships">How `from` / `to` entries are written.</Topic>
+<Topic href="/docs/reference/versioning" title="Versioning and release tags">Independent template and CLI identities.</Topic>
+<Topic href="/docs/reference/workspace-files" title="Configuration files">What belongs in shared YAML versus local bindings.</Topic>
+<Topic href="/docs/reference/cli-commands" title="Command reference">Groups, flags, and examples for CLI 2.1.0.</Topic>
+</TopicList>

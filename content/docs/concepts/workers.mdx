@@ -1,0 +1,40 @@
+---
+title: "Worker agents"
+description: "Optional bounded delegation, with the coordinator integrating the result."
+section: Concepts
+order: 6
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Four roles
+
+| Role | Responsibility |
+| --- | --- |
+| Explorer | Answers a narrow codebase question with evidence. |
+| Planner | Investigates an approved intent and proposes a plan shape. |
+| Worker | Implements an assigned plan or slice and runs normal checks. |
+| Reviewer | Independently reviews a diff read-only, only on a person's request. |
+
+## The host runs the agent
+
+The CLI returns a dispatch specification containing the working directory, ownership, record, assignment, and required return. It does not launch a model or hold model credentials. The coordinator invokes host tools, waits, and integrates results.
+
+Shared model and effort preferences live in role configuration; local overrides stay on the machine. Defaults inherit host settings. `agent setup` writes ignored native definitions; the host may need to reload them.
+
+## Delegate when it helps
+
+Small tasks can stay with the coordinator. Workers sharing a worktree must preserve one another's edits. Dispatch is not completion evidence, and an implementation check is not independent review.

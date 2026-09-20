@@ -27,7 +27,7 @@ export type SearchRecord = {
 };
 
 const sectionOrder = [
-  "Documentation", "Get started", "Concepts", "Workflows", "Reference", "Maintainers",
+  "Documentation", "Understand Context Circuit", "Prompt cookbook", "Get started", "Concepts", "Workflows", "Template", "CLI", "Reference", "Maintainers", "Releases",
   "Template v2", "CLI v2", "Changelog", "Template releases", "CLI releases", "Home",
 ];
 

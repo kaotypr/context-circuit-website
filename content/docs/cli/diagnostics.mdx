@@ -1,0 +1,34 @@
+---
+title: "Diagnostics"
+description: "A finding tells you what needs attention; it does not authorize a repair."
+section: CLI
+order: 5
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Run an explicit diagnostic
+
+```sh
+context-circuit-cli --workspace . check
+```
+
+The diagnostic examines structured workspace records, local bindings, links, IDs, dependency cycles, worktree associations, and owned knowledge. It reports an `issue` and a `resolve` for each finding.
+
+## Read the resolution
+
+A resolution names a command when one exists, an edit when that discharges it, or begins “needs a person” when judgment is required. Do not invent a repair command for the last category.
+
+A knowledge reviewed date is compared with commits under its code anchors. Unchanged code is not stale merely because a note is old. An optional `knowledge_review_days` threshold additionally reports old unanchored notes.
+
+## Keep diagnostics separate from checks
+
+`check` is not an implementation gate, consent, or independent code review. Tests, lint, builds, and observed user flows provide different evidence. Report the commands you actually ran and their results.

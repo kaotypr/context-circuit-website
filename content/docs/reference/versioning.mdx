@@ -1,0 +1,40 @@
+---
+title: "Versioning and release tags"
+description: "A version number is incomplete without its product identity."
+section: Reference
+order: 4
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: CHANGELOG.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.0.0.md
+---
+
+## Independent release identities
+
+| Product | Source version file | Published repository | Tag family | Workspace pin |
+| --- | --- | --- | --- | --- |
+| Template | `VERSION` | `context-circuit` | `v2.1.0` | `.context-circuit/VERSION` |
+| CLI | `CLI_VERSION` | `context-circuit-source` | `cli-v2.1.0` | `.context-circuit/CLI_VERSION` |
+
+Matching numbers do not make a joint release. An instruction change can ship without a binary change, and a CLI fix can ship without replacing workspace instructions.
+
+## Documentation versions
+
+A major-version guide describes the supported model within that major and names its exact evidence release. Minor and patch changes belong in the separate template and CLI changelogs. Selecting a release opens its notes; it does not silently rewrite the other product's selection.
+
+## Available history
+
+This website documents the v2 model and stable 2.0.0 and 2.1.0 release notes, verified from tagged source. It does not provide a v1 guide. The native CLI first shipped in 2.0.0; no CLI 1.x history exists. No patch release is invented to fill a selector.
+
+Use the [release hub](/docs/releases).

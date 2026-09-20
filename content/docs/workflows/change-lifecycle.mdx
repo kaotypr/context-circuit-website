@@ -1,8 +1,8 @@
 ---
-title: Change lifecycle
-description: Move from a grounded request through approval, planning, execution, delivery, and completion.
+title: "Change lifecycle"
+description: "Nine connected steps, with human decisions between preparation and action."
 section: Workflows
-order: 2
+order: 7
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
@@ -14,27 +14,31 @@ sources:
     repository: context-circuit
     ref: v2.1.0
     path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
 ---
 
-## 1. Ground the outcome
+A change moves through the same decisions every time:
 
-The agent retrieves relevant project knowledge, writes the intended outcome and
-its boundaries as an intent, and stops for a person to review it.
+1. Ground the request in product knowledge.
+2. Write an intent the person can approve.
+3. Approve the written outcome.
+4. Investigate real code and write plans.
+5. Request execution after the plans exist.
+6. Implement in prepared worktrees and run checks.
+7. Authorize delivery.
+8. Request completion and reconcile the knowledge that changed.
 
-## 2. Approve and plan
+Optional workers and cleanup sit beside this path. They do not replace it.
 
-Approval authorizes planning only. The agent then inspects real code and writes
-repository-specific plans. Repository changes still wait for an execution
-request made after those plans exist.
+## Request through execution
 
-## 3. Execute and check
+The agent grounds a request in product knowledge and writes an intent. You read it and approve the outcome. The agent investigates real code and writes plans. Once plans exist, you request execution; the agent prepares worktrees, implements, and runs checks.
 
-Execution begins in isolated worktrees unless the person explicitly requests a
-direct change. The implementation follows repository guidance, runs real checks,
-and commits its result so dependent work can build on it.
+## Delivery through reconciliation
 
-## 4. Deliver and complete
+You authorize outward delivery. After the work lands, you request completion. The agent appends the note and reconciles the knowledge affected by the implementation. That knowledge feeds the next request.
 
-Pushes, pull requests, merges, deployment, and cleanup remain separate choices.
-Marking a plan complete records the actual result and reconciles the durable
-knowledge changed by the work.
+Neither a CLI diagnostic nor an editable approval field supplies consent. Delivery does not mark completion, and completion does not delete working copies. See [human control boundaries](/docs/concepts/human-control) for the full decision table.

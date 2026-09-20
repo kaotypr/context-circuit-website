@@ -1,9 +1,9 @@
 ---
-title: CLI commands
-description: Find the deterministic Context Circuit command groups and the work each one owns.
+title: "CLI commands"
+description: "Command groups, concrete examples, and the boundary between mechanics and judgment."
 section: Reference
-order: 3
-audience: [contributor, maintainer]
+order: 6
+audience: [adopter, contributor, maintainer]
 tracks: [cli]
 versions:
   cli: 2.1.0
@@ -15,15 +15,47 @@ sources:
     path: product/docs/commands.md
 ---
 
-The agent normally invokes `context-circuit-cli` for you. The command surface is
-grouped around deterministic bookkeeping:
+## Invocation
 
-- `workspace`, `repository`, and `member` manage workspace identity and local bindings.
-- `record` allocates and updates intents and plans.
-- `context` retrieves and validates durable knowledge.
-- `worktree` prepares and reports isolated working copies.
-- `agent` maintains host role definitions and dispatch specifications.
-- `check` reports workspace consistency without acting as an implementation gate.
+Use the executable resolved from the workspace's pin. Global flags precede commands:
 
-Run `context-circuit-cli help` or follow the version-pinned source link below
-for the complete command surface.
+```sh
+context-circuit-cli --workspace . --json status
+context-circuit-cli help
+context-circuit-cli help record
+context-circuit-cli worktree prepare --help
+```
+
+## Command groups
+
+| Command | Operations and purpose |
+| --- | --- |
+| `version`, `help` | Executable version and command signatures. |
+| `init`, `status`, `check` | Initialize once, report state, diagnose consistency. |
+| `member` | `add`, `band`, `language`, `tone`, `use`, `list`. |
+| `workspace` | `connect`, `base`, `remote` for the records repository. |
+| `repo` | `connect`, `clone`, `init`, `base`, `remote`, `relate`, `inspect`, `fetch`. |
+| `knowledge` | `clone`, `connect`, `sync`, `remote`, `list` for borrowed knowledge. |
+| `context find` | Search by `--query` or get reconciliation candidates with `--repo`. |
+| `record` | `create`, `approve`, `show`, `list`, `dependencies`, `complete`, `order`. |
+| `worktree` | `prepare`, `list`, `inspect`, `move`, `repair`, `remove`. |
+| `agent` | `settings`, `configure`, `setup`, `dispatch`. |
+| `template export` | Write the exact blank embedded seed to a new directory. |
+
+## Read-only examples
+
+```sh
+context-circuit-cli member list
+context-circuit-cli repo inspect --id api
+context-circuit-cli context find --query billing
+context-circuit-cli record list
+context-circuit-cli record show --id p0001
+context-circuit-cli record order --intent i001 --mode waves
+context-circuit-cli worktree list --repo api
+```
+
+Replace IDs with those in your workspace. Normal output is readable YAML; `--json` provides structured values. Errors are on stderr and return nonzero status.
+
+## Mutation is not authorization
+
+Approval and completion commands require the actual corresponding decision. Removal requires its own request. The CLI does not commit, deliver, execute a plan, launch a model, or infer human consent. The pinned command source below contains the complete signatures and refusal behavior.

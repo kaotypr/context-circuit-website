@@ -1,23 +1,48 @@
 ---
-title: The project workflow
-description: Follow intent, planning, implementation, and knowledge reconciliation in order.
-section: Documentation
-order: 2
+title: "Workflows"
+description: "Practical conversations and commands, with explicit human decisions along the way."
+section: Workflows
+order: 0
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: current
-  cli: current
-sidebar_label: Workflow
+  template: 2.1.0
+  cli: 2.1.0
 redirects: []
-sources: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
 ---
 
-The workflow makes human decisions visible while leaving implementation details
-to the repository that owns them.
+A normal change follows the same conversation every time. The agent gathers durable context, writes an intent, and waits. You answer numbered questions and approve the outcome. The agent reads real code and writes plans. You ask for execution after those plans exist. You authorize delivery when the work should leave the machine. You request completion so the knowledge that changed is reconciled.
 
-## Lifecycle
+None of those later requests is implied by the first one. “Add billing” is not approval of the derived intent. An earlier “implement this” does not start execution once plans appear. Delivery does not complete a plan. Completion does not delete working copies.
 
-Begin with an intent, plan after approval, execute only when requested, and
-reconcile durable knowledge when the work is explicitly completed. Read the
-[change lifecycle](/docs/workflows/change-lifecycle) for each control point.
+## The human gates
+
+1. **Ground the request** in accepted product knowledge. Contradictions become questions, not quiet assumptions.
+2. **Approve the written intent.** That authorizes planning only.
+3. **Ask to execute** after the plans can be seen.
+4. **Authorize delivery** — push, pull request, merge, or publication — as a separate request.
+5. **Request completion.** The agent records your note and updates the knowledge the change actually altered.
+
+A person can bypass intent, planning, and worktree preparation for a change that is already its own specification. That still happens in the bound checkout, and commits, delivery, and deletion still need authorization.
+
+The CLI records facts and prepares files. It does not call a model, execute a plan, commit, push, or supply consent.
+
+<TopicList>
+<Topic href="/docs/workflows/gather-context" title="Gather project context">Retrieve accepted knowledge before deriving an outcome.</Topic>
+<Topic href="/docs/workflows/write-intent" title="Write and approve an intent">Present the outcome, wait for answers, record the approval.</Topic>
+<Topic href="/docs/workflows/create-plans" title="Create plans">Investigate real code after approval and write the work.</Topic>
+<Topic href="/docs/workflows/execute-plans" title="Execute plans with workers">Prepare worktrees, implement, check, and optionally dispatch workers.</Topic>
+<Topic href="/docs/workflows/deliver" title="Deliver changes">Push, open a pull request, or merge only when asked.</Topic>
+<Topic href="/docs/workflows/complete" title="Complete plans and update knowledge">Append the note and reconcile what actually changed.</Topic>
+<Topic href="/docs/workflows/change-lifecycle" title="Change lifecycle">The connected path from request through reconciliation.</Topic>
+<Topic href="/docs/workflows/content-contracts" title="Website content contracts">How this documentation stays tied to tagged product source.</Topic>
+</TopicList>

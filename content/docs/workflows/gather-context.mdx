@@ -1,0 +1,42 @@
+---
+title: "Gather project context"
+description: "Turn repository evidence into durable, retrievable understanding."
+section: Workflows
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Ask for a bounded knowledge pass
+
+Name the repositories or exact source documents the agent should learn from. It retrieves existing notes first, then investigates the relevant code and writes accepted architecture, rules, and vocabulary. It keeps raw evidence separate.
+
+```text
+Gather project context from the connected API and web repositories.
+Write down the billing rules and the relationship between the two applications.
+```
+
+## Retrieve the smallest useful context
+
+```sh
+context-circuit-cli context find --query billing
+```
+
+A query searches local and borrowed catalogs and reports which side a match came from. Read the relevant notes; the search output is a locator, not the knowledge itself.
+
+## Finish with traceable notes
+
+Each local note has code anchors in an `Owner:` block and a matching catalog entry with its reviewed date. Borrowed knowledge is corrected upstream, not copied. The next request can now be grounded in that understanding.

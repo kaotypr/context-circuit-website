@@ -1,0 +1,35 @@
+---
+title: "CLI commands"
+description: "Use structured operations for facts and files; leave interpretation to the agent."
+section: CLI
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Read the available surface
+
+```sh
+context-circuit-cli version
+context-circuit-cli help
+context-circuit-cli help worktree
+context-circuit-cli --workspace . --json status
+```
+
+Global flags precede the command. Normal output is readable YAML; `--json` returns structured values. Errors go to stderr with a nonzero exit status. A fully resolved command accepts `--help`; groups need a subcommand for flag help.
+
+## What commands can do
+
+The CLI initializes workspace files, manages members and bindings, retrieves catalog entries, creates records, records decisions already made, derives dependency order, prepares worktrees, and produces diagnostics or dispatch specifications.
+
+It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review.
+
+Read the [command reference](/docs/reference/cli-commands) for each group and concrete examples.

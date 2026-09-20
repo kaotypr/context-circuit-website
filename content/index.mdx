@@ -1,35 +1,55 @@
 ---
-title: Context Circuit
-description: Keep project intent, plans, implementation, and durable knowledge connected.
+title: "Context Circuit"
+description: "Keep project knowledge alive across every change."
 section: Home
 order: 0
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: current
-  cli: current
-draft: false
-unlisted: false
+  template: 2.1.0
+  cli: 2.1.0
 redirects: []
-sources: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: README.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: README.md
 ---
 
-<p className="hero-note">A calmer circuit from request to durable project knowledge.</p>
+<HomeIntro />
 
-Context Circuit gives coding agents shared project context, a grounded plan, and
-explicit human control points across one or more repositories. The workspace
-keeps the decisions readable; the native CLI handles deterministic bookkeeping.
+## Why it exists
 
-## Start with the workflow
+A request can say exactly what to change and still leave out why the current behavior exists, which product rules it must preserve, or what else the change will affect. An agent can follow that prompt faithfully and still produce a locally correct change that is wrong for the product.
 
-Read [Getting started](/docs/get-started), explore the [documentation](/docs), choose the
-[workspace template](/docs/template/v2/getting-started), or learn the
-[CLI](/docs/cli/v2/getting-started).
+Context Circuit makes accepted knowledge available before the outcome is written down. Contradictions and missing decisions become questions for a person. Plans come from real code after that outcome is approved. When implementation changes a durable rule, completion reconciles the knowledge so the next session does not rediscover it.
 
-<InstallLink href="/docs/get-started/install" destination="template">Install the workspace template</InstallLink>
+It does not prove an agent understood the product, and it does not prevent every mistake. Records make assumptions inspectable. The CLI validates files and Git mechanics. Project judgment stays with the agent. Consequential choices stay with you.
 
-## Two products, independent releases
+```mermaid
+flowchart LR
+  K[Living project knowledge] --> R[Relevant context]
+  R --> I[Approved outcome]
+  I --> P[Plans from real code]
+  P --> C[Code changes]
+  C --> X[Knowledge reconciliation]
+  X --> K
+```
 
-The workspace template and CLI can share a version number without sharing a
-release identity. Every versioned page here names its track and links to the
-matching immutable source.
+## A workspace above your repositories
+
+A workspace holds the project understanding and coordination records shared by a solo developer or team. Repositories hold implementation. Local bindings say where each checkout lives on this machine. That separation lets one intended outcome coordinate several repositories without storing anyone's machine paths in shared files.
+
+The CLI keeps IDs, structured files, and Git mechanics dependable. The coding agent does the reasoning and implementation. You approve the intended outcome and authorize outward actions.
+
+## Two products
+
+The **workspace template** supplies the shared project folder: instructions, skills, knowledge, intents, and plans. The **CLI** is the native tool that writes structured records and prepares working copies. This website cites each release independently. They can share a version number without sharing a release identity.
+
+<ReleasePicker />
+
+Create a workspace from [template 2.1.0](/docs/get-started/install), read the complete [product model](/docs/understand), or use the [prompt cookbook](/docs/prompts).

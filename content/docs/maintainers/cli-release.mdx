@@ -1,0 +1,42 @@
+---
+title: "CLI release process"
+description: "Release the native executable independently of template instructions."
+section: Maintainers
+order: 3
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+scope: source
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: .github/workflows/publish.yml
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: WORKFLOW.md
+---
+
+## Select the CLI version
+
+Change `CLI_VERSION` and add `release/requests/cli/<version>.md`. Its body is the release description. The template's `VERSION` need not change unless its own product changes.
+
+## Build and validate
+
+```sh
+go test ./...
+go vet ./...
+sh scripts/build-cli.sh
+sh scripts/check-release.sh
+```
+
+Release archives cover macOS, Linux, and Windows on amd64 and arm64. They include checksums and the Apache-2.0 license. Installer verification checks both the archive checksum and embedded executable version.
+
+## Publish from source
+
+The source repository's publish workflow resolves whether the selected CLI version is already published, builds its assets, and creates the `cli-v*` release when authorized. CLI publication precedes template publication; unchanged version lines do not force new releases.
+
+Cross-compilation is build evidence, not proof of native installer or filesystem behavior. Native CI exercises each operating system. See [validation and tests](/docs/maintainers/validation).

@@ -55,6 +55,16 @@ afterEach(async () => {
 });
 
 describe("content validation", () => {
+  it("rejects a source path absent from the actual tagged tree", async () => {
+    const message = await validationMessage({ "index.mdx": validFrontmatter.replace("path: README.md", "path: missing.md") + "\n\nText" });
+    expect(message).toContain("absent from pinned Git tree: missing.md");
+  });
+
+  it("validates internal links in MDX cards", async () => {
+    const message = await validationMessage({ "index.mdx": validFrontmatter + '\n\n<DocCard href="/missing" title="Broken" />' });
+    expect(message).toContain("broken internal target /missing");
+  });
+
   it("builds stable routes and keeps release tracks independent", async () => {
     const directory = await fixture({
       "index.mdx": `${validFrontmatter}\n\n# Welcome`,

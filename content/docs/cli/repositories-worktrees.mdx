@@ -1,0 +1,41 @@
+---
+title: "Repository and worktree operations"
+description: "Resolve bindings, choose a starting point, and preserve existing work."
+section: CLI
+order: 4
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/worktrees.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Inspect before preparing
+
+```sh
+context-circuit-cli repo inspect --id api
+context-circuit-cli worktree list --repo api
+context-circuit-cli record order --intent i001 --mode waves
+context-circuit-cli worktree prepare --repo api --plan p0001 --copy-mode auto
+```
+
+Use actual returned IDs. A dependent plan in the same repository requires an explicit `--start`; the refusal identifies the predecessor. An explicit start is honored. No implicit fetch occurs.
+
+## Understand reuse
+
+`--reuse` selects an existing branch or association without resetting it. `--copy-mode` accepts `auto`, `required`, `copy`, or `off`. Ignored dependencies are skipped when tracked setup inputs differ; existing destination files are preserved.
+
+## Recover or clean up on request
+
+Git's worktree inventory is authoritative. `worktree inspect` reports the real location; `move` and `repair` support recovery. Removal preserves dirty, untracked, and ignored files unless disposal is explicitly authorized with `--discard`. It never deletes the branch.
+
+Read the pinned worktree source below for filesystem-specific reuse behavior.

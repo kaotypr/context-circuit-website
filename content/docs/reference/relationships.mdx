@@ -1,0 +1,43 @@
+---
+title: "Repository relationships"
+description: "A directed description connects shared logical repository IDs."
+section: Reference
+order: 3
+audience: [adopter, contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/workspace.md
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/commands.md
+---
+
+## Record the product relationship
+
+```yaml
+relationships:
+  - from: web
+    to: api
+    description: Consumes the billing API
+```
+
+`from` and `to` name repositories in the implementation map. The description explains why the connection matters to the product. It contains no local checkout path.
+
+```sh
+context-circuit-cli repo relate --from web --to api --description "Consumes the billing API"
+```
+
+## Keep the other relationships distinct
+
+A plan's `depends_on` describes execution order. The repository relationship above describes how the project works; it is not a scheduling edge.
+
+The workspace repository carries the shared records and is bound separately with `workspace connect`. Borrowed knowledge repositories are read-only and are not named by implementation plans or assigned worktrees.
+
+See [connect repositories](/docs/get-started/connect-repositories) for local setup.

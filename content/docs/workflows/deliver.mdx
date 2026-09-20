@@ -1,0 +1,40 @@
+---
+title: "Deliver changes"
+description: "Authorize the specific outward action after implementation is inspectable."
+section: Workflows
+order: 5
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Make the delivery request concrete
+
+Ask for the action you want: push a branch, open a pull request, merge, or publish. An execution request alone does not authorize these actions.
+
+```text
+Push the implemented branch and open a pull request against this machine's
+recorded base branch. Include the checks that actually ran.
+```
+
+## Resolve source and target
+
+The agent reads real Git state and the CLI's `base_branch` report. A stacked run delivers the final chain end for each repository, including predecessor changes. The shared `default_branch` is only the fallback when no local base exists.
+
+## Leave a reviewable result
+
+The description explains the problem, final behavior, checks, and remaining limitations. Base drift and conflicts are reported without automatically rebasing or launching an independent review.
+
+Delivery does not stamp completion. After the work lands, [request completion and reconciliation](/docs/workflows/complete).

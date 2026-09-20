@@ -1,3 +1,8 @@
 # Redirects are explicit because a Next.js static export has no runtime redirects.
 /docs/getting-started /docs/get-started/ 301
 /docs/start /docs/get-started/ 301
+/docs/prompt-cookbook /docs/prompts/ 301
+/docs/understand/what-it-is /docs/understand/ 301
+/docs/understand/why-it-exists /docs/understand/ 301
+/docs/understand/product-model /docs/understand/ 301
+/docs/understand/repositories /docs/understand/ 301

@@ -1,36 +1,35 @@
 ---
-title: Context Circuit CLI v2
-description: Use the Context Circuit v2 CLI for workspace bookkeeping.
+title: "Context Circuit CLI v2"
+description: "The v2 product model, documented against cli release 2.1.0."
 section: CLI v2
 order: 1
 audience: [adopter, contributor, maintainer]
 tracks: [cli]
 versions:
   cli: 2.1.0
-sidebar_label: Getting started
+sidebar_label: "v2 guide"
 redirects: []
 sources:
   - track: cli
     repository: context-circuit-source
     ref: cli-v2.1.0
-    path: README.md
+    path: release/requests/cli/2.0.0.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.1.0.md
 ---
 
-The CLI validates and updates Context Circuit records without making users
-manage runtime identifiers by hand.
+## The native executable
 
-The bundled `cc-cli` skill resolves the pinned version and registry, selects the
-package for the execution OS and architecture, verifies its checksum, and
-installs it without administrator access. Installed versions coexist so one
-workspace cannot silently upgrade another.
+The CLI creates and validates workspace records, manages repository bindings, prepares worktrees, derives dependencies, and emits dispatch specifications. The agent still owns judgment and implementation; the person owns authorization.
 
-## Release line
+## Install and use
 
-This guide is pinned to CLI release 2.1.0. See its
-[release page](/releases/cli/2.1.0).
+Follow [CLI installation](/docs/cli/installation), resolve the [workspace version pin](/docs/cli/version-pinning), then read the [command reference](/docs/reference/cli-commands). The shared executable on PATH may point at a different workspace's version.
 
-## Command reference
+## Version baseline
 
-See the [CLI command groups](/docs/reference/cli-commands). The agent owns
-judgment and code changes; the CLI owns reproducible bookkeeping and Git
-mechanics.
+This major guide is verified against CLI 2.1.0, which adds configurable GitHub and GitLab installer registries. Read [2.1.0 release notes](/releases/cli/2.1.0) and the independent [CLI changelog](/changelog/cli).
+
+The native CLI began at 2.0.0. There is no CLI 1.x history, and initialization does not migrate a v1 workspace.

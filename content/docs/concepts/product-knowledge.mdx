@@ -1,0 +1,37 @@
+---
+title: "Product knowledge"
+description: "Accepted project understanding that survives a task, a session, and a machine."
+section: Concepts
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## What belongs here
+
+Knowledge notes explain durable architecture, domain rules, conventions, decisions, vocabulary, and repository relationships. They describe the product as it is, rather than task progress. Raw evidence stays separate from accepted knowledge.
+
+`context/INDEX.md` is an optional retrieval catalog. One unwrapped entry names a note, its repositories, the question it answers, search terms, and the date it was reviewed against code. The glossary maps project vocabulary to code identifiers.
+
+## Make claims traceable
+
+A note collects logical repository paths in an `Owner:` block. These are code anchors, not machine-specific paths. A note never names an intent, plan, or raw source file as its durable authority. Knowledge stays English; domain names and code identifiers retain their spelling.
+
+## Keep it current
+
+Completion asks which notes the actual change affected. Update the note and its catalog entry together, including the reviewed date. An unchanged concept needs no rewrite. Borrowed knowledge is read-only here and must be corrected upstream.
+
+See [gather project context](/docs/workflows/gather-context).

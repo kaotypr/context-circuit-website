@@ -1,0 +1,40 @@
+---
+title: "Complete plans and update knowledge"
+description: "Close the work and reconcile the durable concepts it changed."
+section: Workflows
+order: 6
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Request completion after the work lands
+
+Name the plan or plans to complete. The agent inspects actual changes, then records your completion request with `record complete --id ID --text TEXT`. The note preserves your words; `completed_at` records the instant.
+
+## Judge the knowledge candidates
+
+The CLI returns local catalog entries claiming the affected repositories. The agent reads candidates whose meaning could have changed and compares them with the implemented result.
+
+- Update a changed note and its catalog entry together.
+- Move the reviewed date after confirming it against code.
+- Say explicitly when no durable concept changed.
+- Raise borrowed-knowledge corrections upstream.
+
+For a direct change without a plan, `context find --repo ID` supplies the same reconciliation candidates.
+
+## Keep the working copies
+
+Completion is not cleanup. Worktrees and branches remain, including local files. Removing them requires a separate request. The reconciled knowledge is the starting point for the next intent.

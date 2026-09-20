@@ -1,0 +1,63 @@
+---
+title: "Install the CLI"
+description: "Install the version your workspace pins, for the environment where the agent runs."
+section: Get started
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/skills/cc-cli/SKILL.md
+---
+
+## Ask the agent
+
+```text
+Install the Context Circuit CLI version this workspace pins and verify that the
+versioned executable works. Do not update the workspace template or its records.
+```
+
+You do not need to identify your operating-system package or run the installer yourself.
+
+## What the agent does
+
+1. Reads `.context-circuit/CLI_VERSION`.
+2. Detects the operating system and architecture where the agent runs. WSL uses the Linux package.
+3. Uses the bundled `cc-cli` procedure to download the matching release.
+4. Verifies its SHA-256 checksum and reported version.
+5. Keeps the resolved versioned executable for subsequent CLI calls.
+6. Reports what was installed without printing credentials or private provider data.
+
+The CLI installation changes no project identity, template file, intent, plan, or repository binding.
+
+```mermaid
+flowchart LR
+  P[Your prompt] --> A[Agent reads workspace pin]
+  A --> E[Detect execution environment]
+  E --> I[Install and verify release]
+  I --> V[Use versioned executable]
+  V --> R[Report result]
+```
+
+## Special cases
+
+For a private registry, tell the agent which configured source to use and provide credentials through the host's secure mechanism—not in the prompt or workspace files.
+
+```text
+Install this workspace's pinned CLI from its configured private registry. Keep
+the token out of shell history and shared files.
+```
+
+For an offline environment:
+
+```text
+Install the pinned CLI from the trusted archive and checksums in <path>. Verify
+both before using the binary.
+```
+
+Installed versions can coexist. The agent resolves this workspace's versioned executable instead of assuming the shared command on `PATH` is correct. See [version pinning](/docs/cli/version-pinning) for maintenance details.

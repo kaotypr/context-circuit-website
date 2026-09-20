@@ -1,0 +1,49 @@
+---
+title: "Documentation contribution"
+description: "Curate MDX in the website repository and validate the complete static product."
+section: Maintainers
+order: 5
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+scope: website
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Make the content reviewable
+
+Add a page under `content/` with title, description, section, order, audience, scope, product tracks, exact version selections, and pinned sources. Use the shared cards, callouts, tables, and code treatment; avoid page-specific CSS.
+
+Product claims must be checked against the selected tagged source. Update the source inventory from verified Git objects when adding a release. A missing historical guide remains visibly unavailable.
+
+## Run the website checks
+
+```sh
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm typecheck
+pnpm content:check
+pnpm test -- --runInBand
+pnpm theme:check
+pnpm build
+pnpm static:check
+```
+
+Browser checks additionally exercise routes, search, mobile navigation, computed theme colors, reloads, keyboard focus, and accessibility. Review incomplete accessibility results manually.
+
+## Respect the static boundary
+
+The website exports HTML, CSS, JavaScript, and a static search index. It has no CMS, database, authentication, live repository API, or server persistence. Hosted Plausible loads only for an explicitly configured production deployment. Cloudflare Pages configuration is documented; connecting or publishing a production project is a separate action.
+
+New files show their local content path until a committed website revision can provide a valid source link.

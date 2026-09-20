@@ -1,0 +1,312 @@
+[
+  {
+    "route": "/",
+    "status": 200,
+    "h1": "Context Circuit",
+    "headings": [
+      "Start with the workflow",
+      "Two products, independent releases"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/index.mdx"
+    ]
+  },
+  {
+    "route": "/changelog/cli",
+    "status": 200,
+    "h1": "Context Circuit CLI changelog",
+    "headings": [
+      "2.1.0",
+      "2.0.0"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-source/blob/cli-v2.1.0/release/requests/cli/2.1.0.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/changelogs/cli.mdx"
+    ]
+  },
+  {
+    "route": "/changelog/template",
+    "status": 200,
+    "h1": "Workspace template changelog",
+    "headings": [
+      "2.1.0",
+      "2.0.0"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/CHANGELOG.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/changelogs/template.mdx"
+    ]
+  },
+  {
+    "route": "/docs",
+    "status": 200,
+    "h1": "Documentation",
+    "headings": [
+      "Reader paths",
+      "Versioned collections"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/index.mdx"
+    ]
+  },
+  {
+    "route": "/docs/cli/v2/getting-started",
+    "status": 200,
+    "h1": "Context Circuit CLI v2",
+    "headings": [
+      "Release line",
+      "Command reference"
+    ],
+    "overflow": false,
+    "selects": [
+      {
+        "value": "/docs/cli/v2/getting-started",
+        "options": [
+          "/docs/cli/v2/getting-started"
+        ]
+      }
+    ],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-source/blob/cli-v2.1.0/README.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/versions/cli/2/getting-started.mdx"
+    ]
+  },
+  {
+    "route": "/docs/concepts",
+    "status": 200,
+    "h1": "Concepts",
+    "headings": [
+      "Core ideas"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/concepts/index.mdx"
+    ]
+  },
+  {
+    "route": "/docs/concepts/product-boundaries",
+    "status": 200,
+    "h1": "Product boundaries",
+    "headings": [
+      "Independent release tracks"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/README.md",
+      "https://github.com/kaotypr/context-circuit-source/blob/cli-v2.1.0/README.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/concepts/product-boundaries.mdx"
+    ]
+  },
+  {
+    "route": "/docs/get-started",
+    "status": 200,
+    "h1": "Get started",
+    "headings": [
+      "Choose a track"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/get-started/index.mdx"
+    ]
+  },
+  {
+    "route": "/docs/get-started/install",
+    "status": 200,
+    "h1": "Install Context Circuit",
+    "headings": [
+      "What you need"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/README.md",
+      "https://github.com/kaotypr/context-circuit-source/blob/cli-v2.1.0/README.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/get-started/install.mdx"
+    ]
+  },
+  {
+    "route": "/docs/maintainers",
+    "status": 200,
+    "h1": "Maintainers",
+    "headings": [
+      "Maintain a release"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/maintainers/index.mdx"
+    ]
+  },
+  {
+    "route": "/docs/maintainers/releases",
+    "status": 200,
+    "h1": "Release boundaries",
+    "headings": [
+      "Documentation rule"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/CHANGELOG.md",
+      "https://github.com/kaotypr/context-circuit-source/blob/cli-v2.1.0/release/requests/cli/2.1.0.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/maintainers/releases.mdx"
+    ]
+  },
+  {
+    "route": "/docs/reference",
+    "status": 200,
+    "h1": "Reference",
+    "headings": [
+      "Reference pages"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/reference/index.mdx"
+    ]
+  },
+  {
+    "route": "/docs/reference/cli-commands",
+    "status": 200,
+    "h1": "CLI commands",
+    "headings": [],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-source/blob/cli-v2.1.0/product/docs/commands.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/reference/cli-commands.mdx"
+    ]
+  },
+  {
+    "route": "/docs/reference/workspace-files",
+    "status": 200,
+    "h1": "Workspace files",
+    "headings": [
+      "Repository identity"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/.context-circuit/docs/workspace.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/reference/workspace-files.mdx"
+    ]
+  },
+  {
+    "route": "/docs/template/v2/getting-started",
+    "status": 200,
+    "h1": "Workspace template v2",
+    "headings": [
+      "Release line",
+      "Next steps"
+    ],
+    "overflow": false,
+    "selects": [
+      {
+        "value": "/docs/template/v2/getting-started",
+        "options": [
+          "/docs/template/v2/getting-started"
+        ]
+      }
+    ],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/AGENTS.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/versions/template/2/getting-started.mdx"
+    ]
+  },
+  {
+    "route": "/docs/workflows",
+    "status": 200,
+    "h1": "The project workflow",
+    "headings": [
+      "Lifecycle"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/workflows/index.mdx"
+    ]
+  },
+  {
+    "route": "/docs/workflows/change-lifecycle",
+    "status": 200,
+    "h1": "Change lifecycle",
+    "headings": [
+      "1. Ground the outcome",
+      "2. Approve and plan",
+      "3. Execute and check",
+      "4. Deliver and complete"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/AGENTS.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/workflows/change-lifecycle.mdx"
+    ]
+  },
+  {
+    "route": "/docs/workflows/content-contracts",
+    "status": 200,
+    "h1": "Content contracts",
+    "headings": [
+      "Independent releases"
+    ],
+    "overflow": false,
+    "selects": [],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/docs/workflows/content-contracts.mdx"
+    ]
+  },
+  {
+    "route": "/releases/cli/2.1.0",
+    "status": 200,
+    "h1": "Context Circuit CLI 2.1.0",
+    "headings": [
+      "Documentation"
+    ],
+    "overflow": false,
+    "selects": [
+      {
+        "value": "/releases/cli/2.1.0",
+        "options": [
+          "/releases/cli/2.1.0"
+        ]
+      }
+    ],
+    "links": [
+      "https://github.com/kaotypr/context-circuit-source/blob/cli-v2.1.0/release/requests/cli/2.1.0.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/releases/cli/2.1.0.mdx"
+    ]
+  },
+  {
+    "route": "/releases/template/2.1.0",
+    "status": 200,
+    "h1": "Workspace template 2.1.0",
+    "headings": [
+      "Documentation"
+    ],
+    "overflow": false,
+    "selects": [
+      {
+        "value": "/releases/template/2.1.0",
+        "options": [
+          "/releases/template/2.1.0"
+        ]
+      }
+    ],
+    "links": [
+      "https://github.com/kaotypr/context-circuit/blob/v2.1.0/CHANGELOG.md",
+      "https://github.com/kaotypr/context-circuit-website/edit/main/content/releases/template/2.1.0.mdx"
+    ]
+  }
+]

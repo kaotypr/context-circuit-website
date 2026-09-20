@@ -1,0 +1,41 @@
+---
+title: "Context Circuit CLI"
+description: "A native tool for dependable bookkeeping and Git mechanics. The agent supplies judgment."
+section: CLI
+sidebar_label: CLI
+order: 0
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+The Context Circuit CLI is a native command-line tool. It initializes workspace files, manages members and bindings, retrieves catalog entries, creates records, records decisions already made, derives dependency order, prepares worktrees, and produces diagnostics.
+
+It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review. It neither supplies human consent nor treats an editable field as approval.
+
+Each workspace pins a CLI version in `.context-circuit/CLI_VERSION`. Installed versions coexist. The shared command on PATH is not proof that you are running this workspace's pin. Resolve the versioned executable each time you change workspaces.
+
+## What you use it for
+
+```sh
+context-circuit-cli version
+context-circuit-cli help
+context-circuit-cli --workspace . --json status
+```
+
+Normal output is readable YAML. `--json` returns structured values. Errors go to stderr with a nonzero exit status. The agent still does the reasoning; the CLI keeps the files and Git mechanics dependable.
+
+<TopicList>
+<Topic href="/docs/cli/installation" title="Installation">Verified native binaries, installed side by side from the workspace pin.</Topic>
+<Topic href="/docs/cli/commands" title="Commands">The available surface, and what it will not do.</Topic>
+<Topic href="/docs/cli/version-pinning" title="Version pinning">How a workspace names the CLI it expects.</Topic>
+<Topic href="/docs/cli/repositories-worktrees" title="Repository and worktree operations">Connect checkouts and prepare isolated working copies.</Topic>
+<Topic href="/docs/cli/diagnostics" title="Diagnostics">Structured facts about workspace consistency, not permission to repair.</Topic>
+</TopicList>

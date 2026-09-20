@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Search } from "@/components/search";
-import { Sidebar } from "@/components/sidebar";
+import { Sidebar, MobileNav } from "@/components/sidebar";
 import { ThemeToggle, themeScript } from "@/components/theme-toggle";
+import { BrandMark } from "@/components/brand-mark";
 import { getNavigation } from "@/lib/content";
 import { isProductionDeployment } from "@/lib/analytics";
 import "./globals.css";
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
     default: "Context Circuit",
     template: "%s · Context Circuit",
   },
-  description: "Documentation for Context Circuit workspaces and the Context Circuit CLI.",
+  description:
+    "Documentation for Context Circuit, the living documentation system for software projects.",
   metadataBase: new URL("https://context-circuit.kaotypr.com"),
   icons: { icon: "/icon.svg" },
 };
@@ -22,8 +24,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const navigation = await getNavigation();
   const analytics = isProductionDeployment();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-density="comfortable" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
+        <link rel="preload" href="/fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {analytics ? (
           <>
@@ -37,14 +40,24 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <header className="site-header">
           <div className="shell header-inner">
             <Link className="brand" href="/" aria-label="Context Circuit home">
-              <span className="brand-mark" aria-hidden="true">C</span>
+              <BrandMark />
               <span className="brand-text">Context Circuit</span>
+              <span className="brand-label">Docs</span>
             </Link>
-            <div className="header-actions"><Link className="button header-docs" href="/docs">Docs</Link><Search /><ThemeToggle /></div>
+            <div className="header-actions">
+              <Link className="header-docs" href="/docs/releases">Releases</Link>
+              <Search />
+              <ThemeToggle />
+            </div>
           </div>
         </header>
-        <details className="mobile-nav"><summary>Documentation menu</summary><Sidebar items={navigation} /></details>
-        <div className="layout"><Sidebar items={navigation} /><main className="content-main" id="main-content">{children}</main></div>
+        <MobileNav items={navigation} />
+        <div className="layout">
+          <Sidebar items={navigation} />
+          <main className="content-main" id="main-content" tabIndex={-1}>
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

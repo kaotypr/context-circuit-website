@@ -1,0 +1,40 @@
+---
+title: "Source repository layout"
+description: "Edit the authoritative source; generated output is not the product source."
+section: Maintainers
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+scope: source
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: README.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: WORKFLOW.md
+---
+
+## Source ownership
+
+| Path | Owns |
+| --- | --- |
+| `product/` | Shipped instructions, skills, docs, product guide, and 0BSD scaffold license. |
+| `template/` | Blank workspace records and configuration. |
+| `cmd/context-circuit/` | Native CLI entry point. |
+| `internal/cli/` | Commands and output. |
+| `internal/workspace/` | Records, YAML edits, Git, worktrees, and diagnostics. |
+| `internal/cow/` | Native cloning and independent-copy fallback. |
+| `internal/installer/` | Installer acceptance tests. |
+| `scripts/release-manifest.txt`, `assets.go` | Source-to-output inventory and embedded assets. |
+| `release/` | Publication binding, repository-owned landing files, per-product release requests. |
+| `context/` | Maintainer knowledge, never shipped. |
+
+The source checkout is not an initialized Context Circuit workspace. Maintainer changes follow its repository instructions. Passive design history is not a substitute for current product source.
+
+The CLI and source use Apache-2.0; the scaffold a workspace receives uses 0BSD. See [validation](/docs/maintainers/validation) before release assembly.

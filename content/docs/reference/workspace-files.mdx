@@ -1,9 +1,9 @@
 ---
-title: Workspace files
-description: Understand which Context Circuit records are shared and which bindings remain local to one machine.
+title: "Workspace files"
+description: "Shared configuration and machine-local state, file by file."
 section: Reference
-order: 2
-audience: [contributor, maintainer]
+order: 5
+audience: [adopter, contributor, maintainer]
 tracks: [template]
 versions:
   template: 2.1.0
@@ -15,13 +15,29 @@ sources:
     path: .context-circuit/docs/workspace.md
 ---
 
-`workspace.yaml`, `members.yaml`, `context/`, `intent/`, and `plans/` are shared
-through Git. `member.local.yaml`, `repositories.local.yaml`, local locks, and
-worktree associations stay ignored because they describe one machine.
+## Shared files
 
-## Repository identity
+| Path | Purpose |
+| --- | --- |
+| `workspace.yaml` | Identity, repositories, relationships, optional borrowed knowledge and registry. |
+| `members.yaml` | Roster, allocation bands, language, and tone. |
+| `.context-circuit/VERSION` | Template version received. |
+| `.context-circuit/CLI_VERSION` | Expected CLI executable version. |
+| `.context-circuit/role-tiering.yaml` | Shared host/role model and effort preferences. |
+| `.context-circuit/ids.yaml` | Permanent intent and plan reservations. |
+| `intent/`, `plans/` | Outcomes, implementation plans, and decision notes. |
+| `context/` | Durable knowledge, optional index, and glossary. |
 
-`workspace.yaml` gives every logical repository a stable ID, URL, default
-branch, and relationship to its peers. The local bindings map those IDs to
-checkout paths and machine-specific base branches without publishing paths from
-one computer into another's workspace.
+## Local and ignored
+
+| Path | Purpose |
+| --- | --- |
+| `member.local.yaml` | Active member on this machine. |
+| `repositories.local.yaml` | Workspace and repository paths, base branches, borrowed checkout paths. |
+| `.context-circuit/role-tiering.local.yaml` | Machine-specific model and effort overrides. |
+| `.context-circuit/local/worktrees.yaml` | Optional plan-to-worktree associations. |
+| `.context-circuit/local/write.lock` | OS-managed local write lock. |
+| `repositories/`, `.worktrees/` | Local Git working copies. |
+| Native host agent directories | Generated role definitions; run `agent setup` on a new host. |
+
+Unknown control fields fail validation. Knowledge remains ordinary Markdown. Do not store secrets in workspace records; environment files belong to ignored local setup.

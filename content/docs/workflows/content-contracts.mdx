@@ -1,23 +1,34 @@
 ---
-title: Content contracts
-description: Learn how stable routes and release-aware metadata keep documentation reproducible.
-section: Documentation
-order: 1
-audience: [contributor, maintainer]
+title: "Website content contracts"
+description: "Curated content is owned by the website and validated before static export."
+section: Workflows
+order: 8
+audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: current
-  cli: current
-sidebar_label: Content contracts
+  template: 2.1.0
+  cli: 2.1.0
+scope: website
 redirects: []
-sources: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
 ---
 
-Curated content lives in this website repository. The build does not depend on
-a live checkout of either product.
+## One content graph
 
-## Independent releases
+MDX frontmatter supplies title, description, section, order, audience, product scope, independent version selections, and pinned sources. That graph drives routes, navigation, search, and source metadata. Draft and unlisted content is excluded from publication.
 
-A document that covers both tracks selects both versions. That remains true when
-the template and CLI happen to use the same version number.
+## Stable paths and source evidence
 
+Major guides use `/docs/template/v2/` and `/docs/cli/v2/`. Release notes use exact versions under `/releases/`; the two changelogs stay separate. Internal links, fragments, source paths, and release selections are checked before export.
+
+New website files have no published revision until committed. Their footer names the local MDX path instead of inventing a remote link. Existing files link to a verified website snapshot; this is not a claim that uncommitted edits are published.
+
+See [documentation contribution](/docs/maintainers/documentation).

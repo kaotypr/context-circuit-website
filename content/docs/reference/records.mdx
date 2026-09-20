@@ -1,0 +1,46 @@
+---
+title: "Intent and plan records"
+description: "Stable IDs, human-readable Markdown, and UTC decision instants."
+section: Reference
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+---
+
+## Intent fields
+
+| Field | Meaning |
+| --- | --- |
+| `id` | Workspace-global intent ID, such as `i001`. |
+| `created_by` | Author's member ID; the only member-related metadata. |
+| `created_at` | Creation instant. |
+| `plans` | Linked implementation plans. |
+| `approved_at` | Present after a person's approval is recorded. |
+
+The body holds goal, non-goals, constraints, success criteria, repository scope, and numbered open questions. The approval note retains the person's exact words.
+
+## Plan fields
+
+| Field | Meaning |
+| --- | --- |
+| `id`, `created_by`, `created_at` | Identity and author. |
+| `intent` | The approved outcome this plan implements. |
+| `repositories` | Logical implementation repository IDs. |
+| `depends_on` | Optional plan dependencies. |
+| `completed_at` | Present after requested completion. |
+
+The body describes approach, tasks and order, risks, and checks. Execution does not rewrite the plan; the result is carried by the completion note.
+
+## IDs, dates, and language
+
+Intent IDs have at least three digits; plans have at least four. Allocation reserves IDs permanently, including after archival. Use returned IDs rather than guessing the next number. Distinct member bands can separate offline allocation ranges, but a local lock is not distributed coordination.
+
+Instants use `2026-09-15T10:53:00Z`; other dates use `YYYY-MM-DD`. Record prose follows the author's language, headings stay English, and decision notes preserve the person's words exactly.

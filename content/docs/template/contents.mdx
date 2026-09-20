@@ -1,0 +1,39 @@
+---
+title: "What the workspace template contains"
+description: "The shared workspace structure your coding host reads and your project keeps."
+section: Template
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: README.md
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/workspace.md
+---
+
+## The shipped structure
+
+| Area | Purpose |
+| --- | --- |
+| `AGENTS.md` and host entry files | Standing instructions and human control boundaries. |
+| `.agents/skills/` | Procedures for workspace setup, knowledge, intents, plans, worktrees, workers, delivery, and completion. |
+| `workspace.yaml` and `members.yaml` | Project identity, repository model, and roster. |
+| `context/` | Durable knowledge, optional catalog, and glossary. |
+| `intent/` and `plans/` | Human-readable outcomes and implementation plans. |
+| `.context-circuit/` | Product pins, ID reservations, role preferences, and reference documentation. |
+
+## What is created locally
+
+Member selection, checkout bindings, native agent definitions, working copies, and runtime files are machine-local. They are not a portable snapshot of another developer's environment.
+
+The published template repository's README, license, changelog, contribution and security pages, and artwork do not enter a fresh workspace archive. The project's own README is written at initialization.
+
+Read [local versus shared configuration](/docs/template/local-shared).

@@ -1,8 +1,8 @@
 ---
-title: Product boundaries
-description: See how the workspace template, native CLI, coding agent, and person divide responsibility.
+title: "Product boundaries"
+description: "Keep template instructions, CLI mechanics, and agent judgment distinct."
 section: Concepts
-order: 2
+order: 10
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
@@ -13,22 +13,19 @@ sources:
   - track: template
     repository: context-circuit
     ref: v2.1.0
-    path: README.md
+    path: .context-circuit/docs/working.md
   - track: cli
     repository: context-circuit-source
     ref: cli-v2.1.0
-    path: README.md
+    path: product/docs/commands.md
 ---
 
-The workspace stores shared knowledge, intents, plans, member records, and
-repository relationships. The CLI performs operations that must return the same
-result every time. The coding agent reads the actual project and exercises
-judgment. A person supplies consent for approval, execution, delivery, and
-completion.
+The template and CLI work together but release independently. The template teaches the host how to coordinate work; the CLI supplies repeatable mechanics. The coding agent provides interpretation that depends on the project.
 
-## Independent release tracks
+## Ownership test
 
-The workspace template uses `v*` tags in `context-circuit`. The native CLI uses
-`cli-v*` tags in `context-circuit-source`. A workspace pins its expected CLI in
-`.context-circuit/CLI_VERSION`; matching version numbers do not combine the two
-products.
+If an answer depends on reading product behavior, it belongs to the agent. If the same input must return the same structured file or Git result, it belongs to the CLI. Human authorization is outside both.
+
+The source repository builds both products. The website curates documentation for them and runs no live repository API. Major-version guides and changelogs are maintained separately from installed workspaces.
+
+See the [repository map](/docs/understand#products-and-repositories) and [release identities](/docs/reference/versioning).

@@ -1,0 +1,39 @@
+---
+title: "Create plans"
+description: "Turn an approved intent into a concrete implementation approach."
+section: Workflows
+order: 3
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Investigate real code
+
+After approval, the agent reads relevant code, repository instructions, and setup requirements. It chooses useful plan boundaries, tasks, dependencies, risks, and checks. A planner or narrow explorers may help; the coordinator writes the records.
+
+```sh
+context-circuit-cli record create --kind plan --slug invoice-api --title "Invoice download API" --intent i001 --repo api
+context-circuit-cli record create --kind plan --slug invoice-web --title "Invoice download UI" --intent i001 --repo web --depends-on p0001
+context-circuit-cli record order --intent i001 --mode waves
+```
+
+These IDs are illustrative. Substitute the IDs returned in your workspace.
+
+## Present, then wait for execution
+
+The plans explain what will be built and how it will be checked. Reading them is optional; there is no extra approval stage. A new request to execute, made after plans exist, starts implementation.
+
+A dependency is an execution constraint, not a repository relationship. The CLI derives ordering and starting references; it does not execute the plans.

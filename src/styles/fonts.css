@@ -2,4 +2,9 @@
 @font-face { font-family: "Fredoka"; src: url("/fonts/fredoka-latin.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: swap; }
 @font-face { font-family: "Fira Code"; src: url("/fonts/fira-code-latin.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: swap; }
 @font-face { font-family: "Schoolbell"; src: url("/fonts/schoolbell-latin.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
-:root { --font-fredoka: "Fredoka", sans-serif; --font-fira-code: "Fira Code", monospace; --font-schoolbell: "Schoolbell", cursive; }
+:root { --font-fredoka: "Fredoka", "Fredoka Fallback"; --font-fira-code: "Fira Code", "Fira Code Fallback"; --font-schoolbell: "Schoolbell", "Schoolbell Fallback"; }
+
+/* Exact metric-adjusted fallback faces from the canonical v0.1 font stylesheet. */
+@font-face { font-family: "Fredoka Fallback"; src: local(Arial); ascent-override: 95.64%; descent-override: 23.17%; line-gap-override: 0%; size-adjust: 101.84%; }
+@font-face { font-family: "Fira Code Fallback"; src: local(Arial); ascent-override: 73.56%; descent-override: 23.92%; line-gap-override: 0%; size-adjust: 134.59%; }
+@font-face { font-family: "Schoolbell Fallback"; src: local(Arial); ascent-override: 109.2%; descent-override: 41.04%; line-gap-override: 2.57%; size-adjust: 91.13%; }

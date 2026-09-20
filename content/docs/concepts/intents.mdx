@@ -1,0 +1,37 @@
+---
+title: "Intents"
+description: "A written outcome a person can approve before detailed code investigation."
+section: Concepts
+order: 3
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/working.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## What an intent settles
+
+An intent records the goal, non-goals, constraints, success criteria, rough repository scope, and open questions. It is grounded in existing product knowledge before detailed code investigation. A contradiction becomes a question for a person.
+
+## Approval is a real decision
+
+The agent presents the intent and waits. The original request is not approval of the derived outcome. Approval records the actual words and `approved_at`; neither a field nor a command establishes consent.
+
+Questions have stable numbers. Answers remain beneath them, so the discussion stays readable. A later question takes the next unused number.
+
+## What happens next
+
+Approval authorizes code investigation and planning without a second planning permission request. If the outcome or success criteria change materially, return to the intent for renewed approval. A plan cannot quietly resolve a new product question.
+
+Follow [write and approve an intent](/docs/workflows/write-intent).

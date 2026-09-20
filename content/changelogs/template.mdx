@@ -1,12 +1,12 @@
 ---
-title: Workspace template changelog
-description: Follow changes to the independently released Context Circuit workspace template.
+title: "Workspace template changelog"
+description: "Release history for the independently versioned template product."
 section: Changelog
 order: 1
-audience: [adopter, maintainer]
+audience: [adopter, contributor, maintainer]
 tracks: [template]
 versions:
-  template: current
+  template: 2.1.0
 redirects: []
 sources:
   - track: template
@@ -15,14 +15,18 @@ sources:
     path: CHANGELOG.md
 ---
 
-## 2.1.0
+## 2.1.0 — configurable CLI registry
 
-The workspace can now record the registry from which its CLI should be
-installed. Existing workspaces without `cli_registry` continue to use the
-public GitHub release. The current template release is documented on the
-[2.1.0 release page](/releases/template/2.1.0).
+The workspace adds optional `cli_registry` fields for `source`, `repository`, and `api`. The installation skill reads those values. A workspace without the setting continues to resolve the public GitHub registry.
 
-## 2.0.0
+[Read template 2.1.0](/releases/template/2.1.0)
 
-The v2 workspace introduced the native CLI boundary, explicit human control
-points, durable knowledge, isolated worktrees, and independent release tracks.
+## 2.0.0 — the v2 workspace
+
+The stable v2 release establishes the native CLI boundary, explicit human decisions, durable knowledge, worktree coordination, and independent product releases.
+
+[Read template 2.0.0](/releases/template/2.0.0)
+
+## Coverage
+
+This timeline includes verified stable releases 2.0.0 and 2.1.0. No patch entries are inferred. The [major-version policy](/docs/releases/major-versions) distinguishes guides from release notes and identifies unavailable historical documentation.

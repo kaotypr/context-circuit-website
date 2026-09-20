@@ -21,6 +21,7 @@ export const frontmatterSchema = z
     title: z.string().min(1),
     description: z.string().min(1),
     section: z.string().min(1),
+    scope: z.enum(["source", "website"]).optional(),
     order: z.number().int().nonnegative(),
     audience: z.array(z.enum(["adopter", "contributor", "maintainer"])).min(1),
     tracks: z.array(z.enum(tracks)).min(1),

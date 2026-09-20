@@ -1,0 +1,30 @@
+---
+title: "Local versus shared configuration"
+description: "Share product understanding; bind working copies separately on each machine."
+section: Template
+order: 5
+audience: [adopter, contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/workspace.md
+---
+
+## What travels through Git
+
+Project identity, repository URLs and default branches, relationships, the member roster, product pins, role defaults, records, and durable knowledge are shared.
+
+## What stays on the machine
+
+Checkout paths, active member, base branches, local role overrides, worktree associations, installed dependencies, and environment files are local. A second machine connects its own copies; it does not reinitialize the shared workspace.
+
+A local `base_branch` can differ from the remote's shared `default_branch`. Worktree starting points and delivery targets must read the local binding.
+
+## Join safely
+
+Select an existing member, run `workspace connect`, obtain or connect each repository, and run `agent setup`. Use separate compatible checkouts and runtime dependencies for native Windows, WSL, remote hosts, and containers. Shared Git history does not move uncommitted work or installed tools.

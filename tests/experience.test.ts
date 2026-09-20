@@ -33,6 +33,10 @@ describe("documentation experience", () => {
     expect(results.map((result) => result.route)).toEqual(["/template"]);
   });
 
+  it("does not match another product version when a track is selected", () => {
+    expect(rankSearch([record({ tracks: ["template", "cli"], versions: { template: "2.0.0", cli: "2.1.0" } })], "example", { track: "template", version: "2.1.0" })).toEqual([]);
+  });
+
   it("allows only bounded aggregate analytics properties", () => {
     expect(sanitizeEvent("docs_search", { section: "Reference", results: "1-5", query: "secret" })).toEqual({ section: "Reference", results: "1-5" });
     expect(sanitizeEvent("code_copy", { category: "shell", code: "token=secret" })).toEqual({ category: "shell" });
@@ -48,7 +52,7 @@ describe("documentation experience", () => {
       fs.readFile(path.join(process.cwd(), "src/components/search.tsx"), "utf8"),
     ]);
     expect(layout).toContain("skip-link");
-    expect(layout).toContain("mobile-nav");
+    expect(layout).toContain("<MobileNav");
     expect(styles).toContain(":focus-visible");
     expect(styles).toContain("prefers-reduced-motion: reduce");
     expect(search).toContain("event.key.toLowerCase() === \"k\"");

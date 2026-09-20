@@ -1,0 +1,59 @@
+---
+title: "Workspace schema"
+description: "Shared project identity and repository definitions use workspace schema version 2."
+section: Reference
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/workspace.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: release/requests/cli/2.1.0.md
+---
+
+## A minimal project definition
+
+```yaml
+version: 2
+name: Acme
+purpose: Billing software
+workspace_repository:
+  url: git@github.com:acme/acme-workspace.git
+  default_branch: main
+repositories:
+  api:
+    url: https://git.example.com/acme/api.git
+    default_branch: main
+  web:
+    url: https://git.example.com/acme/web.git
+    default_branch: main
+relationships:
+  - from: web
+    to: api
+    description: Consumes the billing API
+```
+
+These are example repository addresses. The workspace's own repository is distinct from the implementation `repositories` map.
+
+## Optional configuration
+
+| Field | Meaning |
+| --- | --- |
+| `knowledge_repositories` | Read-only repositories of borrowed knowledge; shares the logical ID namespace with implementation repositories. |
+| `knowledge_review_days` | Additional review threshold for notes without code anchors. |
+| `cli_registry` | CLI installer registry: `source`, `repository`, and `api`. Added in 2.1.0. |
+
+Unknown structured fields and duplicate mapping keys are errors. YAML edits retain surrounding comments and ordering where possible; byte-for-byte formatting preservation is not promised.
+
+## Local bindings
+
+The local `workspace` binding records this checkout's path and base branch. `bindings` maps implementation IDs to their own `path` and `base_branch`. Keep paths and member selection out of shared identity. See [configuration files](/docs/reference/workspace-files).

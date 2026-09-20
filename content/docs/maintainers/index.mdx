@@ -1,23 +1,36 @@
 ---
-title: Maintainers
-description: Maintain source boundaries, prepare releases, and keep public documentation aligned with tagged behavior.
+title: "Maintainers"
+description: "Change product source, validate its outputs, and release each product deliberately."
 section: Maintainers
-order: 1
-audience: [maintainer]
+order: 0
+audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: current
-  cli: current
-sidebar_label: Overview
+  template: 2.1.0
+  cli: 2.1.0
 redirects: []
-sources: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
 ---
 
-The source repository builds two products but publishes them independently.
-Public documentation should explain tagged behavior in reader-oriented prose,
-not import the maintainer checkout during a website build.
+Product behavior is edited in `context-circuit-source`. The published template repository is an assembled artifact. This website is a third repository: curated documentation, not generated product output.
 
-## Maintain a release
+Do not patch a generated workspace and copy it back as a product change. Change `product/` and `template/` in source, validate, then release. Template publication and CLI publication are independent. They can share a version number without sharing a release identity.
 
-Read the [release boundaries](/docs/maintainers/releases), then update the
-matching track's changelog and release page with immutable source metadata.
+The source checkout is not an initialized Context Circuit workspace. Maintainer changes follow that repository's own instructions. The CLI and source use Apache-2.0; the scaffold a workspace receives uses 0BSD.
+
+<TopicList>
+<Topic href="/docs/maintainers/source-layout" title="Source repository layout">What each path in source owns.</Topic>
+<Topic href="/docs/maintainers/template-release" title="Template release process">Assemble and publish a workspace template tag.</Topic>
+<Topic href="/docs/maintainers/cli-release" title="CLI release process">Build, verify, and publish a CLI tag.</Topic>
+<Topic href="/docs/maintainers/validation" title="Validation and tests">What must pass before a release is assembled.</Topic>
+<Topic href="/docs/maintainers/documentation" title="Documentation contribution">How this website stays tied to tagged source.</Topic>
+<Topic href="/docs/maintainers/releases" title="Release boundaries">What a template release may change, and what a CLI release may change.</Topic>
+</TopicList>

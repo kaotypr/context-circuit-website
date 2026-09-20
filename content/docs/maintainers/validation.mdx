@@ -1,0 +1,44 @@
+---
+title: "Validation and tests"
+description: "Distinguish deterministic mechanics from behavior that must be observed in a coding host."
+section: Maintainers
+order: 4
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+scope: source
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: README.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: WORKFLOW.md
+---
+
+## Source checks
+
+Contributors need Git and Go 1.25 or newer for the documented source revision.
+
+```sh
+gofmt -w path/to/changed.go
+go test ./...
+go vet ./...
+sh scripts/check-release.sh
+```
+
+Replace the example Go path with changed files. The release check builds the workspace archive and six CLI targets, verifies inventories and checksums, exercises installation and initialization, and tests publication safeguards in disposable fixtures.
+
+## Native coverage
+
+CI tests Linux, macOS, and Windows. Cross-compilation alone does not establish native filesystem, installer, or process behavior.
+
+Source knowledge is checked inside a throwaway workspace against actual code anchors. Findings that require a person's judgment are reported rather than treated as automatically repairable.
+
+## Report limits honestly
+
+Passing deterministic checks does not prove a coding host loads and follows the instructions. Exercise the user flows you depend on and distinguish observations from unverified behavior. Validation does not authorize release publication.

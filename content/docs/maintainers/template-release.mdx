@@ -1,0 +1,44 @@
+---
+title: "Template release process"
+description: "Build workspace output from source and publish it through the template release line."
+section: Maintainers
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+scope: source
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: .github/workflows/publish.yml
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: WORKFLOW.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: scripts/publish-template.sh
+---
+
+## Prepare the source change
+
+Edit `product/` and `template/`, keeping the release manifest and embedded inventory consistent. Set `VERSION` and write `release/requests/template/<version>.md`. Its body supplies release notes; an explicit `changelog: reset` controls a published changelog reset.
+
+## Validate and assemble
+
+```sh
+sh scripts/check-release.sh
+sh scripts/build-dist.sh
+```
+
+The workspace artifact excludes the published repository's own README, license, changelog, contribution and security pages, and artwork. Publication restores those separately and marks them `export-ignore` for workspace archives.
+
+## Publish only when authorized
+
+`scripts/publish-template.sh` prepares a clean destination checkout, commits, and tags it. It refuses a destination holding changed, untracked, or ignored files. Push and hosted release creation are separate caller actions.
+
+The publish workflow runs the CLI job before the template job so a new template pin never points at an unpublished CLI. Each job still resolves its own version independently. Inspect the pinned workflow below before using the publication machinery.

@@ -3,6 +3,7 @@ import path from "node:path";
 import GithubSlugger from "github-slugger";
 import matter from "gray-matter";
 import type { Heading, Root } from "mdast";
+import remarkGfm from "remark-gfm";
 import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";
 import { unified } from "unified";
@@ -76,7 +77,7 @@ export async function loadDocuments(contentDirectory: string): Promise<{
         continue;
       }
 
-      const tree = unified().use(remarkParse).use(remarkMdx).parse(parsed.content) as Root;
+      const tree = unified().use(remarkParse).use(remarkGfm).use(remarkMdx).parse(parsed.content) as Root;
       const headings = collectHeadings(tree);
       documents.push({
         file,

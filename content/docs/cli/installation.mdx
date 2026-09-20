@@ -1,0 +1,44 @@
+---
+title: "CLI installation"
+description: "Verified native binaries, installed side by side."
+section: CLI
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/skills/cc-cli/SKILL.md
+---
+
+## Use the bundled installer
+
+The `cc-cli` skill reads `.context-circuit/CLI_VERSION` and installs that exact version for the agent's execution OS and architecture. WSL needs the Linux package, even on a Windows desktop. Release targets are macOS, Linux, and Windows on amd64 and arm64.
+
+From a workspace created from template 2.1.0, the pinned installation can also be run directly:
+
+```sh
+sh .agents/skills/cc-cli/scripts/install.sh --version 2.1.0
+```
+
+On Windows:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .agents/skills/cc-cli/scripts/install.ps1 -Version 2.1.0
+```
+
+The PowerShell policy applies only to this process. The installer verifies SHA-256 and the binary version before changing the shared launcher; no administrator access is needed. Use the reported **versioned command** path immediately, then run `version` to confirm it.
+
+## Keep workspaces independent
+
+Installed versions coexist. The shared command on PATH points at the last installed version, so it is not proof that you are running this workspace's pin. Resolve the versioned executable each time you change workspaces. Installing a CLI does not initialize, migrate, or update the template.
+
+## A different registry or offline installation
+
+An optional `cli_registry` in `workspace.yaml` records `source`, `repository`, and `api`. Installers accept `--source`, `--repo`, and `--api`, with corresponding PowerShell flags. GitLab requires a token; private GitHub releases also require access. Keep tokens out of shared files and shell history. Offline installation accepts a trusted `--archive` and `--checksums` pair.
+
+See [version pinning](/docs/cli/version-pinning) before updating an existing workspace.

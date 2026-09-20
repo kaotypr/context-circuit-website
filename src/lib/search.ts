@@ -25,7 +25,7 @@ export function rankSearch(
     .filter((record) => !filters.track || record.tracks.includes(filters.track))
     .filter(
       (record) =>
-        !filters.version || Object.values(record.versions).includes(filters.version),
+        !filters.version || (filters.track ? record.versions[filters.track] === filters.version : Object.values(record.versions).includes(filters.version)),
     )
     .map((record) => {
       const title = normalized(record.title);

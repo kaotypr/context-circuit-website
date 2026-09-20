@@ -1,0 +1,40 @@
+---
+title: "Human control boundaries"
+description: "A record preserves a decision. It never makes the decision for you."
+section: Concepts
+order: 9
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: README.md
+---
+
+## What each decision authorizes
+
+| Your decision | What may happen next |
+| --- | --- |
+| Request a change | Ground the request and write an intent for you to read. |
+| Approve the written intent | Investigate real code and create linked plans. |
+| Request execution after plans exist | Prepare worktrees, implement, check, and commit on worktree branches. |
+| Authorize delivery | Perform the push, pull request, merge, or publication you requested. |
+| Request completion | Append the note and reconcile affected durable knowledge. |
+| Request cleanup | Remove selected worktrees or branches with the authorized preservation rules. |
+
+## Direct changes
+
+A person can explicitly bypass intent, planning, and worktree preparation for an already-specified change. Work happens in the bound checkout on the current branch. Commits there still need authorization, as do delivery and deletion. Knowledge reconciliation still applies.
+
+## Checks and reviews
+
+Tests belong to implementation. Independent read-only review is manually requested and does not mechanically gate delivery or completion. `check` is a diagnostic, not approval or permission to repair every finding automatically.

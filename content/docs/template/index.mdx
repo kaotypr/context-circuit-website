@@ -1,0 +1,42 @@
+---
+title: "Workspace template"
+description: "Shared instructions, skills, and project files, separate from the installed CLI."
+section: Template
+sidebar_label: Template
+order: 0
+audience: [adopter, contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+---
+
+The workspace template is the project folder a coding agent reads. It is not the CLI. Installing a CLI version does not update the template, and copying a template does not install a CLI.
+
+What you get is ordinary Markdown and YAML: standing instructions, skills for each stage of work, shared identity files, a place for product knowledge, and folders for intents and plans. Member selection, checkout bindings, and working copies stay on the machine that created them.
+
+## What the template contains
+
+| Area | Purpose |
+| --- | --- |
+| `AGENTS.md` and host entry files | Standing instructions and human control boundaries. |
+| `.agents/skills/` | Procedures for setup, knowledge, intents, plans, worktrees, workers, delivery, and completion. |
+| `workspace.yaml` and `members.yaml` | Project identity, repository model, and roster. |
+| `context/` | Durable knowledge, optional catalog, and glossary. |
+| `intent/` and `plans/` | Human-readable outcomes and implementation plans. |
+| `.context-circuit/` | Product pins, ID reservations, role preferences, and reference documentation. |
+
+The published template repository's README, license, changelog, and artwork do not enter a fresh workspace archive. Initialization writes a README for your project.
+
+<TopicList>
+<Topic href="/docs/template/contents" title="What the template contains">The shipped structure, file by file.</Topic>
+<Topic href="/docs/template/agents" title="AGENTS instructions">Standing gates the agent follows in every host.</Topic>
+<Topic href="/docs/template/skills" title="Skills">Procedures loaded when the matching work is due.</Topic>
+<Topic href="/docs/template/workspace-files" title="Workspace files">Identity, roster, pins, and local bindings.</Topic>
+<Topic href="/docs/template/local-shared" title="Local versus shared configuration">What is committed with the project, and what stays on one machine.</Topic>
+</TopicList>

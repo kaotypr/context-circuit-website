@@ -30,9 +30,9 @@ async function main(): Promise<void> {
   const documents = publishedDocuments(graph);
 
   const representativeRoutes = new Map([
-    ["/", "Start with the workflow"],
-    ["/docs", "Reader paths"],
-    ["/docs/get-started", "Choose a track"],
+    ["/", "Why it exists"],
+    ["/docs", "Understand Context Circuit"],
+    ["/docs/get-started", "Setup Context Circuit"],
     ["/docs/reference/cli-commands", "CLI commands"],
     ["/docs/template/v2/getting-started", "Workspace template v2"],
     ["/docs/cli/v2/getting-started", "Context Circuit CLI v2"],
@@ -47,8 +47,9 @@ async function main(): Promise<void> {
 
   const cliVersionFile = artifactPath("/docs/cli/v2/getting-started");
   const cliVersionPage = await read(cliVersionFile);
-  requireText(cliVersionFile, cliVersionPage, 'aria-label="Documentation version"');
-  requireText(cliVersionFile, cliVersionPage, "v2.1.0");
+  requireText(cliVersionFile, cliVersionPage, 'aria-label="CLI release"');
+  requireText(cliVersionFile, cliVersionPage, "2.1.0");
+  requireText(cliVersionFile, cliVersionPage, 'aria-label="Template release"');
 
   const cliChangelogFile = artifactPath("/changelog/cli");
   requireText(cliChangelogFile, await read(cliChangelogFile), "/releases/cli/2.1.0");

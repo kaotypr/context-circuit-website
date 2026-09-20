@@ -1,41 +1,47 @@
 ---
-title: Install Context Circuit
-description: Create the v2 workspace template and install its pinned CLI without administrator access.
+title: "Setup Context Circuit"
+description: "Create a clean workspace from a tagged Context Circuit template release."
 section: Get started
-order: 2
-audience: [adopter]
-tracks: [template, cli]
+sidebar_label: Setup Context Circuit
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [template]
 versions:
   template: 2.1.0
-  cli: 2.1.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
     ref: v2.1.0
     path: README.md
-  - track: cli
-    repository: context-circuit-source
-    ref: cli-v2.1.0
-    path: README.md
 ---
 
-Create a fresh workspace from the tagged template with Tembiter:
+## Create the workspace with Tembiter
+
+From the parent folder where the workspace should be created, run Tembiter with the Context Circuit GitHub template URL, release tag, and new folder name:
 
 ```sh
 npx tembiter init \
   --template https://github.com/kaotypr/context-circuit.git \
   --tag v2.1.0 \
   --target acme-workspace
-cd acme-workspace
 ```
 
-Open the directory in Codex, Claude Code, or Cursor and ask the agent to install
-the Context Circuit CLI and initialize the workspace. The bundled skill selects
-the correct binary, verifies its checksum, and installs it without administrator
-access.
+Replace `acme-workspace` with the folder name you want. Git and Node.js 20 or later must be available.
 
-## What you need
+Tembiter fetches the tagged release without its Git history and initializes a new repository. The release archive excludes files that belong only to the template repository, such as its README, license, changelog, contribution pages, security page, and artwork. The resulting workspace receives its own project README and Git history.
 
-Tembiter needs Node.js 20 or later. Context Circuit itself needs Git; its native
-CLI does not require Go, Python, or Node.js after installation.
+This template step does not use Context Circuit CLI: there is no workspace yet for the CLI to operate on.
+
+## Open and configure the workspace
+
+Open `acme-workspace` in Cursor, Codex, or Claude Code. Continue with one prompt:
+
+```text
+Install the CLI version this workspace pins. Then initialize the workspace as
+“Acme Billing” for our billing platform and add me as Maya.
+```
+
+The agent now reads the workspace instructions, installs the pinned CLI, and uses it for initialization. Continue with [CLI installation](/docs/get-started/install-cli) and [initialization](/docs/get-started/initialize) to see what happens behind that prompt.
+
+If you cloned an existing team workspace, do not initialize it again. Ask the agent to select your existing member and connect this machine instead.

@@ -1,0 +1,42 @@
+---
+title: "Execute plans with workers"
+description: "Prepare the right checkouts, implement the outcome, and report actual checks."
+section: Workflows
+order: 4
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: product/docs/commands.md
+---
+
+## Ask to execute an existing plan
+
+The execution request covers worktree preparation for every repository the plan names. Read `record order` for a multi-plan run, then pass each required dependency start explicitly.
+
+```sh
+context-circuit-cli worktree prepare --repo api --plan p0001 --copy-mode auto
+context-circuit-cli worktree inspect --repo api --path .worktrees/p0001/api
+```
+
+Use your actual IDs and the returned path. Inspect the environment reuse report before installing dependencies. Read the checkout's instructions before editing.
+
+## Give workers bounded ownership
+
+The coordinator can ask the CLI for a worker dispatch specification, then invoke it through the coding host. A worker gets its plan or slice, directory, constraints, and expected results. Shared-worktree workers preserve each other's edits. The CLI never launches a model.
+
+## Report evidence
+
+Run the repository's relevant tests, lint, and builds. Commit implementation on the prepared worktree's branch, including partial work when interrupted. A bound-checkout commit still needs authorization.
+
+Report what ran, what passed or failed, and what remains unverified. Leave the plan itself as written until requested completion.
