@@ -10,13 +10,19 @@ versions:
 redirects: []
 sources:
   - track: template
-    repository: context-circuit-source
+    repository: context-circuit
     ref: v2.1.0
     path: CHANGELOG.md
 ---
 
 ## 2.1.0
 
-The current template release is documented on the
+The workspace can now record the registry from which its CLI should be
+installed. Existing workspaces without `cli_registry` continue to use the
+public GitHub release. The current template release is documented on the
 [2.1.0 release page](/releases/template/2.1.0).
 
+## 2.0.0
+
+The v2 workspace introduced the native CLI boundary, explicit human control
+points, durable knowledge, isolated worktrees, and independent release tracks.

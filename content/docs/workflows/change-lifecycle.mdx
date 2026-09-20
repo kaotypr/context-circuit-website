@@ -1,0 +1,40 @@
+---
+title: Change lifecycle
+description: Move from a grounded request through approval, planning, execution, delivery, and completion.
+section: Workflows
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: AGENTS.md
+---
+
+## 1. Ground the outcome
+
+The agent retrieves relevant project knowledge, writes the intended outcome and
+its boundaries as an intent, and stops for a person to review it.
+
+## 2. Approve and plan
+
+Approval authorizes planning only. The agent then inspects real code and writes
+repository-specific plans. Repository changes still wait for an execution
+request made after those plans exist.
+
+## 3. Execute and check
+
+Execution begins in isolated worktrees unless the person explicitly requests a
+direct change. The implementation follows repository guidance, runs real checks,
+and commits its result so dependent work can build on it.
+
+## 4. Deliver and complete
+
+Pushes, pull requests, merges, deployment, and cleanup remain separate choices.
+Marking a plan complete records the actual result and reconciles the durable
+knowledge changed by the work.

@@ -9,6 +9,7 @@ export type ContentDocument = {
   frontmatter: Frontmatter;
   routeInfo: RouteInfo;
   headings: Set<string>;
+  headingText: string[];
   tree: Root;
 };
 
@@ -17,4 +18,3 @@ export type ContentGraph = {
   byRoute: Map<string, ContentDocument>;
   redirects: Map<string, string>;
 };
-

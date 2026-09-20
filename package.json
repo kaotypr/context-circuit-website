@@ -7,12 +7,13 @@
   },
   "packageManager": "pnpm@11.24.0",
   "scripts": {
-    "build": "next build",
+    "build": "pnpm content:check && pnpm theme:check && next build",
     "content:check": "tsx scripts/check-content.ts",
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start",
     "test": "tsx scripts/run-tests.ts",
+    "theme:check": "tsx scripts/check-theme.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

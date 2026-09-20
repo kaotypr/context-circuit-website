@@ -1,0 +1,27 @@
+---
+title: Workspace files
+description: Understand which Context Circuit records are shared and which bindings remain local to one machine.
+section: Reference
+order: 2
+audience: [contributor, maintainer]
+tracks: [template]
+versions:
+  template: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: .context-circuit/docs/workspace.md
+---
+
+`workspace.yaml`, `members.yaml`, `context/`, `intent/`, and `plans/` are shared
+through Git. `member.local.yaml`, `repositories.local.yaml`, local locks, and
+worktree associations stay ignored because they describe one machine.
+
+## Repository identity
+
+`workspace.yaml` gives every logical repository a stable ID, URL, default
+branch, and relationship to its peers. The local bindings map those IDs to
+checkout paths and machine-specific base branches without publishing paths from
+one computer into another's workspace.

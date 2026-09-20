@@ -11,7 +11,7 @@ sidebar_label: Getting started
 redirects: []
 sources:
   - track: cli
-    repository: context-circuit
+    repository: context-circuit-source
     ref: cli-v2.1.0
     path: README.md
 ---
@@ -19,8 +19,18 @@ sources:
 The CLI validates and updates Context Circuit records without making users
 manage runtime identifiers by hand.
 
+The bundled `cc-cli` skill resolves the pinned version and registry, selects the
+package for the execution OS and architecture, verifies its checksum, and
+installs it without administrator access. Installed versions coexist so one
+workspace cannot silently upgrade another.
+
 ## Release line
 
 This guide is pinned to CLI release 2.1.0. See its
 [release page](/releases/cli/2.1.0).
 
+## Command reference
+
+See the [CLI command groups](/docs/reference/cli-commands). The agent owns
+judgment and code changes; the CLI owns reproducible bookkeeping and Git
+mechanics.

@@ -10,15 +10,17 @@ versions:
 redirects: []
 sources:
   - track: template
-    repository: context-circuit-source
+    repository: context-circuit
     ref: v2.1.0
     path: CHANGELOG.md
 ---
 
-Template 2.1.0 is the current v2 workspace contract.
+Template 2.1.0 adds the optional `cli_registry` workspace setting. Its `source`,
+`repository`, and `api` fields let the bundled installation skill obtain the
+CLI from an explicitly selected GitHub or GitLab registry. A workspace without
+the setting behaves exactly as it did in 2.0.0.
 
 ## Documentation
 
 Read the [template guide](/docs/template/v2/getting-started) or the complete
 [template changelog](/changelog/template).
-

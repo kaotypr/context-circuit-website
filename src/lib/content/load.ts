@@ -31,13 +31,16 @@ function textContent(node: unknown): string {
   return candidate.children?.map(textContent).join("") ?? "";
 }
 
-function collectHeadings(tree: Root): Set<string> {
+function collectHeadings(tree: Root): { ids: Set<string>; text: string[] } {
   const headings = new Set<string>();
+  const headingText: string[] = [];
   const slugger = new GithubSlugger();
   visit(tree, "heading", (node: Heading) => {
-    headings.add(slugger.slug(textContent(node)));
+    const text = textContent(node).trim();
+    headings.add(slugger.slug(text));
+    headingText.push(text);
   });
-  return headings;
+  return { ids: headings, text: headingText };
 }
 
 function formatSchemaError(file: string, error: ZodError): string[] {
@@ -74,13 +77,15 @@ export async function loadDocuments(contentDirectory: string): Promise<{
       }
 
       const tree = unified().use(remarkParse).use(remarkMdx).parse(parsed.content) as Root;
+      const headings = collectHeadings(tree);
       documents.push({
         file,
         absoluteFile,
         body: parsed.content,
         frontmatter: frontmatterResult.data,
         routeInfo: routeForFile(file),
-        headings: collectHeadings(tree),
+        headings: headings.ids,
+        headingText: headings.text,
         tree,
       });
     } catch (error) {

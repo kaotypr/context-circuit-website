@@ -20,8 +20,8 @@ export const releaseRegistry: Record<Track, ReleaseLine> = {
       "2.1.0": {
         version: "2.1.0",
         major: 2,
-        repository: "context-circuit-source",
-        sourceBaseUrl: "https://github.com/kaotypr/context-circuit-source",
+        repository: "context-circuit",
+        sourceBaseUrl: "https://github.com/kaotypr/context-circuit",
         ref: "v2.1.0",
       },
     },
@@ -32,8 +32,8 @@ export const releaseRegistry: Record<Track, ReleaseLine> = {
       "2.1.0": {
         version: "2.1.0",
         major: 2,
-        repository: "context-circuit",
-        sourceBaseUrl: "https://github.com/kaotypr/context-circuit",
+        repository: "context-circuit-source",
+        sourceBaseUrl: "https://github.com/kaotypr/context-circuit-source",
         ref: "cli-v2.1.0",
       },
     },
@@ -50,4 +50,3 @@ export function sourceUrl(track: Track, selector: string, path: string): string 
   if (!release) return undefined;
   return `${release.sourceBaseUrl}/blob/${release.ref}/${path}`;
 }
-

@@ -19,7 +19,7 @@ versions:
 redirects: []
 sources:
   - track: template
-    repository: context-circuit-source
+    repository: context-circuit
     ref: v2.1.0
     path: README.md
 ---`;
@@ -62,7 +62,7 @@ describe("content validation", () => {
       "versions/cli/2/start.mdx": `${validFrontmatter
         .replace("order: 1", "order: 3")
         .replaceAll("template", "cli")
-        .replace("context-circuit-source", "context-circuit")
+        .replace("repository: context-circuit", "repository: context-circuit-source")
         .replace("ref: v2.1.0", "ref: cli-v2.1.0")}\n\n# Start`,
     });
 

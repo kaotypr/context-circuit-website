@@ -10,13 +10,20 @@ versions:
 redirects: []
 sources:
   - track: cli
-    repository: context-circuit
+    repository: context-circuit-source
     ref: cli-v2.1.0
-    path: CHANGELOG.md
+    path: release/requests/cli/2.1.0.md
 ---
 
 ## 2.1.0
 
-The current CLI release is documented on the
+CLI 2.1.0 adds installer support for GitHub or GitLab registries while
+preserving checksum verification, side-by-side versions, and offline archive
+installation. The current CLI release is documented on the
 [2.1.0 release page](/releases/cli/2.1.0).
 
+## 2.0.0
+
+The first native CLI release replaced the v1 shell runtime with a Go binary for
+deterministic workspace records, repository bindings, worktrees, ordering, and
+diagnostics.

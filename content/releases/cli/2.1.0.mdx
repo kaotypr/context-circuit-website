@@ -10,15 +10,17 @@ versions:
 redirects: []
 sources:
   - track: cli
-    repository: context-circuit
+    repository: context-circuit-source
     ref: cli-v2.1.0
-    path: CHANGELOG.md
+    path: release/requests/cli/2.1.0.md
 ---
 
-CLI 2.1.0 is the current v2 command-line release.
+CLI 2.1.0 adds registry-aware installers. They accept GitHub or GitLab source,
+repository, and API settings through flags or environment variables. GitLab
+downloads require a token and fail clearly when it is absent. Checksum and
+embedded-version verification remain in force for every registry.
 
 ## Documentation
 
 Read the [CLI guide](/docs/cli/v2/getting-started) or the complete
 [CLI changelog](/changelog/cli).
-

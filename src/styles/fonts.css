@@ -1,0 +1,5 @@
+/* Latin subsets served by the canonical v0.1 reference; licenses are in public/fonts/licenses/. */
+@font-face { font-family: "Fredoka"; src: url("/fonts/fredoka-latin.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: swap; }
+@font-face { font-family: "Fira Code"; src: url("/fonts/fira-code-latin.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: swap; }
+@font-face { font-family: "Schoolbell"; src: url("/fonts/schoolbell-latin.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
+:root { --font-fredoka: "Fredoka", sans-serif; --font-fira-code: "Fira Code", monospace; --font-schoolbell: "Schoolbell", cursive; }

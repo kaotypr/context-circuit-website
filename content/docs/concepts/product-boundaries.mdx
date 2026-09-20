@@ -1,0 +1,34 @@
+---
+title: Product boundaries
+description: See how the workspace template, native CLI, coding agent, and person divide responsibility.
+section: Concepts
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: README.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: README.md
+---
+
+The workspace stores shared knowledge, intents, plans, member records, and
+repository relationships. The CLI performs operations that must return the same
+result every time. The coding agent reads the actual project and exercises
+judgment. A person supplies consent for approval, execution, delivery, and
+completion.
+
+## Independent release tracks
+
+The workspace template uses `v*` tags in `context-circuit`. The native CLI uses
+`cli-v*` tags in `context-circuit-source`. A workspace pins its expected CLI in
+`.context-circuit/CLI_VERSION`; matching version numbers do not combine the two
+products.

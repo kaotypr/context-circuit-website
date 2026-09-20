@@ -1,0 +1,41 @@
+---
+title: Install Context Circuit
+description: Create the v2 workspace template and install its pinned CLI without administrator access.
+section: Get started
+order: 2
+audience: [adopter]
+tracks: [template, cli]
+versions:
+  template: 2.1.0
+  cli: 2.1.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.1.0
+    path: README.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.1.0
+    path: README.md
+---
+
+Create a fresh workspace from the tagged template with Tembiter:
+
+```sh
+npx tembiter init \
+  --template https://github.com/kaotypr/context-circuit.git \
+  --tag v2.1.0 \
+  --target acme-workspace
+cd acme-workspace
+```
+
+Open the directory in Codex, Claude Code, or Cursor and ask the agent to install
+the Context Circuit CLI and initialize the workspace. The bundled skill selects
+the correct binary, verifies its checksum, and installs it without administrator
+access.
+
+## What you need
+
+Tembiter needs Node.js 20 or later. Context Circuit itself needs Git; its native
+CLI does not require Go, Python, or Node.js after installation.
