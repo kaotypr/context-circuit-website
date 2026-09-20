@@ -11,7 +11,7 @@
     "content:check": "tsx scripts/check-content.ts",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start",
+    "static:check": "tsx scripts/check-static-export.ts",
     "test": "tsx scripts/run-tests.ts",
     "theme:check": "tsx scripts/check-theme.ts",
     "typecheck": "tsc --noEmit"
