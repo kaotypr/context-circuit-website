@@ -6,21 +6,21 @@ order: 0
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: 2.1.0
-  cli: 2.1.0
+  template: 2.3.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/commands.md
 ---
 
-A normal change follows the same conversation every time. The agent gathers durable context, writes an intent, and waits. You answer numbered questions and approve the outcome. The agent reads real code and writes plans. You ask for execution after those plans exist. You authorize delivery when the work should leave the machine. You request completion so the knowledge that changed is reconciled.
+For an outcome that needs approval, the agent gathers durable context, writes an intent, and waits. You answer numbered questions and approve the outcome. The agent reads real code and writes plans. For an already specified outcome, you may instead request a grounded standalone plan. Either way, you ask for execution after the plans exist. You authorize delivery when the work should leave the machine. You request completion so the knowledge that changed is reconciled.
 
 None of those later requests is implied by the first one. “Add billing” is not approval of the derived intent. An earlier “implement this” does not start execution once plans appear. Delivery does not complete a plan. Completion does not delete working copies.
 
@@ -39,7 +39,7 @@ The CLI records facts and prepares files. It does not call a model, execute a pl
 <TopicList>
 <Topic href="/docs/workflows/gather-context" title="Gather project context">Retrieve accepted knowledge before deriving an outcome.</Topic>
 <Topic href="/docs/workflows/write-intent" title="Write and approve an intent">Present the outcome, wait for answers, record the approval.</Topic>
-<Topic href="/docs/workflows/create-plans" title="Create plans">Investigate real code after approval and write the work.</Topic>
+<Topic href="/docs/workflows/create-plans" title="Create plans">Investigate real code after approval or a direct planning request.</Topic>
 <Topic href="/docs/workflows/execute-plans" title="Execute plans with workers">Prepare worktrees, implement, check, and optionally dispatch workers.</Topic>
 <Topic href="/docs/workflows/deliver" title="Deliver changes">Push, open a pull request, or merge only when asked.</Topic>
 <Topic href="/docs/workflows/complete" title="Complete plans and update knowledge">Append the note and reconcile what actually changed.</Topic>

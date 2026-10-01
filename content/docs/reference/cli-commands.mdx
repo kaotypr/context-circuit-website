@@ -6,12 +6,12 @@ order: 6
 audience: [adopter, contributor, maintainer]
 tracks: [cli]
 versions:
-  cli: 2.1.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/commands.md
 ---
 
@@ -37,7 +37,7 @@ context-circuit-cli worktree prepare --help
 | `repo` | `connect`, `clone`, `init`, `base`, `remote`, `relate`, `inspect`, `fetch`. |
 | `knowledge` | `clone`, `connect`, `sync`, `remote`, `list` for borrowed knowledge. |
 | `context find` | Search by `--query` or get reconciliation candidates with `--repo`. |
-| `record` | `create`, `approve`, `show`, `list`, `dependencies`, `complete`, `order`. |
+| `record` | `create`, `approve`, `show`, `list`, `dependencies`, `complete`, `order`, `delete`. |
 | `worktree` | `prepare`, `list`, `inspect`, `move`, `repair`, `remove`. |
 | `agent` | `settings`, `configure`, `setup`, `dispatch`. |
 | `template export` | Write the exact blank embedded seed to a new directory. |
@@ -51,6 +51,7 @@ context-circuit-cli context find --query billing
 context-circuit-cli record list
 context-circuit-cli record show --id p0001
 context-circuit-cli record order --intent i001 --mode waves
+context-circuit-cli record order --plan p0001 --mode waves
 context-circuit-cli worktree list --repo api
 ```
 
@@ -58,4 +59,4 @@ Replace IDs with those in your workspace. Normal output is readable YAML; `--jso
 
 ## Mutation is not authorization
 
-Approval and completion commands require the actual corresponding decision. Removal requires its own request. The CLI does not commit, deliver, execute a plan, launch a model, or infer human consent. The pinned command source below contains the complete signatures and refusal behavior.
+Approval and completion commands require the actual corresponding decision. `record delete` previews the affected records and released IDs without `--confirm`; deletion requires a request and agreement to the exact preview. The CLI does not commit, deliver, execute a plan, launch a model, or infer human consent. The pinned command source below contains the complete signatures and refusal behavior.

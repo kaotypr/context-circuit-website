@@ -6,12 +6,12 @@ order: 2
 audience: [adopter, contributor, maintainer]
 tracks: [cli]
 versions:
-  cli: 2.1.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/commands.md
 ---
 
@@ -28,7 +28,9 @@ Global flags precede the command. Normal output is readable YAML; `--json` retur
 
 ## What commands can do
 
-The CLI initializes workspace files, manages members and bindings, retrieves catalog entries, creates records, records decisions already made, derives dependency order, prepares worktrees, and produces diagnostics or dispatch specifications.
+The CLI initializes workspace files, manages members and bindings, retrieves catalog entries, creates records, records decisions already made, derives dependency order, previews requested record deletion, prepares worktrees, and produces diagnostics or dispatch specifications.
+
+`init` can create a solo workspace without `--member`. In a team workspace, `status` reports `identity_required` until this machine selects a listed member. New plans use folders with `plan.md`; `record order --plan ID` selects an exact run. `record delete --member ID` or, in a solo workspace, `record delete --all` previews what would be removed. Nothing is deleted until the requested preview is confirmed with `--confirm`.
 
 It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review.
 

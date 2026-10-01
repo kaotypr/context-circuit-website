@@ -15,7 +15,7 @@ export type ReleaseLine = {
 
 export const releaseRegistry: Record<Track, ReleaseLine> = {
   template: {
-    current: "2.1.0",
+    current: "2.3.0",
     releases: {
       "2.0.0": { version: "2.0.0", major: 2, repository: "context-circuit", sourceBaseUrl: "https://github.com/kaotypr/context-circuit", ref: "v2.0.0" },
       "2.1.0": {
@@ -25,10 +25,12 @@ export const releaseRegistry: Record<Track, ReleaseLine> = {
         sourceBaseUrl: "https://github.com/kaotypr/context-circuit",
         ref: "v2.1.0",
       },
+      "2.2.0": { version: "2.2.0", major: 2, repository: "context-circuit", sourceBaseUrl: "https://github.com/kaotypr/context-circuit", ref: "v2.2.0" },
+      "2.3.0": { version: "2.3.0", major: 2, repository: "context-circuit", sourceBaseUrl: "https://github.com/kaotypr/context-circuit", ref: "v2.3.0" },
     },
   },
   cli: {
-    current: "2.1.0",
+    current: "2.3.0",
     releases: {
       "2.0.0": { version: "2.0.0", major: 2, repository: "context-circuit-source", sourceBaseUrl: "https://github.com/kaotypr/context-circuit-source", ref: "cli-v2.0.0" },
       "2.1.0": {
@@ -38,6 +40,8 @@ export const releaseRegistry: Record<Track, ReleaseLine> = {
         sourceBaseUrl: "https://github.com/kaotypr/context-circuit-source",
         ref: "cli-v2.1.0",
       },
+      "2.2.0": { version: "2.2.0", major: 2, repository: "context-circuit-source", sourceBaseUrl: "https://github.com/kaotypr/context-circuit-source", ref: "cli-v2.2.0" },
+      "2.3.0": { version: "2.3.0", major: 2, repository: "context-circuit-source", sourceBaseUrl: "https://github.com/kaotypr/context-circuit-source", ref: "cli-v2.3.0" },
     },
   },
 };

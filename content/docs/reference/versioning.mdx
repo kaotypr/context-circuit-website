@@ -6,17 +6,17 @@ order: 4
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: 2.1.0
-  cli: 2.1.0
+  template: 2.3.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: CHANGELOG.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: release/requests/cli/2.0.0.md
 ---
 
@@ -24,8 +24,8 @@ sources:
 
 | Product | Source version file | Published repository | Tag family | Workspace pin |
 | --- | --- | --- | --- | --- |
-| Template | `VERSION` | `context-circuit` | `v2.1.0` | `.context-circuit/VERSION` |
-| CLI | `CLI_VERSION` | `context-circuit-source` | `cli-v2.1.0` | `.context-circuit/CLI_VERSION` |
+| Template | `VERSION` | `context-circuit` | `v2.3.0` | `.context-circuit/VERSION` |
+| CLI | `CLI_VERSION` | `context-circuit-source` | `cli-v2.3.0` | `.context-circuit/CLI_VERSION` |
 
 Matching numbers do not make a joint release. An instruction change can ship without a binary change, and a CLI fix can ship without replacing workspace instructions.
 
@@ -35,6 +35,6 @@ A major-version guide describes the supported model within that major and names 
 
 ## Available history
 
-This website documents the v2 model and stable 2.0.0 and 2.1.0 release notes, verified from tagged source. It does not provide a v1 guide. The native CLI first shipped in 2.0.0; no CLI 1.x history exists. No patch release is invented to fill a selector.
+This website documents the v2 model and stable 2.0.0 through 2.3.0 release notes, verified from tagged source. It does not provide a v1 guide. The native CLI first shipped in 2.0.0; no CLI 1.x history exists. No patch release is invented to fill a selector.
 
 Use the [release hub](/docs/releases).

@@ -1,22 +1,22 @@
 ---
 title: "Initialize a workspace"
-description: "Record your project identity and first member once."
+description: "Record your project identity, then work solo or add members."
 section: Get started
 order: 3
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: 2.1.0
-  cli: 2.1.0
+  template: 2.3.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: .agents/skills/cc-workspace/SKILL.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/commands.md
 ---
 
@@ -28,13 +28,15 @@ billing for small businesses. Add me as Maya. Write my intents and plans in
 Indonesian with a semi-formal tone, while keeping technical terms in English.
 ```
 
-The agent confirms any missing identity choices, derives a readable member ID, and uses the pinned CLI to create the shared workspace structure and local member binding. It then refreshes native agent-role definitions for the hosts this workspace supports.
+The agent uses the pinned CLI to create the shared workspace structure, adds Maya to the roster, and selects her on this machine. It then refreshes native agent-role definitions for the hosts this workspace supports.
+
+You can also start solo. Ask the agent to initialize the project without adding a member; the CLI accepts `init` without `--member`. The empty roster needs no local member selection, and records created while solo have no `created_by`. Adding the first member later makes it a team workspace; earlier records remain valid.
 
 The CLI allocates and writes the structured fields. The agent writes the meaningful project description and language preferences. Initialization preserves existing files and refuses to silently reinitialize an active workspace.
 
 ```mermaid
 flowchart LR
-  Q[Name, purpose, person, preferences] --> A[Agent checks existing state]
+  Q[Name, purpose, optional member] --> A[Agent checks existing state]
   A -->|fresh workspace| C[CLI initializes structure]
   C --> R[Agent reports identity and local setup]
   A -->|already initialized| S[Stop and explain how to join]
@@ -50,6 +52,6 @@ This is an existing team workspace. Set up this machine for the existing member
 native agent roles without overwriting custom definitions.
 ```
 
-The agent asks you to choose if the member ID is ambiguous, then uses the CLI to create only machine-local bindings. Host role definitions are ignored by Git, so a fresh clone needs local setup and the coding host may need to reload them.
+The agent asks you to choose if the member ID is ambiguous, then uses the CLI to create only machine-local bindings. In a team workspace, changing requests wait until this machine has selected someone in the roster; reading and questions still work. Host role definitions are ignored by Git, so a fresh clone needs local setup and the coding host may need to reload them.
 
 Then [connect the implementation repositories](/docs/get-started/connect-repositories).

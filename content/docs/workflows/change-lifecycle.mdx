@@ -1,26 +1,26 @@
 ---
 title: "Change lifecycle"
-description: "Nine connected steps, with human decisions between preparation and action."
+description: "Human decisions connect preparation, implementation, delivery, and completion."
 section: Workflows
 order: 7
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: 2.1.0
-  cli: 2.1.0
+  template: 2.3.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/commands.md
 ---
 
-A change moves through the same decisions every time:
+A change that begins with an intent follows these decisions:
 
 1. Ground the request in product knowledge.
 2. Write an intent the person can approve.
@@ -31,7 +31,7 @@ A change moves through the same decisions every time:
 7. Authorize delivery.
 8. Request completion and reconcile the knowledge that changed.
 
-Optional workers and cleanup sit beside this path. They do not replace it.
+When the outcome is already specified, a person can request a grounded plan directly. The agent presents that standalone plan, and implementation still waits for a separate execution request. Optional workers and cleanup sit beside either path.
 
 ## Request through execution
 

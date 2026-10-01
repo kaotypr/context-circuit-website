@@ -6,12 +6,12 @@ order: 1
 audience: [adopter, contributor, maintainer]
 tracks: [cli]
 versions:
-  cli: 2.1.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/skills/cc-cli/SKILL.md
 ---
 
@@ -19,16 +19,16 @@ sources:
 
 The `cc-cli` skill reads `.context-circuit/CLI_VERSION` and installs that exact version for the agent's execution OS and architecture. WSL needs the Linux package, even on a Windows desktop. Release targets are macOS, Linux, and Windows on amd64 and arm64.
 
-From a workspace created from template 2.1.0, the pinned installation can also be run directly:
+From a workspace created from template 2.3.0, the pinned installation can also be run directly:
 
 ```sh
-sh .agents/skills/cc-cli/scripts/install.sh --version 2.1.0
+sh .agents/skills/cc-cli/scripts/install.sh --version 2.3.0
 ```
 
 On Windows:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .agents/skills/cc-cli/scripts/install.ps1 -Version 2.1.0
+powershell -NoProfile -ExecutionPolicy Bypass -File .agents/skills/cc-cli/scripts/install.ps1 -Version 2.3.0
 ```
 
 The PowerShell policy applies only to this process. The installer verifies SHA-256 and the binary version before changing the shared launcher; no administrator access is needed. Use the reported **versioned command** path immediately, then run `version` to confirm it.

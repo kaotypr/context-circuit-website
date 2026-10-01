@@ -6,18 +6,18 @@ order: 0
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: 2.1.0
-  cli: 2.1.0
+  template: 2.3.0
+  cli: 2.3.0
 redirects:
   - /docs/prompt-cookbook
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/how-it-works.md
 ---
 
@@ -64,6 +64,8 @@ The agent resolves records and checks real branches and diffs before describing 
 
 Initialization happens only on request. Add your preferred language and writing tone if intents and plans should use them.
 
+To work alone without a roster, omit the member request. Records created while solo have no `created_by` and remain valid after members are added.
+
 ### Join an existing workspace on another machine
 
 > This is an existing team workspace. Set this machine up for member `maya`, connect the workspace checkout, and obtain the repositories already recorded here.
@@ -73,6 +75,12 @@ The agent selects the existing member and binds this machine. It does not initia
 ### Add a member
 
 > Add Alex to this workspace. Write Alex's intents and plans in Indonesian with a semi-formal tone and keep technical terms in English.
+
+### Select a member before changing a team workspace
+
+> I am Maya, who is already listed in this workspace. Select me on this machine, then continue the change I requested.
+
+If you are new, say so and ask the agent to add and select you. A team workspace can still answer questions before selection, but it waits for a listed member before making changes. The selection attributes work; it does not verify identity.
 
 ### Configure offline allocation
 
@@ -125,11 +133,11 @@ flowchart LR
 
 ### Update only the CLI
 
-> Update the CLI used by this workspace to version `2.2.0`. Do not change the workspace template or existing records.
+> Update the CLI used by this workspace to version `2.3.0`. Do not change the workspace template or existing records.
 
 ### Update the workspace template
 
-> Update this workspace from its recorded template version to `2.2.0`. Show me the upstream delta and preserve our project-owned files and records.
+> Update this workspace from its recorded template version to `2.3.0`. Show me the upstream delta and preserve our project-owned files and records.
 
 The agent applies the version-to-version delta. It does not recopy a release over the workspace.
 
@@ -218,6 +226,12 @@ The agent retrieves relevant knowledge, writes the outcome it understood, asks n
 > The intent matches what I want. I approve it.
 
 Approval records your exact words and authorizes planning only. The agent then reads real code and writes linked plans without asking for planning permission.
+
+### Request a standalone plan
+
+> The outcome is already specified. Investigate the current code and write a detailed plan for adding an invoice CSV export. Present the plan before implementation.
+
+The agent can create a grounded plan folder without an intent. It still waits for a separate execution request.
 
 ### Correct the outcome before approval
 
@@ -391,6 +405,12 @@ flowchart LR
 Completion is the note plus knowledge reconciliation. Most completions change no durable concept.
 
 ## Organize and clean up
+
+### Delete records after reviewing a preview
+
+> Preview every intent and plan created by member `maya`, including archived records. Show me the exact list and IDs that would become reusable. Do not confirm deletion yet.
+
+For a solo workspace, ask to preview all records instead. After seeing the list, explicitly agree to that list before deletion. The CLI refuses when another member's record or a local worktree would be left referring to deleted work. Deletion must later be committed and synchronized across clones.
 
 ### Archive records
 

@@ -10,8 +10,8 @@ async function main() {
     "context-circuit-website": ".",
   };
   const refs = {
-    "context-circuit": ["v2.0.0", "v2.1.0"],
-    "context-circuit-source": ["cli-v2.0.0", "cli-v2.1.0"],
+    "context-circuit": ["v2.0.0", "v2.1.0", "v2.2.0", "v2.3.0"],
+    "context-circuit-source": ["cli-v2.0.0", "cli-v2.1.0", "cli-v2.2.0", "cli-v2.3.0"],
     "context-circuit-website": ["HEAD"],
   };
   const inventory: Record<string, { commit: string; paths: string[] }> = {};

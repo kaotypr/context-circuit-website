@@ -1,0 +1,34 @@
+---
+title: Context Circuit CLI 2.3.0
+description: Release notes for Context Circuit CLI 2.3.0.
+section: CLI releases
+order: 1
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.3.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.3.0
+    path: release/requests/cli/2.3.0.md
+---
+
+CLI 2.3.0 allows `init` without `--member`. This creates a solo workspace with
+an empty roster, no selected member, and records without `created_by`. Adding
+members later turns it into a team workspace without invalidating those records.
+
+In a team workspace, `status` reports `identity_required` when this machine has
+no selected member or selects one absent from the roster. `record create`
+explains how to select a member before writing.
+
+`record delete --member ID` previews the intents and plans created by one member
+in a team workspace. `record delete --all` previews all records in a solo
+workspace. Both include archived records and release their IDs for reuse. The
+command deletes nothing without `--confirm`, and refuses deletion when another
+member's record or a local plan worktree would be left referring to the records.
+
+## Documentation
+
+Read the [record reference](/docs/reference/records) or the [CLI changelog](/changelog/cli).

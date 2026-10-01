@@ -1,28 +1,30 @@
 ---
 title: "Plans"
-description: "Code-grounded implementation work linked to an approved outcome."
+description: "Code-grounded implementation work after an approved intent or a direct planning request."
 section: Concepts
 order: 4
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: 2.1.0
-  cli: 2.1.0
+  template: 2.3.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: .context-circuit/docs/working.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/commands.md
 ---
 
-## Plan after approval
+## Plan from a grounded request
 
-A plan records the approach, tasks and order, repositories, dependencies, risks, and expected checks. The agent investigates real code after approval. One plan can name several repositories; one plan per repository is not required.
+A plan records the approach, tasks and order, repositories, dependencies, risks, and expected checks. The agent investigates real code after intent approval. When a person directly requests a detailed plan for an already specified outcome, it can create a standalone plan without an intent. One plan can name several repositories.
+
+New plans live at `plans/pNNNN-slug/plan.md`. The folder may hold supporting contracts, diagrams, schemas, or other detail files. `plan.md` links each detail and assigns it as shared or specific to a repository so workers receive the right reading. Existing single-file plans remain readable without migration.
 
 ## Execution is a separate request
 
@@ -30,7 +32,7 @@ Plans are presented once they exist. Reading them is optional and there is no pl
 
 ## Dependencies and resumption
 
-`record order` derives waves or a linear chain from dependencies. It reports starting references and integration merges; it does not run the work. Completed plans drop out of the order.
+`record order` derives waves or a linear chain from dependencies. Use `--intent ID` for linked plans or repeat `--plan ID` to select an exact run. It reports starting references and integration merges; it does not run the work. Completed plans drop out of the order.
 
 The plan stays as written during execution. Results go to the person, then into the requested completion note. Resume by inspecting real branches and diffs; a plan states intention and cannot prove implementation.
 
