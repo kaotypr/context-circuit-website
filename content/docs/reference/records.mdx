@@ -6,12 +6,12 @@ order: 2
 audience: [adopter, contributor, maintainer]
 tracks: [template]
 versions:
-  template: 2.1.0
+  template: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: .context-circuit/docs/working.md
 ---
 
@@ -20,7 +20,7 @@ sources:
 | Field | Meaning |
 | --- | --- |
 | `id` | Workspace-global intent ID, such as `i001`. |
-| `created_by` | Author's member ID; the only member-related metadata. |
+| `created_by` | Author's member ID in a team workspace; absent for solo records. |
 | `created_at` | Creation instant. |
 | `plans` | Linked implementation plans. |
 | `approved_at` | Present after a person's approval is recorded. |
@@ -31,16 +31,18 @@ The body holds goal, non-goals, constraints, success criteria, repository scope,
 
 | Field | Meaning |
 | --- | --- |
-| `id`, `created_by`, `created_at` | Identity and author. |
-| `intent` | The approved outcome this plan implements. |
+| `id`, `created_at` | Plan identity and creation time; `created_by` appears in a team workspace. |
+| `intent` | The approved outcome, when the plan was created from an intent; absent for a standalone plan. |
 | `repositories` | Logical implementation repository IDs. |
 | `depends_on` | Optional plan dependencies. |
 | `completed_at` | Present after requested completion. |
 
-The body describes approach, tasks and order, risks, and checks. Execution does not rewrite the plan; the result is carried by the completion note.
+New plans are folders named `plans/pNNNN-slug/`, with `plan.md` as the entry. The body describes approach, tasks and order, risks, and checks. Optional detail files are linked from the entry and assigned through `required_files.shared` or `required_files.by_repository.<repo>`. Legacy single-file plans remain readable. Execution does not rewrite the plan; the result is carried by the completion note.
 
 ## IDs, dates, and language
 
-Intent IDs have at least three digits; plans have at least four. Allocation reserves IDs permanently, including after archival. Use returned IDs rather than guessing the next number. Distinct member bands can separate offline allocation ranges, but a local lock is not distributed coordination.
+Intent IDs have at least three digits; plans have at least four. Archival and manual file removal do not release reservations. Only a requested `record delete` releases IDs for reuse, after preview and confirmation. Use returned IDs rather than guessing the next number. Distinct member bands can separate offline allocation ranges, but a local lock is not distributed coordination.
+
+In a team workspace, `record delete --member ID` previews all active and archived records one member created. In a solo workspace, `record delete --all` previews every record and resets the ledger. Neither deletes without `--confirm`. The CLI refuses if another member's record would still refer to a deleted record, or a local worktree is associated with a deleted plan. Deletion in one checkout must still be committed and synchronized; until then, another clone may still hold those records.
 
 Instants use `2026-09-15T10:53:00Z`; other dates use `YYYY-MM-DD`. Record prose follows the author's language, headings stay English, and decision notes preserve the person's words exactly.

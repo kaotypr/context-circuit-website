@@ -6,12 +6,12 @@ order: 5
 audience: [adopter, contributor, maintainer]
 tracks: [template]
 versions:
-  template: 2.1.0
+  template: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: .context-circuit/docs/workspace.md
 ---
 
@@ -24,7 +24,7 @@ sources:
 | `.context-circuit/VERSION` | Template version received. |
 | `.context-circuit/CLI_VERSION` | Expected CLI executable version. |
 | `.context-circuit/role-tiering.yaml` | Shared host/role model and effort preferences. |
-| `.context-circuit/ids.yaml` | Permanent intent and plan reservations. |
+| `.context-circuit/ids.yaml` | Intent and plan reservations; only requested record deletion releases IDs. |
 | `intent/`, `plans/` | Outcomes, implementation plans, and decision notes. |
 | `context/` | Durable knowledge, optional index, and glossary. |
 
@@ -32,7 +32,7 @@ sources:
 
 | Path | Purpose |
 | --- | --- |
-| `member.local.yaml` | Active member on this machine. |
+| `member.local.yaml` | Active member on this machine in a team workspace; absent in a solo workspace. |
 | `repositories.local.yaml` | Workspace and repository paths, base branches, borrowed checkout paths. |
 | `.context-circuit/role-tiering.local.yaml` | Machine-specific model and effort overrides. |
 | `.context-circuit/local/worktrees.yaml` | Optional plan-to-worktree associations. |

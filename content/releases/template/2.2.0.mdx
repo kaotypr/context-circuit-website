@@ -1,0 +1,29 @@
+---
+title: Workspace template 2.2.0
+description: Release notes for Context Circuit workspace template 2.2.0.
+section: Template releases
+order: 2
+audience: [adopter, maintainer]
+tracks: [template]
+versions:
+  template: 2.2.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.2.0
+    path: CHANGELOG.md
+---
+
+Template 2.2.0 adds direct grounded planning for an already specified outcome,
+without an intent. Every new plan uses a folder with `plan.md` as its entry and
+optional details for contracts, diagrams, schemas, or other useful design. The
+entry links and assigns those details for shared or repository-specific reading.
+
+The agent presents the complete plan and waits for a separate execution request.
+The template pins CLI 2.2.0, which can also read legacy single-file plans.
+
+## Documentation
+
+Read the [plan workflow](/docs/workflows/create-plans) or the
+[template changelog](/changelog/template).

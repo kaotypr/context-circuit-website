@@ -6,23 +6,23 @@ order: 4
 audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
-  template: 2.1.0
-  cli: 2.1.0
+  template: 2.3.0
+  cli: 2.3.0
 redirects: []
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.1.0
+    ref: v2.3.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.1.0
+    ref: cli-v2.3.0
     path: product/docs/commands.md
 ---
 
 ## Ask to execute an existing plan
 
-The execution request covers worktree preparation for every repository the plan names. Read `record order` for a multi-plan run, then pass each required dependency start explicitly.
+The execution request covers worktree preparation for every repository the plan names. Use `record order --plan ID` to select an exact run, or `--intent ID` for linked plans. Read its dependency order for a multi-plan run, then pass each required dependency start explicitly.
 
 ```sh
 context-circuit-cli worktree prepare --repo api --plan p0001 --copy-mode auto

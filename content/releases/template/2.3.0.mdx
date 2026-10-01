@@ -1,0 +1,31 @@
+---
+title: Workspace template 2.3.0
+description: Release notes for Context Circuit workspace template 2.3.0.
+section: Template releases
+order: 1
+audience: [adopter, maintainer]
+tracks: [template]
+versions:
+  template: 2.3.0
+redirects: []
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.3.0
+    path: CHANGELOG.md
+---
+
+Template 2.3.0 fixes the quick-start command to use the published template's
+own version tag. It also supports solo workspaces with an empty member roster.
+In a team workspace, the agent asks an unidentified person whether they are an
+existing member or someone new, then selects or adds them before changing
+records. Reading and questions remain available before selection.
+
+On request, the agent previews record deletion and waits for agreement to the
+exact list. Team workspaces may delete one member's records; solo workspaces may
+delete all records. Deleted IDs become reusable. This template pins CLI 2.3.0.
+
+## Documentation
+
+Read the [template guide](/docs/template/v2/getting-started) or the
+[template changelog](/changelog/template).

@@ -33,6 +33,6 @@ from the static production output.
 
 Set optional `scope: source` or `scope: website` for source and website pages. Otherwise selected tracks identify the template, CLI, or both. Pages select exact versions independently. Source paths are checked against `src/lib/content/source-inventory.json`, a snapshot of verified tagged Git trees.
 
-Use shared `DocCard`, `CardGrid`, `Callout`, and `Circuit` components in MDX. Literal component links are validated like Markdown links. Tables use GFM; code blocks receive a toolbar. Release selectors navigate to exact notes; the v2 guide states its 2.1.0 evidence baseline instead of pretending to be an archived 2.0.0 manual.
+Use shared `DocCard`, `CardGrid`, `Callout`, and `Circuit` components in MDX. Literal component links are validated like Markdown links. Tables use GFM; code blocks receive a toolbar. Release selectors navigate to exact notes; the v2 guide states its 2.3.0 evidence baseline instead of pretending to be an archived 2.0.0 manual.
 
 After authorized delivery, run `pnpm sources:refresh` with local template/source checkouts and `pnpm sources:verify` to refresh the website snapshot and verify remote paths. New local pages omit an unavailable remote link until that refresh.

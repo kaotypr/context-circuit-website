@@ -1,0 +1,28 @@
+---
+title: Context Circuit CLI 2.2.0
+description: Release notes for Context Circuit CLI 2.2.0.
+section: CLI releases
+order: 2
+audience: [adopter, contributor, maintainer]
+tracks: [cli]
+versions:
+  cli: 2.2.0
+redirects: []
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.2.0
+    path: release/requests/cli/2.2.0.md
+---
+
+CLI 2.2.0 creates plans as folders with `plan.md` as the entry. A plan may include
+supporting files assigned as shared or repository-specific reading. The CLI
+reports missing, unsafe, unlinked, or unassigned details.
+
+Plans may be created without an intent when a person directly requests a grounded
+plan for an already specified outcome. Use `record order --plan ID` to select an
+exact run. Existing single-file plans remain readable without migration.
+
+## Documentation
+
+Read the [plan guide](/docs/concepts/plans) or the [CLI changelog](/changelog/cli).
