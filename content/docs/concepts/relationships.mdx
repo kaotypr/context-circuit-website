@@ -24,7 +24,7 @@ Read the catalog and choose notes relevant to the request. Do not scan every rep
 
 A workspace can mount an organization's knowledge under `knowledge_repositories`. Retrieval searches its index alongside the local catalog and labels which side each match came from. Borrowed entries are never copied into local context or offered as locally reconcilable obligations.
 
-Sync fetches and fast-forwards only a clean checkout on the shared branch. It does not merge, reset, or discard local changes. Obtaining the checkout disables its push URL; corrections go upstream from a separate checkout.
+Sync fetches and fast-forwards only a clean checkout on the shared branch. It does not merge, reset, or discard local changes. Obtaining the checkout disables its push URL. A wrong borrowed fact is neither copied nor corrected in `context/`: the agent tells you the fix goes upstream through that repository's own review, and makes it only when you ask for that as its own task.
 
 ## From relationships to plans
 
