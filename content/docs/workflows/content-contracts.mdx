@@ -1,15 +1,10 @@
 ---
 title: "Website content contracts"
 description: "Curated content is owned by the website and validated before static export."
-section: Workflows
-order: 8
-audience: [adopter, contributor, maintainer]
 tracks: [template, cli]
 versions:
   template: 2.3.0
   cli: 2.3.0
-scope: website
-redirects: []
 sources:
   - track: template
     repository: context-circuit
@@ -21,14 +16,14 @@ sources:
     path: product/docs/commands.md
 ---
 
-## One content graph
+## The content tree is the site
 
-MDX frontmatter supplies title, description, section, order, audience, product scope, independent version selections, and pinned sources. That graph drives routes, navigation, search, and source metadata. Draft and unlisted content is excluded from publication.
+Every MDX file under `content/` is a page, and its path is its URL. Frontmatter supplies the title, description, product tracks, independent version selections, and optional pinned sources; unknown fields fail the build. Folder `meta.json` files order the sidebar and name its sections. The same source drives routes, navigation, and the static search index.
 
 ## Stable paths and source evidence
 
-Major guides use `/docs/template/v2/` and `/docs/cli/v2/`. Release notes use exact versions under `/releases/`; the two changelogs stay separate. Internal links, fragments, source paths, and release selections are checked before export.
+Major guides use `/docs/template/v2/` and `/docs/cli/v2/`. Release notes use exact versions under `/releases/`; the two changelogs stay separate. Every release in the registry has a note and a changelog entry, newest first, and the static check confirms each one was exported.
 
-New website files have no published revision until committed. Their footer names the local MDX path instead of inventing a remote link. Existing files link to a verified website snapshot; this is not a claim that uncommitted edits are published.
+Source links name a repository, an immutable tag, and a path. They are written when the claim is checked and render as plain links in the page footer.
 
 See [documentation contribution](/docs/maintainers/documentation).

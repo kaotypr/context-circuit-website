@@ -1,8 +1,7 @@
 "use client";
 
 import { isValidElement, useState, type ReactNode } from "react";
-import { Check, Copy } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 
 function promptText(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -16,8 +15,12 @@ export function PromptBlock({ children }: { children?: ReactNode }) {
   const text = promptText(children).trim();
 
   async function copy() {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+    } catch {
+      return;
+    }
     window.setTimeout(() => setCopied(false), 1500);
   }
 
@@ -25,16 +28,15 @@ export function PromptBlock({ children }: { children?: ReactNode }) {
     <blockquote className="prompt-block">
       <div className="prompt-copy">
         <span>Prompt</span>
-        <Button
+        <button
+          className="button button-small"
           type="button"
-          variant="outline"
-          size="sm"
           onClick={() => void copy()}
           aria-label="Copy prompt"
         >
-          {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+          {copied ? <CheckIcon aria-hidden="true" /> : <CopyIcon aria-hidden="true" />}
           {copied ? "Copied" : "Copy"}
-        </Button>
+        </button>
       </div>
       <div className="prompt-text">{children}</div>
       <span className="sr-only" role="status">

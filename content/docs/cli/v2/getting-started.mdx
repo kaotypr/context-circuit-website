@@ -1,0 +1,30 @@
+---
+title: "Context Circuit CLI v2"
+description: "The v2 product model, documented against CLI release 2.3.0."
+tracks: [cli]
+versions:
+  cli: 2.3.0
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.3.0
+    path: release/requests/cli/2.0.0.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.3.0
+    path: release/requests/cli/2.3.0.md
+---
+
+## The native executable
+
+The CLI creates and validates workspace records, manages repository bindings, prepares worktrees, derives dependencies, and emits dispatch specifications. The agent still owns judgment and implementation; the person owns authorization.
+
+## Install and use
+
+Follow [CLI installation](/docs/cli/installation), resolve the [workspace version pin](/docs/cli/version-pinning), then read the [command reference](/docs/reference/cli-commands). The shared executable on PATH may point at a different workspace's version.
+
+## Version baseline
+
+This major guide is verified against CLI 2.3.0. Read the [2.3.0 release notes](/releases/cli/2.3.0) for solo workspaces and record deletion, or the independent [CLI changelog](/changelog/cli) for each release.
+
+The native CLI began at 2.0.0. There is no CLI 1.x history, and initialization does not migrate a v1 workspace.

@@ -1,10 +1,11 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { buildSearchIndex, publishedDocuments, sourceUrl } from "../src/lib/content";
-import { validateContent } from "../src/lib/content/validate";
+import { staticClient } from "fumadocs-core/search/client/orama-static";
+import { contentRoutes } from "../src/lib/content-routes";
+import { releaseRegistry, releasesNewestFirst, tracks } from "../src/lib/releases";
 
 const root = process.cwd();
-const outputDirectory = path.join(root, "out");
+const contentDirectory = path.join(root, "content");
 const failures: string[] = [];
 
 async function read(relativePath: string): Promise<string> {
@@ -17,19 +18,48 @@ async function read(relativePath: string): Promise<string> {
   }
 }
 
+async function exists(relativePath: string): Promise<boolean> {
+  try {
+    await fs.access(path.join(root, relativePath));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function requireText(file: string, source: string, expected: string): void {
   if (!source.includes(expected)) failures.push(`${file}: missing ${JSON.stringify(expected)}`);
 }
 
 function artifactPath(route: string): string {
-  return route === "/" ? "out/index.html" : `out${route}/index.html`;
+  return route === "/" ? "out/index.html" : `out${route.replace(/\/$/, "")}/index.html`;
 }
 
 async function main(): Promise<void> {
-  const graph = await validateContent(path.join(root, "content"));
-  const documents = publishedDocuments(graph);
+  const routes = await contentRoutes(contentDirectory);
 
-  const representativeRoutes = new Map([
+  // Every content page is exported with exactly one page heading.
+  for (const route of routes) {
+    const file = artifactPath(route);
+    const html = await read(file);
+    if (html && (html.match(/<h1[\s>]/g) ?? []).length !== 1) {
+      failures.push(`${file}: expected exactly one h1`);
+    }
+  }
+
+  // Public URLs named by the intent's constraints.
+  const required = new Set<string>(["/", "/docs", "/docs/get-started", "/docs/reference/cli-commands"]);
+  for (const track of tracks) {
+    required.add(`/changelog/${track}`);
+    required.add(`/docs/${track}/v2/getting-started`);
+    for (const release of releasesNewestFirst(track)) required.add(`/releases/${track}/${release.version}`);
+  }
+  for (const route of required) {
+    if (!routes.includes(route)) failures.push(`${route}: no content file produces this public route`);
+    if (!(await exists(artifactPath(route)))) failures.push(`${artifactPath(route)}: required route was not exported`);
+  }
+
+  const representative = new Map([
     ["/", "Why it exists"],
     ["/docs", "Understand Context Circuit"],
     ["/docs/get-started", "Setup Context Circuit"],
@@ -39,60 +69,37 @@ async function main(): Promise<void> {
     ["/changelog/template", "Workspace template changelog"],
     ["/changelog/cli", "Context Circuit CLI changelog"],
   ]);
-
-  for (const [route, text] of representativeRoutes) {
+  for (const [route, text] of representative) {
     const file = artifactPath(route);
     requireText(file, await read(file), text);
   }
 
-  const cliVersionFile = artifactPath("/docs/cli/v2/getting-started");
-  const cliVersionPage = await read(cliVersionFile);
-  requireText(cliVersionFile, cliVersionPage, 'aria-label="CLI release"');
-  requireText(cliVersionFile, cliVersionPage, "2.1.0");
-  requireText(cliVersionFile, cliVersionPage, 'aria-label="Template release"');
+  // The release selector lists every registry release for both tracks.
+  const selectorFile = artifactPath("/docs/cli/v2/getting-started");
+  const selectorPage = await read(selectorFile);
+  for (const track of tracks) {
+    requireText(selectorFile, selectorPage, `id="release-list-${track}-`);
+    for (const release of releasesNewestFirst(track)) {
+      const href = `/releases/${track}/${release.version}`;
+      if (!selectorPage.includes(`href="${href}"`) && !selectorPage.includes(`href="${href}/"`)) {
+        failures.push(`${selectorFile}: release selector does not list ${href}`);
+      }
+    }
+  }
+  requireText(selectorFile, selectorPage, 'class="version-baseline"');
+  requireText(selectorFile, selectorPage, `CLI ${releaseRegistry.cli.current}`);
 
   const cliChangelogFile = artifactPath("/changelog/cli");
   requireText(cliChangelogFile, await read(cliChangelogFile), "/releases/cli/2.1.0");
 
-  for (const document of documents) {
-    const file = artifactPath(document.routeInfo.route);
-    const html = await read(file);
-    for (const source of document.frontmatter.sources) {
-      const selector = document.frontmatter.versions[source.track];
-      const url = selector ? sourceUrl(source.track, selector, source.path) : undefined;
-      if (!url) failures.push(`${document.file}: could not resolve source ${source.path}`);
-      else requireText(file, html, url);
-    }
-  }
-
-  for (const document of graph.documents.filter(
-    (candidate) => candidate.frontmatter.draft || candidate.frontmatter.unlisted,
-  )) {
-    try {
-      await fs.access(path.join(root, artifactPath(document.routeInfo.route)));
-      failures.push(`${artifactPath(document.routeInfo.route)}: excluded document was exported`);
-    } catch {
-      // Excluded content must have no artifact.
-    }
-  }
-
-  const searchFile = "out/search-index.json";
-  const searchSource = await read(searchFile);
-  try {
-    const actual = JSON.parse(searchSource) as unknown;
-    const expected = buildSearchIndex(graph);
-    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-      failures.push(`${searchFile}: does not match the validated published content graph`);
-    }
-  } catch (error) {
-    failures.push(`${searchFile}: invalid JSON (${error instanceof Error ? error.message : String(error)})`);
-  }
-
+  // Every redirect lands on an exported page.
   const redirectsFile = "out/_redirects";
   const redirects = await read(redirectsFile);
-  for (const document of documents) {
-    for (const redirect of document.frontmatter.redirects) {
-      requireText(redirectsFile, redirects, `${redirect} ${document.routeInfo.route}/ 301`);
+  for (const line of redirects.split("\n").map((entry) => entry.trim())) {
+    if (!line || line.startsWith("#")) continue;
+    const [, target] = line.split(/\s+/);
+    if (!target || !(await exists(artifactPath(target)))) {
+      failures.push(`${redirectsFile}: target of "${line}" was not exported`);
     }
   }
 
@@ -104,43 +111,56 @@ async function main(): Promise<void> {
   const homeFile = "out/index.html";
   const home = await read(homeFile);
   requireText(homeFile, home, 'class="skip-link"');
-  requireText(homeFile, home, 'aria-haspopup="dialog"');
+  requireText(homeFile, home, 'id="main-content"');
 
-  const staticDirectory = path.join(outputDirectory, "_next/static");
+  // Static search: the exported index parses and matches titles and body text.
+  const searchFile = "out/search-index.json";
+  const searchSource = await read(searchFile);
+  try {
+    JSON.parse(searchSource);
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async () => new Response(searchSource, { status: 200 })) as typeof fetch;
+    try {
+      const client = staticClient({ from: "/search-index.json" });
+      const byTitle = await client.search("version pinning");
+      if (!byTitle.some((result) => result.url.startsWith("/docs/cli/version-pinning") && result.type === "page")) {
+        failures.push(`${searchFile}: title search for "version pinning" does not find /docs/cli/version-pinning`);
+      }
+      const byBody = await client.search("There is no CLI 1.x history");
+      if (!byBody.some((result) => result.url.startsWith("/docs/cli/v2/getting-started"))) {
+        failures.push(`${searchFile}: body search does not find /docs/cli/v2/getting-started`);
+      }
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  } catch (error) {
+    failures.push(`${searchFile}: ${error instanceof Error ? error.message : String(error)}`);
+  }
+
+  const staticDirectory = path.join(root, "out/_next/static");
   const staticFiles = await fs.readdir(staticDirectory, { recursive: true });
-  const cssFiles = staticFiles.filter((file) => file.endsWith(".css"));
-  const css = (await Promise.all(cssFiles.map((file) => read(`out/_next/static/${file}`)))).join("\n");
-  requireText("out/_next/static/css/*.css", css, "prefers-reduced-motion:reduce");
-  requireText("out/_next/static/css/*.css", css, ":focus-visible");
-  const javascriptFiles = staticFiles.filter((file) => file.endsWith(".js"));
-  const javascript = (await Promise.all(
-    javascriptFiles.map((file) => read(`out/_next/static/${file}`)),
-  )).join("\n");
-  requireText("out/_next/static/**/*.js", javascript, "/search-index.json");
+  const css = (
+    await Promise.all(staticFiles.filter((file) => file.endsWith(".css")).map((file) => read(`out/_next/static/${file}`)))
+  ).join("\n");
+  requireText("out/_next/static/**/*.css", css, "prefers-reduced-motion:reduce");
+  requireText("out/_next/static/**/*.css", css, ":focus-visible");
+  // The search dialog is configured to load the exported static index.
+  requireText(homeFile, home, "/search-index.json");
 
-  const htmlFiles = await Promise.all(
-    documents.map((document) => read(artifactPath(document.routeInfo.route))),
-  );
+  const htmlFiles = await Promise.all(routes.map((route) => read(artifactPath(route))));
   if (htmlFiles.some((html) => html.includes("plausible.io/js/script.js"))) {
     failures.push("out/: preview artifact contains the production analytics script");
   }
 
   for (const runtimeArtifact of ["out/server.js", "out/package.json", "out/.next/BUILD_ID"]) {
-    try {
-      await fs.access(path.join(root, runtimeArtifact));
-      failures.push(`${runtimeArtifact}: runtime-only artifact must not be present`);
-    } catch {
-      // A static export has no runtime entrypoint or Next.js server state.
-    }
+    if (await exists(runtimeArtifact)) failures.push(`${runtimeArtifact}: runtime-only artifact must not be present`);
   }
 
   if (failures.length > 0) {
-    throw new Error(
-      `Static export acceptance failed:\n${failures.map((failure) => `- ${failure}`).join("\n")}`,
-    );
+    throw new Error(`Static export acceptance failed:\n${failures.map((failure) => `- ${failure}`).join("\n")}`);
   }
 
-  console.log(`Static export acceptance passed for ${documents.length} published routes.`);
+  console.log(`Static export acceptance passed for ${routes.length} content routes.`);
 }
 
 main().catch((error: unknown) => {

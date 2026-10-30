@@ -1,0 +1,14 @@
+{
+  "title": "Workflows",
+  "pages": [
+    "index",
+    "gather-context",
+    "write-intent",
+    "create-plans",
+    "execute-plans",
+    "deliver",
+    "complete",
+    "change-lifecycle",
+    "content-contracts"
+  ]
+}
