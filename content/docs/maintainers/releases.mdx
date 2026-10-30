@@ -15,16 +15,39 @@ sources:
     path: release/README.md
 ---
 
+## The release flow
+
+`context-circuit-source` allows merge commits only, and its maintainer is the only person who merges. Contributors open pull requests into `main`.
+
+1. **`main` is the trunk and never publishes.** Work merges there. A pull request that changes something users see adds a change file under `.changelog/`; one that changes nothing users see writes `None` under Release note instead.
+2. **Each minor line has a release branch, `release/X.Y`,** cut from `main` at the minor's freeze. It publishes that minor and its patches. Cutting it publishes nothing.
+3. **A fix lands on `main` first,** then reaches `release/X.Y` through a cherry-pick pull request that carries its change file.
+4. **A release-prep pull request into `release/X.Y`** sets `VERSION`, `CLI_VERSION`, or both, and adds each product's release request.
+5. **Merging it runs Publish** on `release/X.Y`: the CLI job first, then the template job. A version that is not on its own line's branch, such as `2.6.0` on `release/2.5`, or anything on `main`, is refused.
+6. **After a stable release,** `release/X.Y` merges back into `main` from a topic branch cut from it, so `main` carries the release's version files and requests and drops the change files it shipped.
+
+A release candidate, such as `2.5.0-rc.1`, follows steps 4 and 5 on the same branch and is published as a prerelease. A patch, such as `2.5.1`, follows steps 3 to 6 on the existing `release/X.Y`.
+
 ## Independent versions, ordered publication
 
-`VERSION` selects the template release. `CLI_VERSION` selects the executable. The source publish workflow runs native validation, then CLI publication, then template publication. It checks whether each version is already released; changing one line does not require releasing the other.
+`VERSION` selects the template release. `CLI_VERSION` selects the executable. Publish runs native validation, then CLI publication, then template publication. A product is published only when its version file names a release that is not out yet, so changing one line does not require releasing the other.
 
-## Workspace updates
+## Compatibility
 
-A template update applies the delta between recorded and newer tags, rather than copying a whole template over a project. Repository-owned landing files are read as evidence but not applied to a workspace.
+| Surface | Breaking | Not breaking |
+| --- | --- | --- |
+| CLI | A removed or renamed command, flag, or JSON field; a changed exit code; a new refusal of something that used to work. | A new command, optional flag, or JSON field; clearer output text. |
+| Template | A change that makes existing records invalid, or needs the workspace owner to act to keep working. | New skill text, a reworded instruction, a new optional file. |
+| Workspace schema | Any change that needs a migration; the schema number goes up. | Documentation of existing fields. |
 
-A CLI installation changes the local executable launcher after verification. It does not rewrite workspace records or the template version.
+Schema 3 is the per-member ID layout. Moving a schema 2 workspace there is a migration, and one person on a team makes that split, commits it, and pushes it before anyone else changes anything. Separately, the pin guard refuses a writing change from a CLI that is not the pin and did not hand off, when it would move the workspace to schema 3 or when the two CLIs are on different release lines. A feature is deprecated in one minor release's upgrade notes before it is removed in a later release.
 
-## Documentation updates
+## Variant forks
 
-Maintain major-version guides for model changes and separate changelogs for each product's minor and patch changes. Never infer release history from matching version numbers. Use [available release evidence](/docs/releases/major-versions).
+`X.Y.Z-<label>.N` is reserved for forks. A fork adds `release/variant.env`, the counter `scripts/release-version.sh` reads, and sets `CC_VERSION_SUFFIX` to its label: 1–20 lowercase letters, not a reserved label such as `rc`. The composed version is `<base>-<label>.<counter>`, built on a stable `2.Y.Z`, and its CLI installs as `<label>-context-circuit-cli`. A public checkout prints `VERSION` and `CLI_VERSION` unchanged. A published stable tag is never published again.
+
+## Workspace and documentation updates
+
+A template update applies the delta between the recorded tag and a later tag on the same release line, rather than copying a whole template over a project. Repository-owned landing files are read as evidence but not applied to a workspace, and neither is a delta that deletes the shared ID file or changes the schema version.
+
+Maintain major-version guides for model changes and separate changelogs for each product's stable releases. Never infer release history from matching version numbers. Use [available release evidence](/docs/releases/major-versions).
