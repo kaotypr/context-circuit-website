@@ -20,8 +20,8 @@ sources:
 
 | Product | Source version file | Published repository | Tag family | Workspace pin |
 | --- | --- | --- | --- | --- |
-| Template | `VERSION` | `context-circuit` | `v2.3.0` | `.context-circuit/VERSION` |
-| CLI | `CLI_VERSION` | `context-circuit-source` | `cli-v2.3.0` | `.context-circuit/CLI_VERSION` |
+| Template | `VERSION` | `context-circuit` | `v2.5.0` | `.context-circuit/VERSION` |
+| CLI | `CLI_VERSION` | `context-circuit-source` | `cli-v2.5.0` | `.context-circuit/CLI_VERSION` |
 
 Matching numbers do not make a joint release. An instruction change can ship without a binary change, and a CLI fix can ship without replacing workspace instructions.
 
@@ -31,6 +31,12 @@ A major-version guide describes the supported model within that major and names 
 
 ## Available history
 
-This website documents the v2 model and stable 2.0.0 through 2.3.0 release notes, verified from tagged source. It does not provide a v1 guide. The native CLI first shipped in 2.0.0; no CLI 1.x history exists. No patch release is invented to fill a selector.
+This website documents the v2 model and stable 2.0.0 through 2.5.0 release notes, verified from tagged source. Release candidates such as 2.5.0-rc.1 have no notes of their own. It does not provide a v1 guide. The native CLI first shipped in 2.0.0; no CLI 1.x history exists. No patch release is invented to fill a selector.
+
+## Release lines and labels
+
+A stable version is `X.Y.Z` and is on the stable release line. A variant version is `X.Y.Z-<label>.<N>`, where the label is 1–20 lowercase letters; it is published by a fork, is on that label's own line, and installs its CLI as `<label>-context-circuit-cli`. The labels `alpha`, `beta`, `rc`, `dev`, `test`, `pre`, `preview`, and `snapshot` are reserved: a version such as `2.5.0-rc.1` is a release candidate, a prerelease of the stable line that installs as `context-circuit-cli` and is never offered as an update.
+
+A later template version is a later tag on the workspace's own release line. A workspace moves to another line only when a person names the exact tag, and a CLI from another line refuses changes to it.
 
 Use the [release hub](/docs/releases).

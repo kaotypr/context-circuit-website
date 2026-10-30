@@ -24,7 +24,7 @@ relationships:
     description: Consumes the billing API
 ```
 
-`from` and `to` name repositories in the implementation map. The description explains why the connection matters to the product. It contains no local checkout path.
+`from` and `to` name repositories in the implementation map. The description explains why the connection matters to the product. It contains no local checkout path. The agent records an entry through the workspace's launcher:
 
 ```sh
 sh .context-circuit/cli repo relate --from web --to api --description "Consumes the billing API"

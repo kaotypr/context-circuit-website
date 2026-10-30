@@ -15,23 +15,29 @@ sources:
 
 The `cc-cli` skill reads `.context-circuit/CLI_VERSION` and installs that exact version for the agent's execution OS and architecture. WSL needs the Linux package, even on a Windows desktop. Release targets are macOS, Linux, and Windows on amd64 and arm64.
 
-From a workspace created from template 2.3.0, the pinned installation can also be run directly:
+From a workspace created from template 2.5.0, the pinned installation can also be run directly:
 
 ```sh
-sh .agents/skills/cc-cli/scripts/install.sh --version 2.3.0
+sh .agents/skills/cc-cli/scripts/install.sh --version 2.5.0
 ```
 
 On Windows:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .agents/skills/cc-cli/scripts/install.ps1 -Version 2.3.0
+powershell -NoProfile -ExecutionPolicy Bypass -File .agents/skills/cc-cli/scripts/install.ps1 -Version 2.5.0
 ```
 
-The PowerShell policy applies only to this process. The installer verifies SHA-256 and the binary version before changing the shared launcher; no administrator access is needed. Use the reported **versioned command** path immediately, then run `version` to confirm it.
+The PowerShell policy applies only to this process. The installer verifies SHA-256 and the binary version before changing the shared launcher; no administrator access is needed. Then run `sh .context-circuit/cli version` to confirm that the launcher finds it. The installers accept only `2.*` versions, without a `v` prefix.
 
 ## Keep workspaces independent
 
-Installed versions coexist. The shared command on PATH points at the last installed version, so it is not proof that you are running this workspace's pin. Resolve the versioned executable each time you change workspaces. Installing a CLI does not initialize, migrate, or update the template.
+Installed versions coexist in one version store. The shared command on PATH points at the last installed version, so it is not proof that you are running this workspace's pin. Each workspace's launcher, `.context-circuit/cli` (`.context-circuit/cli.ps1` on Windows), runs exactly the version that workspace pins from the store, and refuses, naming the install step, when it is not installed. Installing a CLI does not initialize, migrate, or update the template.
+
+## Command names and the command directory
+
+A stable version, such as `2.5.0`, installs the command `context-circuit-cli`. A variant version, `X.Y.Z-<label>.<N>`, built by a fork, installs as `<label>-context-circuit-cli`, so it never shares a command with the public one; both keep their versions in the same store. A release candidate such as `2.5.0-rc.1` is a prerelease of the stable line, installs as `context-circuit-cli`, and is used only when a workspace pins it exactly.
+
+Both installers take `CONTEXT_CIRCUIT_BIN_DIR` as their default command directory, and the launcher reads it too. Without it, they use `~/.local/bin` on macOS and Linux, and `%LOCALAPPDATA%\ContextCircuit\bin` on Windows. If you install with `--bin-dir`, set `CONTEXT_CIRCUIT_BIN_DIR` to that directory so the launcher finds the store.
 
 ## A different registry or offline installation
 

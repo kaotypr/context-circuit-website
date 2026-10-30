@@ -15,7 +15,7 @@ The Context Circuit CLI is a native command-line tool. It initializes workspace 
 
 It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review. It neither supplies human consent nor treats an editable field as approval.
 
-Each workspace pins a CLI version in `.context-circuit/CLI_VERSION`. Installed versions coexist. The shared command on PATH is not proof that you are running this workspace's pin. Resolve the versioned executable each time you change workspaces.
+Each workspace pins a CLI version in `.context-circuit/CLI_VERSION`. Installed versions coexist. Run every command through the workspace's launcher: `sh .context-circuit/cli COMMAND …` from the workspace root, or `sh <root>/.context-circuit/cli COMMAND …` from anywhere else. In Windows PowerShell or cmd, use `powershell -NoProfile -ExecutionPolicy Bypass -File <root>/.context-circuit/cli.ps1 COMMAND …`. The launcher runs exactly the pinned version and passes its own workspace root, so no `--workspace` is needed. Never run a CLI found on PATH for a workspace: it is whichever version was installed last.
 
 ## What you use it for
 
@@ -25,7 +25,7 @@ sh .context-circuit/cli help
 sh .context-circuit/cli --json status
 ```
 
-Normal output is readable YAML. `--json` returns structured values. Errors go to stderr with a nonzero exit status. The agent still does the reasoning; the CLI keeps the files and Git mechanics dependable.
+Normal output is readable YAML. `--json` returns structured values; it and `--workspace` may precede the command or follow the full command, as in `sh .context-circuit/cli status --json`. Errors go to stderr with a nonzero exit status. The agent still does the reasoning; the CLI keeps the files and Git mechanics dependable.
 
 <TopicList>
 <Topic href="/docs/cli/installation" title="Installation">Verified native binaries, installed side by side from the workspace pin.</Topic>

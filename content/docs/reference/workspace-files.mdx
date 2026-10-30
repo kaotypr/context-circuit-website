@@ -16,24 +16,29 @@ sources:
 | Path | Purpose |
 | --- | --- |
 | `workspace.yaml` | Identity, repositories, relationships, optional borrowed knowledge and registry. |
-| `members.yaml` | Roster, allocation bands, language, and tone. |
+| `members.yaml` | Roster of at least one member, each with an allocation band, optional language and tone, and optional informational roles. |
 | `.context-circuit/VERSION` | Template version received. |
 | `.context-circuit/CLI_VERSION` | Expected CLI executable version. |
+| `.context-circuit/cli`, `.context-circuit/cli.ps1` | The launcher, which runs exactly the pinned CLI from the installers' version store; `cli.ps1` is for Windows PowerShell or cmd. |
+| `.context-circuit/.gitattributes` | Keeps `cli` at LF and `cli.ps1` at CRLF line endings on every checkout. |
 | `.context-circuit/role-tiering.yaml` | Shared host/role model and effort preferences. |
-| `.context-circuit/ids.yaml` | Intent and plan reservations; only requested record deletion releases IDs. |
-| `intent/`, `plans/` | Outcomes, implementation plans, and decision notes. |
+| `.context-circuit/ids/<member>.yaml` | One member's intent and plan reservations; only requested record deletion releases IDs. A schema 2 workspace has one shared `.context-circuit/ids.yaml` until the split. |
+| `intent/`, `plans/` | Outcomes, implementation plans, and decision notes, with optional group folders and `_archive/`. |
+| `.ignore` | Keeps `/sources/` out of ripgrep-based search. |
+| `.claude/settings.json` | Allows both launcher commands in Claude Code; a workspace merges new entries into its own file entry by entry. |
 | `context/` | Durable knowledge, optional index, and glossary. |
 
 ## Local and ignored
 
 | Path | Purpose |
 | --- | --- |
-| `member.local.yaml` | Active member on this machine in a team workspace; absent in a solo workspace. |
+| `member.local.yaml` | Active member on this machine, written by `init` and by `member use` on every other machine. |
 | `repositories.local.yaml` | Workspace and repository paths, base branches, borrowed checkout paths. |
 | `.context-circuit/role-tiering.local.yaml` | Machine-specific model and effort overrides. |
 | `.context-circuit/local/worktrees.yaml` | Optional plan-to-worktree associations. |
 | `.context-circuit/local/write.lock` | OS-managed local write lock. |
 | `repositories/`, `.worktrees/` | Local Git working copies. |
 | Native host agent directories | Generated role definitions; run `agent setup` on a new host. |
+| `.claude/settings.local.json` | This machine's Claude Code settings; `agent setup` adds the `attribution` setting that turns commit and pull request attribution off. |
 
 Unknown control fields fail validation. Knowledge remains ordinary Markdown. Do not store secrets in workspace records; environment files belong to ignored local setup.

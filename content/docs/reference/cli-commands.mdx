@@ -13,10 +13,11 @@ sources:
 
 ## Invocation
 
-Use the executable resolved from the workspace's pin. Global flags precede commands:
+Run every command through the workspace's launcher: `sh .context-circuit/cli COMMAND …` from the workspace root, `sh <root>/.context-circuit/cli COMMAND …` from anywhere else, or `powershell -NoProfile -ExecutionPolicy Bypass -File <root>/.context-circuit/cli.ps1 COMMAND …` in Windows PowerShell or cmd. The launcher runs exactly the pinned version and passes the workspace root. The global flags `--workspace PATH` and `--json` may precede the command or follow the full command, but not sit between a group and its subcommand:
 
 ```sh
 sh .context-circuit/cli --json status
+sh .context-circuit/cli status --json
 sh .context-circuit/cli help
 sh .context-circuit/cli help record
 sh .context-circuit/cli worktree prepare --help
@@ -28,13 +29,13 @@ sh .context-circuit/cli worktree prepare --help
 | --- | --- |
 | `version`, `help` | Executable version and command signatures. |
 | `init`, `status`, `check` | Initialize once, report state, diagnose consistency. |
-| `member` | `add`, `band`, `language`, `tone`, `use`, `list`. |
+| `member` | `add`, `band`, `language`, `tone`, `roles`, `use`, `list`. |
 | `workspace` | `connect`, `base`, `remote` for the records repository. |
 | `repo` | `connect`, `clone`, `init`, `base`, `remote`, `relate`, `inspect`, `fetch`. |
 | `knowledge` | `clone`, `connect`, `sync`, `remote`, `list` for borrowed knowledge. |
 | `context find` | Search by `--query` or get reconciliation candidates with `--repo`. |
-| `record` | `create`, `approve`, `show`, `list`, `dependencies`, `complete`, `order`, `delete`. |
-| `worktree` | `prepare`, `list`, `inspect`, `move`, `repair`, `remove`. |
+| `record` | `create`, `approve`, `show`, `list`, `dependencies`, `complete`, `archive`, `order`, `delete`. |
+| `worktree` | `prepare`, `list`, `inspect`, `move`, `repair`, `remove`, `prune`. |
 | `agent` | `settings`, `configure`, `setup`, `dispatch`. |
 | `template export` | Write the exact blank embedded seed to a new directory. |
 
@@ -45,14 +46,25 @@ sh .context-circuit/cli member list
 sh .context-circuit/cli repo inspect --id api
 sh .context-circuit/cli context find --query billing
 sh .context-circuit/cli record list
+sh .context-circuit/cli record list --all --archived
 sh .context-circuit/cli record show --id p0001
 sh .context-circuit/cli record order --intent i001 --mode waves
 sh .context-circuit/cli record order --plan p0001 --mode waves
 sh .context-circuit/cli worktree list --repo api
 ```
 
-Replace IDs with those in your workspace. Normal output is readable YAML; `--json` provides structured values. Errors are on stderr and return nonzero status.
+Replace IDs with those in your workspace. Normal output is readable YAML; `--json` provides structured values. Errors are on stderr and return nonzero status; a flag a command does not take exits 2 with that command's signature.
 
 ## Mutation is not authorization
 
-Approval and completion commands require the actual corresponding decision. `record delete` previews the affected records and released IDs without `--confirm`; deletion requires a request and agreement to the exact preview. The CLI does not commit, deliver, execute a plan, launch a model, or infer human consent. The pinned command source below contains the complete signatures and refusal behavior.
+Approval and completion commands require the actual corresponding decision. `record approve` returns `planning_recommended`; approval, completion, and `record archive` return `commit_recommended` for the records and ID files they left uncommitted, and the CLI never stages, commits, or pushes them.
+
+```sh
+sh .context-circuit/cli member add --id alex --name Alex --band 2 --role maintainer
+sh .context-circuit/cli record archive
+sh .context-circuit/cli record delete --id p1002
+sh .context-circuit/cli record delete --id i101 --id p1003 --confirm
+sh .context-circuit/cli worktree prune --repo api
+```
+
+`record delete` previews the affected records, each with its author, path, and status, and the released IDs without `--confirm`; deletion requires a request and agreement to the exact preview. `--member ID` takes one member's records, `--id ID` (repeatable) takes exactly the named records or a reservation no record holds, and `--all` takes every record only while the roster lists exactly one member. A refusal returns the preview too, with `blocked_by`, `refused`, and, for `--id`, `add_ids`, and exits 1. The CLI does not commit, deliver, execute a plan, launch a model, or infer human consent. The pinned command source below contains the complete signatures and refusal behavior.

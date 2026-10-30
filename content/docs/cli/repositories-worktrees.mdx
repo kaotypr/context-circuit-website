@@ -24,14 +24,20 @@ sh .context-circuit/cli record order --intent i001 --mode waves
 sh .context-circuit/cli worktree prepare --repo api --plan p0001 --copy-mode auto
 ```
 
-Use actual returned IDs. A dependent plan in the same repository requires an explicit `--start`; the refusal identifies the predecessor. An explicit start is honored. No implicit fetch occurs.
+Use actual returned IDs. A dependent plan in the same repository requires an explicit `--start`; the refusal identifies the predecessor. An explicit start is honored. No implicit fetch occurs. The result reports `start`, what the worktree actually started from, beside `base_branch`, this machine's delivery target. A local start branch behind or diverged from its fetched remote is still used, and `sync_required` gives the counts, the remedy (`--start origin/<branch>`, or update the local branch first), and that `repo fetch` refreshes the remote ref.
 
 ## Understand reuse
 
-`--reuse` selects an existing branch or association without resetting it. `--copy-mode` accepts `auto`, `required`, `copy`, or `off`. Ignored dependencies are skipped when tracked setup inputs differ; existing destination files are preserved.
+Preparing again for the same plan resumes its worktree. Without `--reuse`, a worktree or branch left from an earlier plan that held the same number is refused, and the refusal names how to remove it. A plan branch already checked out in another working copy is refused with where it is and the safe next steps. `--reuse` selects an existing branch or association without resetting it. `--copy-mode` accepts `auto`, `required`, `copy`, or `off`. Ignored dependencies are skipped when tracked setup inputs differ; existing destination files are preserved.
 
 ## Recover or clean up on request
 
-Git's worktree inventory is authoritative. `worktree inspect` reports the real location; `move` and `repair` support recovery. Removal preserves dirty, untracked, and ignored files unless disposal is explicitly authorized with `--discard`. It never deletes the branch.
+Git's worktree inventory is authoritative. `worktree inspect` reports the real location; `move` and `repair` support recovery. Removal preserves dirty, untracked, and ignored files unless disposal is explicitly authorized with `--discard`. It never deletes the branch. It removes the folders under `.worktrees/` that the removal left empty, such as `.worktrees/pNNNN/`, and lists them as `removed_directories`.
+
+```sh
+sh .context-circuit/cli worktree prune --repo api
+```
+
+`worktree prune` drops the plan-to-worktree associations of one repository whose path Git no longer lists, such as a worktree removed with `git worktree remove` or by hand, and reports them as `dropped`. It touches no worktree, branch, or file. `worktree repair` is for a checkout Git still lists that only moved.
 
 Read the pinned worktree source below for filesystem-specific reuse behavior.

@@ -16,9 +16,9 @@ sources:
     path: product/docs/commands.md
 ---
 
-Use these pages when you need the exact shape of a file or command, not an explanation of why it exists. Schema, record fields, relationship entries, version tags, configuration files, and CLI signatures are verified against template 2.3.0 and CLI 2.3.0.
+Use these pages when you need the exact shape of a file or command, not an explanation of why it exists. Schema, record fields, relationship entries, version tags, configuration files, and CLI signatures are verified against template 2.5.0 and CLI 2.5.0.
 
-Workspace identity uses schema version 2. Intent and plan records use canonical ISO 8601 UTC timestamps for instants and calendar dates everywhere else. IDs are workspace-global; only requested record deletion releases them for reuse.
+Workspace identity uses schema version 3, with one ID file per member. Intent and plan records use canonical ISO 8601 UTC timestamps for instants and calendar dates everywhere else. IDs are workspace-global; only requested record deletion releases them for reuse.
 
 If you are looking for the product model rather than a field list, start at [Understand](/docs/understand).
 
@@ -28,5 +28,5 @@ If you are looking for the product model rather than a field list, start at [Und
 <Topic href="/docs/reference/relationships" title="Repository relationships">How `from` / `to` entries are written.</Topic>
 <Topic href="/docs/reference/versioning" title="Versioning and release tags">Independent template and CLI identities.</Topic>
 <Topic href="/docs/reference/workspace-files" title="Configuration files">What belongs in shared YAML versus local bindings.</Topic>
-<Topic href="/docs/reference/cli-commands" title="Command reference">Groups, flags, and examples for CLI 2.3.0.</Topic>
+<Topic href="/docs/reference/cli-commands" title="Command reference">Groups, flags, and examples for CLI 2.5.0.</Topic>
 </TopicList>
