@@ -39,7 +39,7 @@ export default async function Page({ params }: RouteProps) {
       <DocsBody>
         <MDX components={components} />
       </DocsBody>
-      <PageSources sources={page.data.sources ?? []} versions={page.data.versions} />
+      <PageSources sources={page.data.sources ?? []} />
     </DocsPage>
   );
 }

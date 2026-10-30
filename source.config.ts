@@ -2,8 +2,7 @@ import { defineConfig, defineDocs } from "fumadocs-mdx/config";
 import { metaSchema, pageSchema } from "fumadocs-core/source/schema";
 import { remarkMdxMermaid } from "fumadocs-core/mdx-plugins/remark-mdx-mermaid";
 import { z } from "zod";
-
-const tracks = ["template", "cli"] as const;
+import { isRelease, isReleaseRef, trackRepository, tracks } from "./src/lib/releases";
 
 const sourceSchema = z
   .object({
@@ -45,7 +44,33 @@ const docsPageSchema = pageSchema
           message: `is not allowed unless tracks includes ${track}`,
         });
       }
+      // A baseline links to that release's notes, so it must name a registered release.
+      const version = value.versions[track];
+      if (version && !isRelease(track, version)) {
+        context.addIssue({
+          code: "custom",
+          path: ["versions", track],
+          message: `${version} is not a registered ${track} release in src/lib/releases.ts`,
+        });
+      }
     }
+    // A source links to the repository and tag it declares, so both must be real.
+    value.sources?.forEach((source, index) => {
+      if (source.repository !== trackRepository(source.track).repository) {
+        context.addIssue({
+          code: "custom",
+          path: ["sources", index, "repository"],
+          message: `${source.track} sources come from ${trackRepository(source.track).repository}`,
+        });
+      }
+      if (!isReleaseRef(source.track, source.ref)) {
+        context.addIssue({
+          code: "custom",
+          path: ["sources", index, "ref"],
+          message: `${source.ref} is not the tag of a registered ${source.track} release`,
+        });
+      }
+    });
   });
 
 export const docs = defineDocs({

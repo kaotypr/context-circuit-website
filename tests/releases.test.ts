@@ -21,6 +21,11 @@ describe("release registry", () => {
     }
   });
 
+  it.each(tracks)("lists every %s release in the sidebar, newest first", async (track) => {
+    const meta = JSON.parse(await fs.readFile(path.join(content, "releases", track, "meta.json"), "utf8"));
+    expect(meta.pages).toEqual(releasesNewestFirst(track).map((release) => release.version));
+  });
+
   it.each(tracks)("lists every %s release in its changelog, newest first", async (track) => {
     const changelog = await fs.readFile(path.join(content, "changelog", `${track}.mdx`), "utf8");
     const linked = [...changelog.matchAll(new RegExp(`\\(/releases/${track}/([^)/]+)\\)`, "g"))].map(
