@@ -1,0 +1,12 @@
+{
+  "title": "Reference",
+  "pages": [
+    "index",
+    "workspace-schema",
+    "records",
+    "relationships",
+    "versioning",
+    "workspace-files",
+    "cli-commands"
+  ]
+}

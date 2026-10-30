@@ -1,0 +1,9 @@
+{
+  "title": "Release notes",
+  "description": "Notes for each template and CLI release",
+  "root": true,
+  "pages": [
+    "template",
+    "cli"
+  ]
+}

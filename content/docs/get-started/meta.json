@@ -1,0 +1,11 @@
+{
+  "title": "Get started",
+  "pages": [
+    "index",
+    "install",
+    "install-cli",
+    "initialize",
+    "connect-repositories",
+    "first-workflow"
+  ]
+}

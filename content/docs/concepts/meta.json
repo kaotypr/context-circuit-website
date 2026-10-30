@@ -1,0 +1,16 @@
+{
+  "title": "Concepts",
+  "pages": [
+    "index",
+    "product-knowledge",
+    "relationships",
+    "intents",
+    "plans",
+    "worktrees",
+    "workers",
+    "delivery",
+    "completion",
+    "human-control",
+    "product-boundaries"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Maintainers",
+  "pages": [
+    "index",
+    "source-layout",
+    "template-release",
+    "cli-release",
+    "validation",
+    "documentation",
+    "releases"
+  ]
+}

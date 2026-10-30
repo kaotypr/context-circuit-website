@@ -1,0 +1,12 @@
+{
+  "title": "CLI",
+  "pages": [
+    "index",
+    "installation",
+    "commands",
+    "version-pinning",
+    "repositories-worktrees",
+    "diagnostics",
+    "v2"
+  ]
+}
