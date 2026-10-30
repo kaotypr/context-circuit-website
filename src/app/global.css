@@ -3,7 +3,7 @@
 @import "fumadocs-ui/css/preset.css";
 @import "../styles/fonts.css";
 @import "../styles/theme.css";
-@import "../styles/site.css" layer(components);
+@import "../styles/site.css";
 
 /* Fumadocs UI reads --color-fd-*; bind them to the kaotypr v0.1 tokens in
  * src/styles/theme.css. The tokens switch with the .dark class, so one binding
@@ -13,7 +13,7 @@
   --color-fd-background: var(--background);
   --color-fd-foreground: var(--foreground);
   --color-fd-muted: var(--muted);
-  --color-fd-muted-foreground: var(--muted-foreground);
+  --color-fd-muted-foreground: var(--foreground-subtle);
   --color-fd-popover: var(--popover);
   --color-fd-popover-foreground: var(--popover-foreground);
   --color-fd-card: var(--card);

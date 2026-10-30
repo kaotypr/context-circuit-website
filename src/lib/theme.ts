@@ -23,7 +23,7 @@ const requiredTokens = [
 /** Fumadocs UI color variables and the kaotypr tokens they must follow. */
 const fumadocsBindings = [
   ["--color-fd-background", "--background"], ["--color-fd-foreground", "--foreground"],
-  ["--color-fd-muted", "--muted"], ["--color-fd-muted-foreground", "--muted-foreground"],
+  ["--color-fd-muted", "--muted"], ["--color-fd-muted-foreground", "--foreground-subtle"],
   ["--color-fd-popover", "--popover"], ["--color-fd-popover-foreground", "--popover-foreground"],
   ["--color-fd-card", "--card"], ["--color-fd-card-foreground", "--card-foreground"],
   ["--color-fd-border", "--border"], ["--color-fd-primary", "--primary"],
