@@ -1,0 +1,83 @@
+---
+title: Context Circuit CLI 2.4.0
+description: Release notes for Context Circuit CLI 2.4.0.
+tracks: [cli]
+versions:
+  cli: 2.4.0
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.4.0
+    path: release/requests/cli/2.4.0.md
+---
+
+## Upgrade notes
+
+Every member of a workspace needs 2.4.0, and one of them goes first. The first
+changing command 2.4.0 runs in an existing workspace, once setup is complete,
+splits the shared `.context-circuit/ids.yaml` into one file per member,
+`.context-circuit/ids/<member>.yaml`, and moves `workspace.yaml` from schema 2
+to schema 3. Each reservation goes to the file of its record's author; one with
+no author goes to the member selected on that machine. Older CLIs refuse a
+schema 3 workspace with "workspace schema 3 requires a newer CLI; this CLI
+supports schema 2", so every member needs 2.4.0 before they pull the split.
+
+Only one person on a team upgrades first: they run the first changing command,
+commit the split, and push it, and everyone else pulls before changing anything.
+Teammates who upgrade at the same time get a Git conflict in
+`.context-circuit/ids/*.yaml`, resolved by keeping the union of both sides'
+entries in each member file and then running `check`, which reports any number
+reserved twice. A member ID that is a Windows device name, such as `con` or
+`nul`, is refused, and one already on a 2.3.0 roster stops the split until it is
+renamed by hand.
+
+## Members and setup
+
+Every workspace now has a roster, and every member a band. `init` requires a
+member and suggests band 1; the workspace with an empty roster is gone. Band 0
+is a band like any other, `i001`–`i099` and `p0001`–`p0999`. Until the roster
+lists a member, every member holds a band, and this machine has selected one,
+every changing command is refused with a message naming the missing step;
+`init`, `member add`, `member use`, `member band`, and the reading commands
+still run. `status` reports `band_required` with a suggested band for each
+member who has none, and `next_band` for the next member added.
+
+`member add` requires `--band`, `member band --band 0` sets band 0, and a band
+can no longer be cleared. A member may carry optional free-text `roles`, set
+with `member add --role`, `init --member-role`, or `member roles`; they are
+shown by `member list` and `status` and decide nothing.
+
+## Approval, completion, and deletion
+
+`record approve` returns `planning_recommended` instead of `planning_required`:
+approval records a decision, and planning follows a request for it, which may
+arrive with the approval. After they succeed, `record approve` and
+`record complete` report uncommitted records and ID files as
+`commit_recommended`, or `commit_unchecked` when Git cannot be read. The CLI
+never stages or commits
+([#144](https://github.com/kaotypr/context-circuit-source/pull/144), reported
+via [#141](https://github.com/kaotypr/context-circuit-source/pull/141)).
+
+`record delete --id ID`, repeatable, deletes the records a person names, or a
+reserved ID no record file holds. The preview shows each record's `status`
+beside its author and path, and warns about leftover `cc/pNNNN/*` branches and
+worktrees. `record delete --all` works only while the roster lists exactly one
+member. A confirmed deletion removes record files before releasing any ID, so a
+deletion stopped part-way keeps every number reserved and names the call that
+finishes it.
+
+## Worktrees
+
+`worktree prepare` no longer resumes a worktree left from an earlier plan that
+held the same number; it is refused without `--reuse`, and the refusal names how
+to remove it. `worktree prune --repo ID` drops the associations of worktrees Git
+no longer lists and touches no worktree, branch, or file, and `check` now
+recommends it rather than `worktree repair` for those
+([#140](https://github.com/kaotypr/context-circuit-source/pull/140)).
+`worktree remove` also removes the empty `.worktrees/` folders it leaves behind
+([#161](https://github.com/kaotypr/context-circuit-source/pull/161)).
+
+## Documentation
+
+Read the [CLI commands guide](/docs/cli/commands), the
+[record reference](/docs/reference/records), or the [CLI changelog](/changelog/cli).

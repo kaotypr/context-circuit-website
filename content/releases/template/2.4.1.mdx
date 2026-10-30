@@ -1,0 +1,36 @@
+---
+title: Workspace template 2.4.1
+description: Release notes for Context Circuit workspace template 2.4.1.
+tracks: [template]
+versions:
+  template: 2.4.1
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.4.1
+    path: CHANGELOG.md
+---
+
+Template 2.4.1 pins CLI 2.4.1 and teaches the instructions what that patch
+changed. No record, schema, or ID file changes, and a team can move to it member
+by member.
+
+On a workspace an earlier CLI wrote, the setup step that completes setup now
+makes the ID split itself: the `member band`, `member add`, or `member use` that
+leaves every member with a band and this machine with a member selected. The
+agent says so before that step, and the split's notice names every file to
+commit, the roster included when the step changed it. One person upgrades first,
+commits and pushes those files, and everyone else pulls before changing
+anything.
+
+A refused deletion now shows its preview, so the agent shows the records asked
+for, the records blocking them, and the IDs to add in one answer. A prepared
+worktree reports `start`, what it actually started from, beside `base_branch`,
+and the agent passes on `sync_required` when that start was a local branch
+behind its fetched remote. The command reference says that `--workspace` and
+`--json` may follow the command.
+
+## Documentation
+
+Read the [execution workflow](/docs/workflows/execute-plans) or the
+[template changelog](/changelog/template).
