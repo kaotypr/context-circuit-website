@@ -3,37 +3,44 @@ title: "Template release process"
 description: "Build workspace output from source and publish it through the template release line."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: .github/workflows/publish.yml
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
-    path: WORKFLOW.md
+    ref: cli-v2.5.0
+    path: release/README.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: scripts/publish-template.sh
 ---
 
 ## Prepare the source change
 
-Edit `product/` and `template/`, keeping the release manifest and embedded inventory consistent. Set `VERSION` and write `release/requests/template/<version>.md`. Its body supplies release notes; an explicit `changelog: reset` controls a published changelog reset.
+Edit `product/` and `template/`, keeping the release manifest and embedded inventory consistent. In a release-prep branch from `release/X.Y`, set `VERSION` and draft the request:
+
+```sh
+sh scripts/release-notes.sh template 2.5.1
+```
+
+The draft at `release/requests/template/<version>.md` links each entry as `kaotypr/context-circuit-source#N`, because the note is published on the template repository. Edit it before it merges; what merges is what publishes. Its `changelog:` field controls the published changelog: `keep`, the default, prepends the new entry; `reset` starts the changelog over; `skip` leaves it alone, which a release candidate uses so its notes appear on its release only.
 
 ## Validate and assemble
 
 ```sh
-sh scripts/check-release.sh
-sh scripts/build-dist.sh
+gofmt -l .
+sh scripts/check-release.sh "$(mktemp -d)/out"
+sh scripts/build-dist.sh v2.0.0-dev "$(mktemp -d)/out"
 ```
 
-The workspace artifact excludes the published repository's own README, license, changelog, contribution and security pages, and artwork. Publication restores those separately and marks them `export-ignore` for workspace archives.
+Explicit output directories must not already exist. The workspace artifact excludes the published repository's own README, license, changelog, contribution and security pages, and artwork. Publication restores those separately and marks them `export-ignore` for workspace archives.
 
 ## Publish only when authorized
 
-`scripts/publish-template.sh` prepares a clean destination checkout, commits, and tags it. It refuses a destination holding changed, untracked, or ignored files. Push and hosted release creation are separate caller actions.
+Merging the release-prep pull request into `release/X.Y` runs Publish. The template job runs after the CLI job, so a new template pin never points at an unpublished CLI, and runs `scripts/check-release.sh` before it assembles the template. `scripts/publish-template.sh` prepares a clean destination checkout, commits, and tags it, and refuses a destination holding changed, untracked, or ignored files. Template publication stops when the tag `v<version>` already exists.
 
-The publish workflow runs the CLI job before the template job so a new template pin never points at an unpublished CLI. Each job still resolves its own version independently. Inspect the pinned workflow below before using the publication machinery.
+After a stable release, merge `release/X.Y` back into `main` from a topic branch, so the release branch survives for its line's patches. Inspect the pinned workflow below before using the publication machinery.

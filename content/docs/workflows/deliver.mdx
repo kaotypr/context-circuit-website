@@ -3,16 +3,16 @@ title: "Deliver changes"
 description: "Authorize the specific outward action after implementation is inspectable."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -32,5 +32,9 @@ The agent reads real Git state and the CLI's `base_branch` report. A stacked run
 ## Leave a reviewable result
 
 The description explains the problem, final behavior, checks, and remaining limitations. Base drift and conflicts are reported without automatically rebasing or launching an independent review.
+
+## Records are committed separately
+
+Committing workspace records is not code delivery. When approval, completion, or archiving leaves records uncommitted, the agent asks whether to commit and push them, or commit only, and pushes only the workspace's base branch to its upstream. A push refused because the remote moved on is brought up to date with `git pull --rebase`: an ID file conflict keeps the union of both sides, any other conflict goes to you with the rebase left in progress, and nothing is force-pushed. Code delivery never rebases automatically.
 
 Delivery does not stamp completion. After the work lands, [request completion and reconciliation](/docs/workflows/complete).

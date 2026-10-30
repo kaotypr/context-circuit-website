@@ -3,15 +3,15 @@ title: "Version pinning"
 description: "Run the CLI a workspace expects, not whichever launcher changed most recently."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/skills/cc-cli/SKILL.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: release/requests/cli/2.0.0.md
 ---
 
@@ -19,17 +19,35 @@ sources:
 
 `.context-circuit/VERSION` records the template the workspace received. `.context-circuit/CLI_VERSION` records its expected executable version. Updating one product does not imply updating the other.
 
-## Resolve the executable
+## The launcher runs the pin
 
-1. Read the workspace's CLI pin.
-2. Locate the installer's version store from its report or shared launcher.
-3. Use the executable under the matching version, OS, and architecture.
-4. If missing, install that exact version and use the reported versioned command.
+Every workspace carries a launcher, `.context-circuit/cli`, run as `sh .context-circuit/cli COMMAND …`, and `.context-circuit/cli.ps1` for Windows PowerShell or cmd. It reads `.context-circuit/CLI_VERSION` and runs exactly that version from the installers' version store, passing its own workspace root. It never installs and never reads PATH.
 
-The shared launcher on PATH points at the last installed version. A mismatched CLI warns on stderr; resolve the correct executable rather than rewriting the workspace to silence it.
+- When the pinned version is not installed, it refuses, runs nothing, and names the install step: the workspace's `cc-cli` skill, using the `cli_registry` in `workspace.yaml`.
+- A `--workspace` naming another workspace is refused; that workspace has its own launcher.
+- It looks in the installers' default command directory, or in `CONTEXT_CIRCUIT_BIN_DIR` when that is set.
+- `.context-circuit/.gitattributes` keeps `cli` at LF and `cli.ps1` at CRLF line endings on every checkout.
+
+The shared command on PATH points at the last installed version. Never run it against a workspace: the agent always calls the launcher.
+
+## A CLI that is not the pin
+
+A CLI run directly against a workspace that pins another version hands off to the pin when the pin is installed in the same version store: it prints one note on stderr and runs the pinned binary with the same arguments. `CC_CLI_VERSION=local` keeps the running CLI for one command. A source build, or a binary outside the version store, never hands off.
+
+When no hand-off happens, the running CLI refuses a change, with nothing changed, if it would move the workspace from schema 2 to schema 3, `init` included, or if the running CLI and the pin are on different release lines. There is no override: `CC_CLI_VERSION=local` never lifts a refusal. Read-only commands, previews such as `record delete` without `--confirm`, and other changes on the same release line only warn. When CLI output warns that the workspace pins another version, the agent acts on none of it and runs the command again through the launcher.
+
+## Release lines
+
+A stable version, `X.Y.Z`, is on the stable line. A variant version, `X.Y.Z-<label>.<N>`, is on that label's line. A version under a reserved label, such as `2.5.0-rc.1`, is a prerelease of the stable line and is never offered as an update. An update moves only along the workspace's own line: a stable pin among stable releases, and a `<label>` pin among that label's releases. Moving to another line is a template change a person names by its exact tag; a CLI from another line is a different product for the workspace, never a close-enough substitute.
+
+## Schema 3
+
+A workspace written by a CLI before 2.4.0 is at schema 2, with every reservation in one shared `.context-circuit/ids.yaml`. The first changing command of a 2.4.0 or later CLI, once setup is complete, splits it into one file per member and moves `workspace.yaml` to `version: 3`; from 2.4.1 the setup step that completes setup makes the split itself. CLIs before 2.4.0 refuse a schema 3 workspace, so one person on a team upgrades first, commits and pushes the split, and everyone else installs the new CLI and pulls before changing anything. With 2.5.0, bring in the template first and let the pinned CLI make the split through the launcher.
+
+The first changing command of a 2.5.0 CLI also renames `intent/archive/` and `plans/archive/` to `_archive/`. A 2.4.x CLI does not read `_archive/`, so every member installs 2.5.0 before pulling that rename.
 
 ## Upgrade deliberately
 
-The installer verifies checksums and embedded version before switching the launcher. Old versions remain available. Installation never initializes or migrates workspace records. An older CLI may reject fields introduced after it, which is why the workspace pin matters.
+The installer verifies checksums and embedded version before switching the shared command. Old versions remain available. Installation never initializes or migrates workspace records. An older CLI may reject fields introduced after it, which is why the workspace pin matters.
 
 See [versioning and release tags](/docs/reference/versioning).

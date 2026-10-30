@@ -3,16 +3,16 @@ title: "Documentation contribution"
 description: "Curate MDX in the website repository and validate the complete static product."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -34,7 +34,7 @@ pnpm build
 pnpm static:check
 ```
 
-The build rejects frontmatter outside the page schema. The static check confirms every content page, release note, changelog, and redirect target was exported, and that search finds titles and body text. Browser checks additionally exercise routes, search, the release selector, mobile navigation, theme switching, keyboard focus, and accessibility. Review incomplete accessibility results manually.
+The build rejects frontmatter outside the page schema. The static check confirms every content page, release note, changelog, and redirect target was exported, and that search finds titles and body text. Browser checks additionally exercise routes, search, the changelog filters, mobile navigation, theme switching, keyboard focus, and accessibility. Review incomplete accessibility results manually.
 
 ## Respect the static boundary
 

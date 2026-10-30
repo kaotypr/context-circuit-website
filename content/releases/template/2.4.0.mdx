@@ -1,0 +1,65 @@
+---
+title: Workspace template 2.4.0
+description: Release notes for Context Circuit workspace template 2.4.0.
+tracks: [template]
+versions:
+  template: 2.4.0
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.4.0
+    path: CHANGELOG.md
+---
+
+## Upgrade notes
+
+Template 2.4.0 pins CLI 2.4.0, and every member of a team needs it. The first
+changing command 2.4.0 runs in an existing workspace splits the shared
+`.context-circuit/ids.yaml` into one file per member,
+`.context-circuit/ids/<member>.yaml`, and moves the workspace from schema 2 to
+schema 3. Older CLIs refuse a schema 3 workspace, so every member installs
+2.4.0 before pulling the split.
+
+The split writes every author's file, so one person upgrades first: they make
+the first change, commit it, and push it, and everyone else pulls before
+changing anything. The agent says so before that first change. Teammates who
+upgrade at the same time get a Git conflict in `.context-circuit/ids/*.yaml`;
+keep the union of both sides' entries in each member file, then run `check`,
+which reports any number reserved twice. A template update reads, rather than
+applies, a delta that deletes the shared ID file or changes the schema version.
+
+## What changed
+
+Approval no longer starts planning on its own. The agent records the approval,
+recommends planning, and stops; a request that approves and asks for plans in
+the same message continues straight into planning. Approval and completion also
+say which records and ID files they left uncommitted, as `commit_recommended`,
+and the agent commits them only when the person authorizes it
+([#144](https://github.com/kaotypr/context-circuit-source/pull/144)).
+
+Every workspace has members, and every member a band; a person working alone is
+a team of one. Initializing asks for the first member and suggests band 1, and
+band 0 is an ordinary band. Until the roster lists a member, every member holds
+a band, and this machine has selected one, the agent declines changing requests
+and walks the person through the missing step. A member may also record
+free-text roles, which authorize nothing.
+
+A person can delete just the records they name with `record delete --id`, after
+a preview that shows each record's author and status and any leftover
+`cc/pNNNN/*` branches. `record delete --all` is only for a roster of exactly one
+member.
+
+The worktree skill no longer passes `--reuse` by default, so a worktree or
+branch left from an earlier plan with the same number is refused rather than
+resumed. `worktree prune` clears associations of worktrees Git no longer lists
+([#140](https://github.com/kaotypr/context-circuit-source/pull/140)), and
+`worktree remove` also removes the empty `.worktrees/` folders it leaves behind
+([#161](https://github.com/kaotypr/context-circuit-source/pull/161)). When a
+knowledge note changes, its catalog search terms are rewritten rather than only
+appended to.
+
+## Documentation
+
+Read the [first workflow](/docs/get-started/first-workflow), the
+[record reference](/docs/reference/records), or the
+[template changelog](/changelog/template).

@@ -3,16 +3,16 @@ title: "Delivery"
 description: "Move implemented work outward through the actions a person authorizes."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/working.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -29,5 +29,13 @@ The default target is this machine's `base_branch`, falling back to the shared `
 ## Keep completion separate
 
 A pull request or merge does not mark a plan complete. Completion includes a separately requested note and knowledge reconciliation. Drift or conflicts are reported; they do not start an automatic rebase and verification loop.
+
+## Workspace records are not code delivery
+
+Committing and pushing workspace records follows its own rule. When approval, completion, or archiving leaves records uncommitted, the agent asks one question: commit and push those files, or commit only. That answer covers pushing only the workspace's base branch to its upstream, that once; with no remote or upstream, the agent commits and says why it stopped.
+
+If the push is refused because the remote moved on, the agent runs `git pull --rebase`, which replays only the unpushed record commits. What Git combines is kept and reported. A conflict in an ID file keeps the union of both sides' entries. Any other conflict — the same record changed on both sides, a record deleted on one side, or a file that is not a record — goes to the person with both versions and the rebase left in progress; the agent never edits a conflicted record itself. It then runs `check`, pushes once more, reports a second refusal, and never force-pushes.
+
+Delivering code is unchanged: drift there is explained, not rebased.
 
 Follow [deliver changes](/docs/workflows/deliver).

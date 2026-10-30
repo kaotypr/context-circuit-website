@@ -3,16 +3,16 @@ title: "Completion and reconciliation"
 description: "Record the result and make the next change start from accurate knowledge."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/working.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -27,5 +27,9 @@ The agent compares those notes with the actual change. It updates affected notes
 The plan is intended work; the branch and diff show what happened. Complete only when the work has actually landed. Dependency ordering uses completion to release dependents. Reconcile several completed plans across their combined effect.
 
 Borrowed knowledge remains read-only and is not a local obligation. Worktrees and branches remain after completion; removing them needs a separate request.
+
+## Commit, then offer to archive
+
+`record complete` also returns `commit_recommended` when the plan's files, its intent's file, or the ID files are uncommitted. The agent asks one question: commit and push those files, or commit only. While you have finished records not archived, the result also carries `archive_offer`, and the agent offers to archive them. Archiving is optional: `record archive` moves your own finished records under `_archive/`, keeps every ID reserved, and returns its own `commit_recommended`. Declining the offer changes nothing.
 
 Follow [complete plans and update knowledge](/docs/workflows/complete).

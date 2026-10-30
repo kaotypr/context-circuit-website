@@ -3,22 +3,22 @@ title: "Get started"
 description: "Create a workspace, connect repositories, and take one change through the circuit."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
 You work with Context Circuit by talking to your coding agent in ordinary project language. You do not need to choose CLI commands, allocate record IDs, or manage Context Circuit files yourself.
 
-The agent interprets the request, checks the workspace rules, and calls the pinned CLI when exact bookkeeping or Git mechanics are needed. The CLI reports structured facts back to the agent; the agent explains those facts and asks for decisions in project language.
+The agent interprets the request, checks the workspace rules, and calls the pinned CLI through the workspace's launcher, `sh .context-circuit/cli COMMAND …`, when exact bookkeeping or Git mechanics are needed. The launcher runs exactly the version the workspace pins, never a CLI found on `PATH`. The CLI reports structured facts back to the agent; the agent explains those facts and asks for decisions in project language.
 
 ```mermaid
 sequenceDiagram
@@ -43,7 +43,7 @@ Install the Context Circuit CLI version this workspace pins. Then initialize thi
 workspace as “Acme Billing” for our subscription billing product. Add me as Maya.
 ```
 
-The agent resolves the correct binary for its execution environment, verifies it, initializes the shared project identity, creates your local member binding, and configures native agent roles. It does not expect you to translate that request into commands.
+The agent resolves the correct binary for its execution environment, verifies it, initializes the shared project identity, adds you to the roster with an allocation band, selects you on this machine, and configures native agent roles. Every workspace has at least one member, so a person working alone is a team of one. It does not expect you to translate that request into commands.
 
 ## Connect the project
 
@@ -62,12 +62,12 @@ Let customers download an invoice as a PDF. Preserve the current authorization
 rules and audit trail.
 ```
 
-The agent retrieves relevant knowledge and presents the intended outcome with numbered questions. After you approve that written outcome, it investigates real code and presents plans. You then request execution, delivery, and completion as separate decisions.
+The agent retrieves relevant knowledge and presents the intended outcome with numbered questions. Approving that written outcome records your decision and stops with a recommendation to plan. When you ask for plans — in a later message, or in the same one, as in "I approve it. Create the plans." — it investigates real code and presents them. You then request execution, delivery, and completion as separate decisions.
 
 ```mermaid
 flowchart LR
   Q[Describe outcome] --> I[Read and approve intent]
-  I --> P[Review plans]
+  I -->|ask for plans| P[Review plans]
   P -->|ask to execute| E[Implementation]
   E -->|authorize| D[Delivery]
   D -->|request after landing| C[Completion and knowledge reconciliation]
@@ -76,9 +76,9 @@ flowchart LR
 The following pages show the prompts to use and what the agent does with the CLI at each step.
 
 <TopicList>
-<Topic href="/docs/get-started/install" title="Setup Context Circuit">Create a clean workspace from template 2.3.0 with Tembiter.</Topic>
+<Topic href="/docs/get-started/install" title="Setup Context Circuit">Create a clean workspace from template 2.5.0 with Tembiter.</Topic>
 <Topic href="/docs/get-started/install-cli" title="Install the CLI">Install the native binary this workspace pins.</Topic>
-<Topic href="/docs/get-started/initialize" title="Initialize a workspace">Record project identity and choose a solo or team workspace.</Topic>
+<Topic href="/docs/get-started/initialize" title="Initialize a workspace">Record project identity and add yourself as the first member.</Topic>
 <Topic href="/docs/get-started/connect-repositories" title="Connect repositories">Give each repository a shared identity and a local checkout.</Topic>
 <Topic href="/docs/get-started/first-workflow" title="First Context Circuit workflow">One bounded product change through the full lifecycle.</Topic>
 </TopicList>

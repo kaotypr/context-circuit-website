@@ -1,25 +1,25 @@
 ---
 title: "Workspace schema"
-description: "Shared project identity and repository definitions use workspace schema version 2."
+description: "Shared project identity and repository definitions use workspace schema version 3."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/workspace.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
-    path: release/requests/cli/2.3.0.md
+    ref: cli-v2.5.0
+    path: release/requests/cli/2.4.0.md
 ---
 
 ## A minimal project definition
 
 ```yaml
-version: 2
+version: 3
 name: Acme
 purpose: Billing software
 workspace_repository:
@@ -39,6 +39,8 @@ relationships:
 ```
 
 These are example repository addresses. The workspace's own repository is distinct from the implementation `repositories` map.
+
+`version` is the workspace schema. Schema 3 is the per-member ID layout, with one `.context-circuit/ids/<member>.yaml` file per member; a new workspace starts there. A workspace an earlier CLI wrote is at schema 2, with one shared `.context-circuit/ids.yaml`, and the first changing command of a 2.4.0 or later CLI splits it and moves `version` to 3. CLIs before 2.4.0 refuse a schema 3 workspace. A template update reads, rather than applies, a delta that changes `version`: the CLI migrates it.
 
 ## Optional configuration
 

@@ -3,15 +3,15 @@ title: "Skills"
 description: "Load the procedure needed for the current stage without expanding authorization."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .agents/skills/cc-dispatch/SKILL.md
 ---
 
@@ -30,5 +30,16 @@ sources:
 ## Skills and native roles differ
 
 A skill is a procedure read by an agent. A native role definition is a host-local configuration for a subagent. `agent setup` creates ignored role files for the supported hosts; it does not execute a skill or launch a worker.
+
+## What changed in 2.4.0–2.5.0
+
+- `cc-cli` installs within the workspace's own release line, explains a release-candidate pin such as `2.5.0-rc.1`, and names the `<label>-context-circuit-cli` command a variant installs.
+- `cc-workspace` asks for a band, suggesting band 1, and optional roles for every member it adds, and completes the setup gate before carrying on.
+- `cc-intent` and `cc-plan` stop after approval with a recommendation to plan, and pass on `commit_recommended` with the person's authorization; `cc-intent` presents the intent in the language the person writes in.
+- `cc-worktree` no longer passes `--reuse` by default, reports `start` and `sync_required`, and uses `worktree prune` for stale associations.
+- `cc-complete` reads the completed record from the `completed` key, asks the commit question, and offers `record archive`.
+- `cc-knowledge` rewrites a catalog entry's search terms against the note, and sends borrowed-knowledge fixes upstream.
+- `cc-stacked` records an integration merge's resolution in the merge commit and the report to the person, not in a workspace record.
+- Every skill calls the CLI through the launcher.
 
 Skills carry stage-specific details. Root instructions carry standing boundaries. Read only the procedures relevant to the task, then use host tools for actions already authorized by the person.

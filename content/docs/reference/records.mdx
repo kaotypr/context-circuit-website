@@ -3,11 +3,11 @@ title: "Intent and plan records"
 description: "Stable IDs, human-readable Markdown, and UTC decision instants."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/working.md
 ---
 
@@ -16,7 +16,7 @@ sources:
 | Field | Meaning |
 | --- | --- |
 | `id` | Workspace-global intent ID, such as `i001`. |
-| `created_by` | Author's member ID in a team workspace; absent for solo records. |
+| `created_by` | Author's member ID. Only records an earlier version wrote without an author lack it. |
 | `created_at` | Creation instant. |
 | `plans` | Linked implementation plans. |
 | `approved_at` | Present after a person's approval is recorded. |
@@ -27,7 +27,7 @@ The body holds goal, non-goals, constraints, success criteria, repository scope,
 
 | Field | Meaning |
 | --- | --- |
-| `id`, `created_at` | Plan identity and creation time; `created_by` appears in a team workspace. |
+| `id`, `created_by`, `created_at` | Plan identity, author, and creation time. |
 | `intent` | The approved outcome, when the plan was created from an intent; absent for a standalone plan. |
 | `repositories` | Logical implementation repository IDs. |
 | `depends_on` | Optional plan dependencies. |
@@ -35,10 +35,16 @@ The body holds goal, non-goals, constraints, success criteria, repository scope,
 
 New plans are folders named `plans/pNNNN-slug/`, with `plan.md` as the entry. The body describes approach, tasks and order, risks, and checks. Optional detail files are linked from the entry and assigned through `required_files.shared` or `required_files.by_repository.<repo>`. Legacy single-file plans remain readable. Execution does not rewrite the plan; the result is carried by the completion note.
 
+## Folders and the archive
+
+A record may sit directly in `intent/` or `plans/`, or in one level of group folder, such as `plans/alex/p1010-thing/`. `_archive/` may sit above or below a group: `plans/_archive/`, `plans/<group>/_archive/`, and `plans/_archive/<group>/`. A record under `_archive/` is archived. Folder names starting with `_` are reserved for the CLI. A top-level `archive/` is the legacy archive folder from before 2.5.0, which the first changing command renames to `_archive/`; an `archive/` inside a group is an ordinary folder.
+
+`record archive` moves the active member's finished records — completed plans, and approved intents whose plans are all completed — under the `_archive/` beside them; repeatable `--id` moves exactly the named records. No ID file changes, and inline relative links into and out of the moved records are rewritten.
+
 ## IDs, dates, and language
 
-Intent IDs have at least three digits; plans have at least four. Archival and manual file removal do not release reservations. Only a requested `record delete` releases IDs for reuse, after preview and confirmation. Use returned IDs rather than guessing the next number. Distinct member bands can separate offline allocation ranges, but a local lock is not distributed coordination.
+Intent IDs have at least three digits; plans have at least four. Every member holds a band: band N allocates intents from `N*100` and plans from `N*1000`, and band 0 covers `i001`–`i099` and `p0001`–`p0999`. Each member's reservations live in `.context-circuit/ids/<member>.yaml`. Archival and manual file removal do not release reservations. Only a requested `record delete` releases IDs for reuse, after preview and confirmation. Use returned IDs rather than guessing the next number. Distinct bands separate offline allocation ranges, but a local lock is not distributed coordination.
 
-In a team workspace, `record delete --member ID` previews all active and archived records one member created. In a solo workspace, `record delete --all` previews every record and resets the ledger. Neither deletes without `--confirm`. The CLI refuses if another member's record would still refer to a deleted record, or a local worktree is associated with a deleted plan. Deletion in one checkout must still be committed and synchronized; until then, another clone may still hold those records.
+`record delete --member ID` previews all active and archived records one member created. `record delete --all` previews every record, including any an earlier version wrote without an author, and is refused unless the roster lists exactly one member. `record delete --id ID`, repeatable, previews exactly the named records, whoever wrote them, or a reserved ID no record file holds. None deletes without `--confirm`. The CLI refuses if a record outside the selection would still refer to a deleted record, or a local worktree is associated with a deleted plan; with `--id`, a deleted plan is instead taken out of its own intent's `plans:` list, and the refusal for any other link names the IDs to add. Leftover `cc/pNNNN/*` branches are listed as warnings. Deletion in one checkout must still be committed and synchronized; until then, another clone may still hold those records.
 
 Instants use `2026-09-15T10:53:00Z`; other dates use `YYYY-MM-DD`. Record prose follows the author's language, headings stay English, and decision notes preserve the person's words exactly.

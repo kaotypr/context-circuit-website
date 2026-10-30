@@ -3,11 +3,11 @@ title: "Workspace template"
 description: "Shared instructions, skills, and project files, separate from the installed CLI."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
 ---
 
@@ -24,7 +24,9 @@ What you get is ordinary Markdown and YAML: standing instructions, skills for ea
 | `workspace.yaml` and `members.yaml` | Project identity, repository model, and roster. |
 | `context/` | Durable knowledge, optional catalog, and glossary. |
 | `intent/` and `plans/` | Human-readable outcomes and implementation plans. |
-| `.context-circuit/` | Product pins, ID reservations, role preferences, and reference documentation. |
+| `.context-circuit/` | Product pins, the launcher (`cli` and `cli.ps1`), per-member ID reservations, role preferences, and reference documentation. |
+| `.ignore` | Keeps `/sources/` out of ripgrep-based search. |
+| `.claude/settings.json` | Allows both launcher commands in Claude Code without a prompt. |
 
 The published template repository's README, license, changelog, and artwork do not enter a fresh workspace archive. Initialization writes a README for your project.
 

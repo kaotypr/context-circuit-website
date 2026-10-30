@@ -3,15 +3,15 @@ title: "What the workspace template contains"
 description: "The shared workspace structure your coding host reads and your project keeps."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: README.md
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/workspace.md
 ---
 
@@ -24,12 +24,16 @@ sources:
 | `workspace.yaml` and `members.yaml` | Project identity, repository model, and roster. |
 | `context/` | Durable knowledge, optional catalog, and glossary. |
 | `intent/` and `plans/` | Human-readable outcomes and implementation plans. |
-| `.context-circuit/` | Product pins, ID reservations, role preferences, and reference documentation. |
+| `.context-circuit/` | Product pins, the launcher (`cli` and `cli.ps1`), per-member ID reservations, role preferences, and reference documentation. |
+| `.ignore` | Keeps `/sources/` out of ripgrep-based search. |
+| `.claude/settings.json` | Allows both launcher commands in Claude Code without a prompt. |
 
 ## What is created locally
 
-Member selection, checkout bindings, native agent definitions, working copies, and runtime files are machine-local. They are not a portable snapshot of another developer's environment.
+Member selection, checkout bindings, native agent definitions, the Claude Code attribution setting in `.claude/settings.local.json`, working copies, and runtime files are machine-local. They are not a portable snapshot of another developer's environment.
 
 The published template repository's README, license, changelog, contribution and security pages, and artwork do not enter a fresh workspace archive. The project's own README is written at initialization.
+
+A workspace that already has `.claude/settings.json` takes a template update's entries merged in entry by entry, keeping every entry it added, rather than replacing the file.
 
 Read [local versus shared configuration](/docs/template/local-shared).

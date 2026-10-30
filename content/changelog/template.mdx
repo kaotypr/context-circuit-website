@@ -3,13 +3,31 @@ title: "Workspace template changelog"
 description: "Release history for the independently versioned template product."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: CHANGELOG.md
 ---
+
+## 2.5.0 — the launcher and the archive
+
+Every workspace carries a launcher that runs exactly the pinned CLI. Records may sit in group folders and are archived under `_archive/` after an offer at completion. The agent asks whether to commit and push, or commit only, the records it leaves uncommitted.
+
+[Read template 2.5.0](/releases/template/2.5.0)
+
+## 2.4.1 — setup completes the ID split
+
+The setup step that completes setup makes the ID split and names every file to commit. A refused deletion shows its preview, and a prepared worktree says where it started.
+
+[Read template 2.4.1](/releases/template/2.4.1)
+
+## 2.4.0 — schema 3, banded members, and planning on request
+
+One ID file per member at schema 3, with one person upgrading first. Every member holds a band, approval stops with a recommendation to plan, records can be deleted by ID, and worktrees from an earlier plan with the same number are refused.
+
+[Read template 2.4.0](/releases/template/2.4.0)
 
 ## 2.3.0 — solo workspaces and controlled deletion
 
@@ -37,4 +55,4 @@ The stable v2 release establishes the native CLI boundary, explicit human decisi
 
 ## Coverage
 
-This timeline includes verified stable releases 2.0.0 through 2.3.0. No patch entries are inferred. The [major-version policy](/docs/releases/major-versions) distinguishes guides from release notes and identifies unavailable historical documentation.
+This timeline covers 2.0.0–2.5.0, stable releases only. Release candidates such as 2.5.0-rc.1 have no notes of their own, and each entry is written from its tagged release request. The [major-version policy](/docs/releases/major-versions) distinguishes guides from release notes and identifies unavailable historical documentation.

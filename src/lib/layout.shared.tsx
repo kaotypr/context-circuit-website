@@ -1,5 +1,6 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import { BrandMark } from "@/components/brand-mark";
+import { releaseRegistry } from "@/lib/releases";
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -12,10 +13,11 @@ export function baseOptions(): BaseLayoutProps {
       ),
       url: "/",
     },
+    themeSwitch: { mode: "light-dark" },
     links: [
       { text: "Docs", url: "/docs", active: "nested-url" },
-      { text: "Releases", url: "/docs/releases", active: "url" },
-      { text: "Changelog", url: "/changelog/template", active: "none" },
+      { text: "Release notes", url: `/releases/template/${releaseRegistry.template.current}`, active: "none" },
+      { text: "Changelog", url: "/changelog", active: "nested-url" },
     ],
   };
 }

@@ -3,11 +3,11 @@ title: "Setup Context Circuit"
 description: "Create a clean workspace from a tagged Context Circuit template release."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: README.md
 ---
 
@@ -18,7 +18,7 @@ From the parent folder where the workspace should be created, run Tembiter with 
 ```sh
 npx tembiter init \
   --template https://github.com/kaotypr/context-circuit.git \
-  --tag v2.3.0 \
+  --tag v2.5.0 \
   --target acme-workspace
 ```
 
@@ -37,6 +37,6 @@ Install the CLI version this workspace pins. Then initialize the workspace as
 “Acme Billing” for our billing platform and add me as Maya.
 ```
 
-The agent now reads the workspace instructions, installs the pinned CLI, and uses it for initialization. Continue with [CLI installation](/docs/get-started/install-cli) and [initialization](/docs/get-started/initialize) to see what happens behind that prompt.
+The agent now reads the workspace instructions, installs the pinned CLI, and runs it through the workspace's launcher, `.context-circuit/cli`, for initialization. Continue with [CLI installation](/docs/get-started/install-cli) and [initialization](/docs/get-started/initialize) to see what happens behind that prompt.
 
 If you cloned an existing team workspace, do not initialize it again. Ask the agent to select your existing member and connect this machine instead.

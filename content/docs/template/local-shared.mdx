@@ -3,21 +3,21 @@ title: "Local versus shared configuration"
 description: "Share product understanding; bind working copies separately on each machine."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/workspace.md
 ---
 
 ## What travels through Git
 
-Project identity, repository URLs and default branches, relationships, the member roster, product pins, role defaults, records, and durable knowledge are shared.
+Project identity, repository URLs and default branches, relationships, the member roster with each member's band and roles, product pins and the launcher, role defaults, per-member ID files, records, and durable knowledge are shared. Roles say what a member contributes and authorize nothing.
 
 ## What stays on the machine
 
-Checkout paths, active member, base branches, local role overrides, worktree associations, installed dependencies, and environment files are local. A second machine connects its own copies; it does not reinitialize the shared workspace.
+Checkout paths, active member, base branches, local role overrides, worktree associations, installed dependencies, and environment files are local. So is `.claude/settings.local.json`, where `agent setup` adds Claude Code's `attribution` setting to turn commit and pull request attribution off; it is gitignored, so every machine runs `agent setup` to receive it. A second machine connects its own copies; it does not reinitialize the shared workspace.
 
 A local `base_branch` can differ from the remote's shared `default_branch`. Worktree starting points and delivery targets must read the local binding.
 

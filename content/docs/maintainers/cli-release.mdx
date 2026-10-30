@@ -3,35 +3,41 @@ title: "CLI release process"
 description: "Release the native executable independently of template instructions."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: .github/workflows/publish.yml
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
-    path: WORKFLOW.md
+    ref: cli-v2.5.0
+    path: release/README.md
 ---
 
-## Select the CLI version
+## Prepare the release
 
-Change `CLI_VERSION` and add `release/requests/cli/<version>.md`. Its body is the release description. The template's `VERSION` need not change unless its own product changes.
+On a branch from `release/X.Y`, set `CLI_VERSION` and draft the release request:
+
+```sh
+sh scripts/release-notes.sh cli 2.5.1
+```
+
+The script writes `release/requests/cli/2.5.1.md` from every CLI change file under `.changelog/`, under the headings Upgrade notes, Breaking, Added, Fixed, Changed, and Contributors, each entry linking its pull request as `#N`. Edit the draft as freely as a request written by hand: a release note describes the difference from the previous release a user had, not the pull requests in between. A stable release's draft removes the change files it used; a candidate's leaves them for the stable release. The template's `VERSION` need not change unless its own product changes.
 
 ## Build and validate
 
 ```sh
-go test ./...
-go vet ./...
-sh scripts/build-cli.sh
-sh scripts/check-release.sh
+gofmt -l .
+sh scripts/check-release.sh "$(mktemp -d)/out"
 ```
 
-Release archives cover macOS, Linux, and Windows on amd64 and arm64. They include checksums and the Apache-2.0 license. Installer verification checks both the archive checksum and embedded executable version.
+`gofmt -l .` prints nothing when the Go files are formatted. `check-release.sh` runs `go test ./...` and `go vet ./...`, then builds both products and runs the publication, version, and release-note checks. Its output directory must not exist yet.
 
-## Publish from source
+Release archives cover macOS, Linux, and Windows on amd64 and arm64. They include checksums and the Apache-2.0 license. Installer verification checks both the archive checksum and the embedded executable version. `scripts/release-version.sh cli` prints the version the CLI builds as: `CLI_VERSION` in a public checkout, or `<base>-<label>.<counter>` in a variant fork.
 
-The source repository's publish workflow resolves whether the selected CLI version is already published, builds its assets, and creates the `cli-v*` release when authorized. CLI publication precedes template publication; unchanged version lines do not force new releases.
+## Publish from the release branch
+
+Open the release-prep pull request into `release/X.Y`. Merging it runs Publish there, which is the maintainer's explicit act: the `gate` job runs native tests, then the `cli` job creates the `cli-v*` release when `CLI_VERSION` names a version not yet out, before the template job. A version already released is left alone.
 
 Cross-compilation is build evidence, not proof of native installer or filesystem behavior. Native CI exercises each operating system. See [validation and tests](/docs/maintainers/validation).

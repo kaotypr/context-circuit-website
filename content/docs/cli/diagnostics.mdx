@@ -3,18 +3,18 @@ title: "Diagnostics"
 description: "A finding tells you what needs attention; it does not authorize a repair."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
 ## Run an explicit diagnostic
 
 ```sh
-context-circuit-cli --workspace . check
+sh .context-circuit/cli check
 ```
 
 The diagnostic examines structured workspace records, local bindings, links, IDs, dependency cycles, worktree associations, and owned knowledge. It reports an `issue` and a `resolve` for each finding.
@@ -22,6 +22,17 @@ The diagnostic examines structured workspace records, local bindings, links, IDs
 ## Read the resolution
 
 A resolution names a command when one exists, an edit when that discharges it, or begins “needs a person” when judgment is required. Do not invent a repair command for the last category.
+
+`check` also reports what earlier releases could not:
+
+- A number reserved in more than one member's ID file, or twice in one, a record whose ID no file reserves, and a file in `.context-circuit/ids/` not named after a member.
+- A `members.yaml` holding conflict markers or a member listed twice, two members on one band, a member ID that is a Windows device name, and roles in a schema 2 roster — each needing a person.
+- Record folders that break the layout: a `reserved folder name`, a `folder named like a record holds records`, a `record file outside the folders records are read from`, and a `legacy archive folder awaits its rename to _archive/`.
+- An empty plan folder left by an interrupted deletion, and a worktree prepared for a deleted plan or for an earlier plan with the same number.
+
+## Prune versus repair
+
+When Git no longer lists a worktree a plan is associated with, `check` recommends `worktree prune`, which drops the stale association. It keeps the `worktree repair` advice for a checkout that only moved, because repair works only on a path Git still lists.
 
 A knowledge reviewed date is compared with commits under its code anchors. Unchanged code is not stale merely because a note is old. An optional `knowledge_review_days` threshold additionally reports old unanchored notes.
 

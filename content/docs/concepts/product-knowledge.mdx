@@ -3,16 +3,16 @@ title: "Product knowledge"
 description: "Accepted project understanding that survives a task, a session, and a machine."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/working.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -20,7 +20,7 @@ sources:
 
 Knowledge notes explain durable architecture, domain rules, conventions, decisions, vocabulary, and repository relationships. They describe the product as it is, rather than task progress. Raw evidence stays separate from accepted knowledge.
 
-`context/INDEX.md` is an optional retrieval catalog. One unwrapped entry names a note, its repositories, the question it answers, search terms, and the date it was reviewed against code. The glossary maps project vocabulary to code identifiers.
+`context/INDEX.md` is an optional retrieval catalog, searched for the entries a task needs rather than read in full. One unwrapped entry names a note, its repositories, the question it answers, search terms, and the date it was reviewed against code. The glossary maps project vocabulary to code identifiers.
 
 ## Make claims traceable
 
@@ -28,6 +28,12 @@ A note collects logical repository paths in an `Owner:` block. These are code an
 
 ## Keep it current
 
-Completion asks which notes the actual change affected. Update the note and its catalog entry together, including the reviewed date. An unchanged concept needs no rewrite. Borrowed knowledge is read-only here and must be corrected upstream.
+Completion asks which notes the actual change affected. Update the note and its catalog entry together, including the reviewed date, and rewrite the entry's search terms against what the note now says rather than only adding to them. An unchanged concept needs no rewrite.
+
+## Borrowed knowledge and sources
+
+Borrowed knowledge is read-only here. A wrong borrowed fact is neither copied nor corrected in `context/`: the agent tells you the fix goes upstream through that repository's own review, and does not edit, clone, commit to, or push the borrowed repository unless you ask for that as its own task.
+
+Raw evidence under `sources/` is read only when a person or task names the exact file. The workspace ships a root `.ignore` with `/sources/`, which keeps the folder out of ripgrep-based search, including Claude Code's Grep and Glob and Cursor's search; with any other search the agent leaves it out itself.
 
 See [gather project context](/docs/workflows/gather-context).

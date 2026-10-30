@@ -3,24 +3,30 @@ title: "Plans"
 description: "Code-grounded implementation work after an approved intent or a direct planning request."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/working.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
 ## Plan from a grounded request
 
-A plan records the approach, tasks and order, repositories, dependencies, risks, and expected checks. The agent investigates real code after intent approval. When a person directly requests a detailed plan for an already specified outcome, it can create a standalone plan without an intent. One plan can name several repositories.
+A plan records the approach, tasks and order, repositories, dependencies, risks, and expected checks. The agent investigates real code once an approved intent's planning is requested. When a person directly requests a detailed plan for an already specified outcome, it can create a standalone plan without an intent. One plan can name several repositories.
 
 New plans live at `plans/pNNNN-slug/plan.md`. The folder may hold supporting contracts, diagrams, schemas, or other detail files. `plan.md` links each detail and assigns it as shared or specific to a repository so workers receive the right reading. Existing single-file plans remain readable without migration.
+
+## Groups and the archive
+
+A record may sit directly in `intent/` or `plans/`, or in one level of group folder below it, such as `plans/alex/p1010-thing/`. A group is ordinary file organization and says nothing about who owns a record. `_archive/` may sit above or below a group: `plans/_archive/`, `plans/<group>/_archive/`, or `plans/_archive/<group>/`. Folder names starting with `_` are kept for the CLI, and `_archive/` is the only one it gives meaning to.
+
+`record archive` moves your own finished records — completed plans, and approved intents whose plans are all completed — under the `_archive/` beside them. IDs stay reserved, lookup by ID still finds them, and inline relative links into and out of the moved records are rewritten. The archive folder was `archive/` before 2.5.0; the first changing command of a 2.5.0 CLI renames it.
 
 ## Execution is a separate request
 

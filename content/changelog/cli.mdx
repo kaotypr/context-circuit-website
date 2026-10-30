@@ -3,25 +3,55 @@ title: "Context Circuit CLI changelog"
 description: "Release history for the independently versioned cli product."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: release/requests/cli/2.0.0.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: release/requests/cli/2.1.0.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: release/requests/cli/2.2.0.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: release/requests/cli/2.3.0.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.5.0
+    path: release/requests/cli/2.4.0.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.5.0
+    path: release/requests/cli/2.4.1.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.5.0
+    path: release/requests/cli/2.5.0.md
 ---
+
+## 2.5.0 — the launcher, release lines, and the archive
+
+A CLI that is not the pinned one hands off to it, or refuses a migrating or cross-line change. Variant builds install under their own command name. `record archive` moves finished records under `_archive/`, records may sit in group folders, and `record list` and `status` show your own work first.
+
+[Read CLI 2.5.0](/releases/cli/2.5.0)
+
+## 2.4.1 — setup splits the IDs, refusals show their preview
+
+The setup step that completes setup makes the ID split and names every file to commit. A refused deletion shows its preview, global flags may follow the command, and worktree preparation reports where it started.
+
+[Read CLI 2.4.1](/releases/cli/2.4.1)
+
+## 2.4.0 — schema 3, banded members, and deletion by ID
+
+The shared ID file splits into one file per member at schema 3. Every member holds a band, approval recommends planning and committing, `record delete --id` deletes named records, and `worktree prune` drops stale associations.
+
+[Read CLI 2.4.0](/releases/cli/2.4.0)
 
 ## 2.3.0 — solo workspaces and record deletion
 
@@ -49,4 +79,4 @@ The first native CLI provides workspace records, bindings, worktrees, ordering, 
 
 ## Coverage
 
-This timeline includes verified stable releases 2.0.0 through 2.3.0. No patch entries are inferred. The [major-version policy](/docs/releases/major-versions) distinguishes guides from release notes and identifies unavailable historical documentation.
+This timeline covers 2.0.0–2.5.0, stable releases only. Release candidates such as 2.5.0-rc.1 have no notes of their own, and each entry is written from its tagged release request. The [major-version policy](/docs/releases/major-versions) distinguishes guides from release notes and identifies unavailable historical documentation.

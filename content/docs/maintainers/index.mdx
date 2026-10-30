@@ -3,22 +3,22 @@ title: "Maintainers"
 description: "Change product source, validate its outputs, and release each product deliberately."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
 Product behavior is edited in `context-circuit-source`. The published template repository is an assembled artifact. This website is a third repository: curated documentation, not generated product output.
 
-Do not patch a generated workspace and copy it back as a product change. Change `product/` and `template/` in source, validate, then release. Template publication and CLI publication are independent. They can share a version number without sharing a release identity.
+Do not patch a generated workspace and copy it back as a product change. Change `product/` and `template/` in source, validate, then release. Work merges into `main`, and each minor line publishes from its own `release/X.Y` branch. Template publication and CLI publication are independent. They can share a version number without sharing a release identity.
 
 The source checkout is not an initialized Context Circuit workspace. Maintainer changes follow that repository's own instructions. The CLI and source use Apache-2.0; the scaffold a workspace receives uses 0BSD.
 

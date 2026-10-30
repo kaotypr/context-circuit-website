@@ -3,16 +3,16 @@ title: "Worker agents"
 description: "Optional bounded delegation, with the coordinator integrating the result."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/working.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -34,3 +34,11 @@ Shared model and effort preferences live in role configuration; local overrides 
 ## Delegate when it helps
 
 Small tasks can stay with the coordinator. Workers sharing a worktree must preserve one another's edits. Dispatch is not completion evidence, and an implementation check is not independent review.
+
+## Roles authorize nothing
+
+An agent role, like a member's recorded role in `members.yaml`, says what someone contributes. It grants no permission: no agent message is a person's consent, and only a person approves, authorizes delivery, or agrees to a deletion.
+
+## No attribution
+
+Commits, pull requests, reviews, and comments carry no agent attribution, credit, co-author, or generated-by text. `agent setup` turns Claude Code's commit and pull request attribution off in the gitignored `.claude/settings.local.json`. Codex has no such setting, and Cursor reads it only from a person's own or a team admin's configuration, so there the written rule is the guard and the agent inspects each commit message before reporting delivery.

@@ -3,16 +3,16 @@ title: "Concepts"
 description: "Understand the durable records, working copies, and decisions behind each change."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -22,7 +22,7 @@ Knowledge survives a task, a session, and a machine. It is English, with domain 
 
 ## Records and working copies
 
-An **intent** writes the outcome a person can approve before detailed code investigation: goal, non-goals, constraints, success criteria, rough repository scope, and numbered open questions. The original request is not approval of that derived outcome. Approval records the person's words and authorizes planning only.
+An **intent** writes the outcome a person can approve before detailed code investigation: goal, non-goals, constraints, success criteria, rough repository scope, and numbered open questions. The original request is not approval of that derived outcome. Approval records the person's words and stops with a recommendation to plan; planning follows a request for it.
 
 A **plan** is code-grounded implementation work linked to that approved outcome. There is no plan approval gate. Implementation waits until a person asks for execution after the plans exist.
 
@@ -30,7 +30,7 @@ A **worktree** is an isolated Git checkout for a repository a plan touches. It i
 
 ## Decisions that stay with you
 
-Approving an intent, asking for execution, authorizing delivery, requesting completion, and requesting cleanup are separate choices. A record preserves a decision. It never makes one. A person can bypass intent and planning for an already-specified change; commits in a bound checkout, delivery, and deletion still need authorization.
+Approving an intent, asking for plans, asking for execution, authorizing delivery, requesting completion, and requesting cleanup are separate choices. A record preserves a decision. It never makes one. A person can bypass intent and planning for an already-specified change; commits in a bound checkout, delivery, and deletion still need authorization.
 
 <TopicList>
 <Topic href="/docs/concepts/product-knowledge" title="Product knowledge">Accepted project understanding that survives a task and a machine.</Topic>

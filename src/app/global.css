@@ -21,8 +21,10 @@
   --color-fd-border: var(--border);
   --color-fd-primary: var(--primary);
   --color-fd-primary-foreground: var(--primary-foreground);
-  --color-fd-secondary: var(--secondary);
-  --color-fd-secondary-foreground: var(--secondary-foreground);
+  /* Fumadocs uses secondary as a neutral surface (search, toggles); the DLS
+   * lavender secondary is a brand accent, so the surface binds to muted. */
+  --color-fd-secondary: var(--muted);
+  --color-fd-secondary-foreground: var(--foreground);
   --color-fd-accent: var(--state-hover);
   --color-fd-accent-foreground: var(--accent-foreground);
   --color-fd-ring: var(--ring);

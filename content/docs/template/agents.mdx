@@ -3,11 +3,11 @@ title: "AGENTS instructions"
 description: "Standing boundaries stay active; stage procedures load when needed."
 tracks: [template]
 versions:
-  template: 2.3.0
+  template: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
 ---
 
@@ -15,7 +15,16 @@ sources:
 
 `AGENTS.md` defines project orientation, knowledge retrieval, language, approval and execution decisions, preservation of existing work, reporting, and delivery and cleanup authorization. Host entry files make these instructions available to supported coding hosts.
 
-The agent uses the workspace's pinned CLI for deterministic bookkeeping. It does not infer product decisions from fields or tool success.
+The agent runs the workspace's pinned CLI through its launcher, `sh .context-circuit/cli COMMAND …`, for deterministic bookkeeping, and never a CLI found on PATH. When CLI output warns that the workspace pins another version, the agent acts on none of it and runs the command again through the launcher. It does not infer product decisions from fields or tool success.
+
+## Standing rules worth knowing
+
+- **Setup first.** Until the roster lists a member, every member holds a band, and this machine has selected one, the agent declines changing requests and walks you through the missing step.
+- **Approval and planning are separate.** Approving an intent records the decision and stops with a recommendation to plan; a request that approves and asks for plans continues into planning.
+- **The intent is presented in your language.** The record follows the language recorded for its author, but the agent presents it in the language you write in.
+- **Borrowed knowledge is fixed upstream.** A wrong borrowed fact is neither copied nor corrected in `context/`, and the agent does not edit, clone, commit to, or push the borrowed repository unless you ask for that as its own task.
+- **Records are committed on your answer.** After approval, completion, or archiving, the agent asks whether to commit and push the records, or commit only.
+- **No attribution.** Commits, pull requests, reviews, and comments carry no agent attribution, credit, co-author, or generated-by text.
 
 ## Repository conventions still apply
 

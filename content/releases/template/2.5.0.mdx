@@ -1,0 +1,99 @@
+---
+title: Workspace template 2.5.0
+description: Release notes for Context Circuit workspace template 2.5.0.
+tracks: [template]
+versions:
+  template: 2.5.0
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.5.0
+    path: CHANGELOG.md
+---
+
+Template 2.5.0 pins CLI 2.5.0. No record's content changes. It is unchanged from
+2.5.0-rc.1 apart from the version.
+
+## Upgrade notes
+
+A 2.5.0 CLI refuses changes to a workspace still at schema 2 unless the pinned
+CLI runs them. Bring in this template first, then let the pinned CLI make the ID
+split through the launcher. One person on a team makes the split, commits and
+pushes it, and everyone else pulls before changing anything
+([#177](https://github.com/kaotypr/context-circuit-source/pull/177)).
+
+Every member installs CLI 2.5.0 before pulling a workspace whose `archive/` was
+renamed to `_archive/`, because a 2.4.x CLI does not read `_archive/`. One person
+runs the first changing command, commits and pushes the moved records, and
+everyone else pulls before changing anything
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)).
+
+## Added
+
+Every workspace carries a launcher, `.context-circuit/cli`, run as
+`sh .context-circuit/cli COMMAND …`, and `.context-circuit/cli.ps1` for Windows
+PowerShell or cmd. It runs exactly the version `.context-circuit/CLI_VERSION`
+pins from the installers' version store, never a CLI found on PATH, and when
+that version is not installed it refuses and names the install step. It looks in
+`CONTEXT_CIRCUIT_BIN_DIR` when that is set, and `.context-circuit/.gitattributes`
+keeps its line endings stable
+([#177](https://github.com/kaotypr/context-circuit-source/pull/177)).
+`.claude/settings.json` allows both launcher commands; an existing file takes
+the two entries merged in, never replaced
+([#178](https://github.com/kaotypr/context-circuit-source/pull/178)).
+
+`agent setup` turns Claude Code's commit attribution off in the gitignored
+`.claude/settings.local.json`, and the orient check names the setting so an
+existing machine runs `agent setup` to receive it
+([#208](https://github.com/kaotypr/context-circuit-source/pull/208)).
+
+Records may sit in one level of group folder with `_archive/` above or below
+it, `record list` and `status` show your own work first, and `record archive`
+moves your own finished records under `_archive/`. After completion the agent
+offers to archive, and declining changes nothing
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)).
+
+## Fixed
+
+Several shipped skills now say what the CLI and installers actually do,
+including `commit_recommended` after approval and how a release-candidate pin
+such as `2.5.0-rc.1` is read
+([#203](https://github.com/kaotypr/context-circuit-source/pull/203)). A wrong
+fact in borrowed knowledge is neither copied nor corrected in `context/`: the
+fix goes upstream through that repository's own review. An intent is presented
+in the language the person writes in. A shipped root `.ignore` keeps `sources/`
+out of ripgrep-based search
+([#208](https://github.com/kaotypr/context-circuit-source/pull/208)).
+`AGENTS.md` says the four workspace files sit at the workspace root, never under
+`.context-circuit/`
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)). The
+worktree reference names an `npm link` inside node_modules as an entry reuse
+rejects ([#169](https://github.com/kaotypr/context-circuit-source/pull/169)).
+
+## Changed
+
+Every instruction, skill, and command reference calls the launcher. When CLI
+output warns that the workspace pins another version, the agent acts on none of
+it and runs the command again through the launcher. "A later tag" means a later
+one on the workspace's own release line; moving to another line is a change a
+person names by its exact tag
+([#180](https://github.com/kaotypr/context-circuit-source/pull/180)).
+
+Where `record approve`, `record complete`, or `record archive` return
+`commit_recommended`, the agent asks one question: commit and push the listed
+records and ID files, or commit only. A push refused because the remote moved on
+is brought up to date with `git pull --rebase`; an ID file conflict keeps the
+union of both sides, and any other conflict goes to the person with the rebase
+left in progress. The agent never force-pushes. Delivering code is unchanged
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)).
+
+The worktree reference describes what copy-on-write reuse does with an entry it
+cannot reuse ([#173](https://github.com/kaotypr/context-circuit-source/pull/173)),
+and the README's release badges point at the forge the template was published
+from ([#175](https://github.com/kaotypr/context-circuit-source/pull/175)).
+
+## Documentation
+
+Read the [version pinning guide](/docs/cli/version-pinning), the
+[record reference](/docs/reference/records), or the
+[template changelog](/changelog/template).

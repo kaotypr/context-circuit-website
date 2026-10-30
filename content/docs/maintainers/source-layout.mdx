@@ -3,16 +3,16 @@ title: "Source repository layout"
 description: "Edit the authoritative source; generated output is not the product source."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: README.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
-    path: WORKFLOW.md
+    ref: cli-v2.5.0
+    path: CONTRIBUTING.md
 ---
 
 ## Source ownership
@@ -22,14 +22,17 @@ sources:
 | `product/` | Shipped instructions, skills, docs, product guide, and 0BSD scaffold license. |
 | `template/` | Blank workspace records and configuration. |
 | `cmd/context-circuit/` | Native CLI entry point. |
-| `internal/cli/` | Commands and output. |
-| `internal/workspace/` | Records, YAML edits, Git, worktrees, and diagnostics. |
+| `internal/cli/` | Commands and output, including the pin hand-off and guard. |
+| `internal/workspace/` | Records, YAML edits, Git, worktrees, and diagnostics; `placement.go` decides where every record goes. |
 | `internal/cow/` | Native cloning and independent-copy fallback. |
 | `internal/installer/` | Installer acceptance tests. |
 | `scripts/release-manifest.txt`, `assets.go` | Source-to-output inventory and embedded assets. |
-| `release/` | Publication binding, repository-owned landing files, per-product release requests. |
-| `context/` | Maintainer knowledge, never shipped. |
+| `product/launcher/` | The workspace launcher, which runs exactly the pinned CLI. |
+| `release/` | `README.md`, how releases are cut; publication binding; repository-owned landing files; `cli/README.md`, the page inside every CLI archive; per-product release requests. |
+| `.changelog/` | One change file per user-visible change, until it ships. |
+| `agent-tests/` | Agent tests and committed baselines, run outside CI. |
+| `context/` | Product knowledge, public and never shipped; a pull request that changes code or agent behavior updates it in the same pull request. |
 
-The source checkout is not an initialized Context Circuit workspace. Maintainer changes follow its repository instructions. Passive design history is not a substitute for current product source.
+The source checkout is not an initialized Context Circuit workspace. Maintainer changes follow its repository instructions and `CONTRIBUTING.md`, and merge into `main` as merge commits. Commit subjects use `type(scope): imperative subject`.
 
 The CLI and source use Apache-2.0; the scaffold a workspace receives uses 0BSD. See [validation](/docs/maintainers/validation) before release assembly.

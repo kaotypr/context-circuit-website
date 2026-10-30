@@ -3,37 +3,46 @@ title: "Validation and tests"
 description: "Distinguish deterministic mechanics from behavior that must be observed in a coding host."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: README.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
-    path: WORKFLOW.md
+    ref: cli-v2.5.0
+    path: CONTRIBUTING.md
 ---
 
 ## Source checks
 
-Contributors need Git and Go 1.25 or newer for the documented source revision.
+Contributors need Git and Go 1.25 or newer, a POSIX `sh` with the usual archive and text tools, and a full clone: the knowledge test counts commits under each note's code anchors, so a shallow clone passes without looking.
 
 ```sh
-gofmt -w path/to/changed.go
-go test ./...
-go vet ./...
-sh scripts/check-release.sh
+gofmt -l .
+sh scripts/check-release.sh "$(mktemp -d)/out"
 ```
 
-Replace the example Go path with changed files. The release check builds the workspace archive and six CLI targets, verifies inventories and checksums, exercises installation and initialization, and tests publication safeguards in disposable fixtures.
+`gofmt -l .` should print nothing. The release check runs `go test ./...` and `go vet ./...`, builds the workspace archive and six CLI targets, verifies inventories and checksums, exercises installation and initialization, and tests publication safeguards in disposable fixtures. Its output directory must not exist yet.
 
-## Native coverage
+## Continuous integration
 
-CI tests Linux, macOS, and Windows. Cross-compilation alone does not establish native filesystem, installer, or process behavior.
+Check runs on every pull request, and on pushes to `main` and `release/**`.
+
+| Pull request into | Go tests and filesystem clone tests | Release build | Change files |
+| --- | --- | --- | --- |
+| `main` | run | skipped | runs |
+| `release/X.Y` | run | runs | runs |
+
+Go tests run natively on Linux, macOS, and Windows, and the filesystem clone tests on Linux and Windows. The Change files check fails a pull request that changes CLI or template files without a change file under `.changelog/` or `None` under Release note. `main` and `release/*` are protected; six checks are required to merge, and force-pushes are blocked. Cross-compilation alone does not establish native filesystem, installer, or process behavior.
 
 Source knowledge is checked inside a throwaway workspace against actual code anchors. Findings that require a person's judgment are reported rather than treated as automatically repairable.
 
+## Agent tests
+
+A change that affects what an agent in a generated workspace reads, finds, or sees is measured by the agent tests under `agent-tests/`. They run a real coding host, outside CI, on the contributor's own account. `surface-diff` names the scenarios a change needs, and the pull request reports the host, model, and results.
+
 ## Report limits honestly
 
-Passing deterministic checks does not prove a coding host loads and follows the instructions. Exercise the user flows you depend on and distinguish observations from unverified behavior. Validation does not authorize release publication.
+Passing deterministic checks does not prove a coding host loads and follows the instructions. Report host behavior as measured on a named host, model, and date, and as not exercised when it was not. Validation does not authorize release publication.

@@ -1,0 +1,103 @@
+---
+title: Context Circuit CLI 2.5.0
+description: Release notes for Context Circuit CLI 2.5.0.
+tracks: [cli]
+versions:
+  cli: 2.5.0
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.5.0
+    path: release/requests/cli/2.5.0.md
+---
+
+CLI 2.5.0 is a minor release. The workspace schema stays at 3, and nothing is
+renumbered. It is unchanged from 2.5.0-rc.1 apart from the version.
+
+## Upgrade notes
+
+A workspace on schema 2 is refused changes by a 2.5.0 CLI unless it runs the
+pinned CLI. Upgrade the template first, then let the pinned CLI make the split;
+one person on a team makes it, commits and pushes it, and everyone else pulls
+before changing anything
+([#179](https://github.com/kaotypr/context-circuit-source/pull/179)).
+
+Every member installs CLI 2.5.0 before pulling a workspace whose `archive/` was
+renamed to `_archive/`, because a 2.4.x CLI does not read `_archive/`. One person
+runs the first changing command, commits and pushes the moved records, and
+everyone else pulls before changing anything
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)).
+
+Scripts that relied on `record list` listing every record pass `--all`
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)).
+
+## Added
+
+A workspace runs its CLI through its launcher, `.context-circuit/cli`, or
+`.context-circuit/cli.ps1` in Windows PowerShell or cmd, which the 2.5.0
+template carries. The launcher runs exactly the version
+`.context-circuit/CLI_VERSION` pins from the installers' version store, and
+refuses, naming the install step, when that version is not installed
+([#177](https://github.com/kaotypr/context-circuit-source/pull/177)).
+
+A CLI that is not the pinned version hands off to it when the pin is installed
+in the same version store, printing one note on stderr.
+`CC_CLI_VERSION=local` keeps the running CLI for one command
+([#179](https://github.com/kaotypr/context-circuit-source/pull/179)).
+
+A variant version, `X.Y.Z-<label>.<N>`, installs as
+`<label>-context-circuit-cli`, so it never shares a command with the public
+`context-circuit-cli`. Both installers take `CONTEXT_CIRCUIT_BIN_DIR` as their
+default command directory, and the launcher reads it too
+([#176](https://github.com/kaotypr/context-circuit-source/pull/176)).
+`scripts/release-version.sh` prints the version a product builds as, so a
+downstream builder can compose `<base>-<label>.<counter>`
+([#172](https://github.com/kaotypr/context-circuit-source/pull/172)).
+
+`agent setup`, and `init` through it, turns Claude Code's commit and pull
+request attribution off in the gitignored `.claude/settings.local.json`, adding
+the key only when it is absent
+([#208](https://github.com/kaotypr/context-circuit-source/pull/208)).
+
+`record archive` moves the active member's finished records, or exactly the
+records named with `--id`, under the `_archive/` beside them. IDs stay reserved,
+inline relative links are rewritten, and it returns `commit_recommended`.
+`record complete` returns `archive_offer` while finished records remain
+unarchived. Records may sit in one level of group folder under `intent/` or
+`plans/`, with `_archive/` above or below it, and `check` reports folders that
+break those rules
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)).
+
+## Fixed
+
+`check` and `record dependencies` walk each plan's dependencies once, and several
+commands now refuse arguments they used to drop
+([#169](https://github.com/kaotypr/context-circuit-source/pull/169)).
+`record order` is read-only, and `repo fetch` no longer makes the ID split
+([#171](https://github.com/kaotypr/context-circuit-source/pull/171)).
+
+## Changed
+
+When no hand-off happens, a change is refused, with nothing changed, if it would
+move the workspace to schema 3, `init` included, or if the running CLI and the
+pin are on different release lines. `CC_CLI_VERSION=local` never lifts a
+refusal. Read-only commands, previews, and other changes on the same release
+line only warn
+([#179](https://github.com/kaotypr/context-circuit-source/pull/179)).
+
+The archive folder is now `_archive/`. The first changing command renames an
+existing top-level `intent/archive/` and `plans/archive/` to `_archive/`, keeps
+every ID reserved, and reports the move as a notice. The `commit_recommended`
+note now tells the agent to ask whether to commit and push or commit only, and
+what to do when that push is refused. `record list` lists the active member's
+own records, and `status` opens with `my_work`
+([#209](https://github.com/kaotypr/context-circuit-source/pull/209)).
+
+`check`, `record order`, `record create`, and `record dependencies` read the
+records once per command
+([#170](https://github.com/kaotypr/context-circuit-source/pull/170)).
+
+## Documentation
+
+Read the [version pinning guide](/docs/cli/version-pinning), the
+[CLI commands guide](/docs/cli/commands), or the [CLI changelog](/changelog/cli).

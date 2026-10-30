@@ -3,16 +3,16 @@ title: "Worktrees"
 description: "An isolated Git checkout for each repository a plan touches."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: .context-circuit/docs/worktrees.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -20,7 +20,11 @@ sources:
 
 An execution request covers worktree preparation. Default branches are `cc/<plan-id>/<repository-id>`, under `.worktrees/<plan-id>/<repository-id>`. A person may instead request direct work in a bound checkout, preserving its branch and existing work.
 
-The starting point is this machine's base branch unless an explicit start or dependency requires another reference. No fetch happens implicitly. Reusing a branch does not reset it.
+The starting point is this machine's base branch unless an explicit start or dependency requires another reference. No fetch happens implicitly. The result reports `start`, what the worktree actually started from, beside `base_branch`, where its work is delivered. When the start is a local branch behind its fetched remote, `sync_required` gives the counts and the remedy, and the agent passes that on rather than building on a stale start.
+
+## Reuse is explicit
+
+Preparing again for the same plan resumes its own worktree. A worktree or branch left from an earlier plan that held the same number is refused rather than resumed, and the refusal says how to remove it; the agent inspects it before choosing `--reuse`. `--reuse` selects an existing branch without resetting it, and is never passed by default. A plan branch already checked out in another working copy is refused with the safe next steps.
 
 ## Environment reuse is not setup
 
@@ -28,6 +32,6 @@ Preparation can clone ignored dependencies and environment files using native co
 
 ## Preserve working copies
 
-Git's inventory is authoritative; the local plan association is a convenience. Inspect actual branches and diffs on resume. Completion removes neither worktrees nor branches. Removal preserves dirty, untracked, and ignored files unless disposal was explicitly authorized.
+Git's inventory is authoritative; the local plan association is a convenience. Inspect actual branches and diffs on resume. Completion removes neither worktrees nor branches. Removal preserves dirty, untracked, and ignored files unless disposal was explicitly authorized, keeps the branch, and removes the `.worktrees/` folders it left empty. A worktree removed with `git worktree remove` or by hand leaves its association behind; `worktree prune` drops it and touches no worktree, branch, or file.
 
 See [worktree commands](/docs/cli/repositories-worktrees).

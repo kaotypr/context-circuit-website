@@ -27,8 +27,8 @@ const fumadocsBindings = [
   ["--color-fd-popover", "--popover"], ["--color-fd-popover-foreground", "--popover-foreground"],
   ["--color-fd-card", "--card"], ["--color-fd-card-foreground", "--card-foreground"],
   ["--color-fd-border", "--border"], ["--color-fd-primary", "--primary"],
-  ["--color-fd-primary-foreground", "--primary-foreground"], ["--color-fd-secondary", "--secondary"],
-  ["--color-fd-secondary-foreground", "--secondary-foreground"], ["--color-fd-ring", "--ring"],
+  ["--color-fd-primary-foreground", "--primary-foreground"], ["--color-fd-secondary", "--muted"],
+  ["--color-fd-secondary-foreground", "--foreground"], ["--color-fd-ring", "--ring"],
 ] as const;
 
 export async function validateTheme(root: string): Promise<string[]> {

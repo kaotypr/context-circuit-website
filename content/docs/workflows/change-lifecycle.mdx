@@ -3,16 +3,16 @@ title: "Change lifecycle"
 description: "Human decisions connect preparation, implementation, delivery, and completion."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -21,7 +21,7 @@ A change that begins with an intent follows these decisions:
 1. Ground the request in product knowledge.
 2. Write an intent the person can approve.
 3. Approve the written outcome.
-4. Investigate real code and write plans.
+4. Ask for plans; the agent investigates real code and writes them.
 5. Request execution after the plans exist.
 6. Implement in prepared worktrees and run checks.
 7. Authorize delivery.
@@ -31,10 +31,10 @@ When the outcome is already specified, a person can request a grounded plan dire
 
 ## Request through execution
 
-The agent grounds a request in product knowledge and writes an intent. You read it and approve the outcome. The agent investigates real code and writes plans. Once plans exist, you request execution; the agent prepares worktrees, implements, and runs checks.
+The agent grounds a request in product knowledge and writes an intent. You read it and approve the outcome; the agent records that and recommends planning. When you ask for plans — later, or in the same message as the approval — the agent investigates real code and writes them. Once plans exist, you request execution; the agent prepares worktrees, implements, and runs checks.
 
 ## Delivery through reconciliation
 
-You authorize outward delivery. After the work lands, you request completion. The agent appends the note and reconciles the knowledge affected by the implementation. That knowledge feeds the next request.
+You authorize outward delivery. After the work lands, you request completion. The agent appends the note, reconciles the knowledge affected by the implementation, asks whether to commit and push the records, and offers to archive finished records. That knowledge feeds the next request.
 
 Neither a CLI diagnostic nor an editable approval field supplies consent. Delivery does not mark completion, and completion does not delete working copies. See [human control boundaries](/docs/concepts/human-control) for the full decision table.

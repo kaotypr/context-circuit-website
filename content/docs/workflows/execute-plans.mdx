@@ -3,16 +3,16 @@ title: "Execute plans with workers"
 description: "Prepare the right checkouts, implement the outcome, and report actual checks."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -21,11 +21,13 @@ sources:
 The execution request covers worktree preparation for every repository the plan names. Use `record order --plan ID` to select an exact run, or `--intent ID` for linked plans. Read its dependency order for a multi-plan run, then pass each required dependency start explicitly.
 
 ```sh
-context-circuit-cli worktree prepare --repo api --plan p0001 --copy-mode auto
-context-circuit-cli worktree inspect --repo api --path .worktrees/p0001/api
+sh .context-circuit/cli worktree prepare --repo api --plan p0001 --copy-mode auto
+sh .context-circuit/cli worktree inspect --repo api --path .worktrees/p0001/api
 ```
 
-Use your actual IDs and the returned path. Inspect the environment reuse report before installing dependencies. Read the checkout's instructions before editing.
+Use your actual IDs and the returned path. The result reports `start`, what the worktree actually started from, beside `base_branch`. When that start is a local branch behind its fetched remote, `sync_required` gives the counts and the remedy, and the agent passes it on rather than building on a stale start. Inspect the environment reuse report before installing dependencies. Read the checkout's instructions before editing.
+
+Preparing again for the same plan resumes its worktree. A worktree or branch left from an earlier plan that held the same number is refused rather than resumed; the agent inspects it and asks before removing it or choosing `--reuse`. A plan branch already checked out elsewhere is refused with the safe next steps.
 
 ## Give workers bounded ownership
 

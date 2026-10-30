@@ -1,0 +1,41 @@
+---
+title: Context Circuit CLI 2.4.1
+description: Release notes for Context Circuit CLI 2.4.1.
+tracks: [cli]
+versions:
+  cli: 2.4.1
+sources:
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.4.1
+    path: release/requests/cli/2.4.1.md
+---
+
+CLI 2.4.1 is a patch for 2.4.0. The workspace schema stays at 3 and nothing is
+renumbered; 2.4.0 and 2.4.1 work in the same workspace.
+
+The setup step that completes setup now makes the ID split itself. On a
+workspace still at schema 2, the `member band`, `member add --band`, or
+`member use` that completes setup splits `.context-circuit/ids.yaml` right after
+it succeeds, instead of leaving the split to the next changing command. A split
+that step cannot make is a warning, and the next changing command refuses with
+the reason. The split notice names every shared file the command changed,
+`members.yaml` included when it changed.
+
+A refused `record delete` now shows its preview, in YAML and `--json`: the
+records asked for, `blocked_by` with each blocking record's `link`, `refused`,
+and, for `--id`, `add_ids`. Nothing is deleted and the exit status stays 1.
+
+`--workspace PATH` and `--json` are accepted after the full command as well as
+before it. A flag a command does not take is followed by that command's
+signature and the `help` topic to read, with exit status 2.
+
+`worktree prepare` reports `start`, what the worktree actually started from,
+beside `base_branch`. An explicit `--start` naming a local branch behind or
+diverged from its remote-tracking branch is still used as asked, and
+`sync_required` gives the counts and the remedy.
+
+## Documentation
+
+Read the [repositories and worktrees guide](/docs/cli/repositories-worktrees) or
+the [CLI changelog](/changelog/cli).

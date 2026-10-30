@@ -35,9 +35,10 @@ describe("documentation experience", () => {
     expect(styles).toContain("prefers-reduced-motion: reduce");
   });
 
-  it("keeps the release selector defaulting to the registry's current release", async () => {
-    const selector = await read("src/components/version-selector.tsx");
-    expect(selector).toContain("releaseRegistry[track].current");
-    expect(selector).not.toMatch(/"2\.\d+\.\d+"/);
+  it("keeps the changelog filterable by product and version", async () => {
+    const timeline = await read("src/components/changelog-timeline.tsx");
+    expect(timeline).toContain('aria-label="Filter releases"');
+    expect(timeline).toContain('aria-label="Product"');
+    expect(timeline).toContain("All versions");
   });
 });

@@ -27,7 +27,7 @@ repository checkout, or runtime server is needed.
 - `pnpm build` validates the theme, compiles every MDX page against its
   frontmatter schema, and produces the static site in `out/`.
 - `pnpm static:check` checks the built artifact: every content route, release
-  notes, changelogs, redirect targets, headers, the release selector, static
+  notes, changelogs, redirect targets, headers, the changelog filters, static
   search, and analytics isolation.
 - `pnpm browser:check` drives a served build in Chromium (see
   [`docs/deployment.md`](docs/deployment.md)).
