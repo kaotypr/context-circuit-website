@@ -6,24 +6,25 @@ repository. `pnpm build` writes the complete deployable artifact to `out/`.
 
 ## Local review
 
-Use the versions pinned by `.nvmrc` and `packageManager`, then run:
+Use the versions pinned by `.nvmrc` and `packageManager`, then run the commands
+below. The install's `postinstall` step generates the `.source/` content
+collections that typechecking and the build read.
 
 ```sh
 corepack enable
 pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
-pnpm content:check
-pnpm test -- --runInBand
 pnpm theme:check
+pnpm test -- --runInBand
 NEXT_PUBLIC_DEPLOYMENT_ENV=preview pnpm build
 pnpm static:check
 ```
 
 Serve `out/` with any static file server when browser review is needed. Review
 home, the documentation landing, a guided page, a reference page, both v2
-collections, changelogs, search, keyboard focus and shortcuts, and reduced
-motion. Redirect and header behavior must also be checked on the eventual host;
+guides, release notes, changelogs, the release selector, search, keyboard focus
+and shortcuts, and reduced motion. Redirect and header behavior must also be checked on the eventual host;
 they are represented in `public/_redirects` and `public/_headers` and copied into
 the export.
 
@@ -76,4 +77,10 @@ outside this repository according to the project's operational process.
 
 ## Browser acceptance
 
-Run `pnpm dev --port 3100` and `pnpm browser:check` for route, computed-theme, search, mobile, focus, and axe checks. Install Chromium with `pnpm exec playwright install chromium`. Set `DOCS_URL` to test a served static artifact and `DOCS_REPORT_DIR` to choose its evidence directory. Every incomplete accessibility result needs investigation; the script reports these separately from violations. See `redesign-audit.md` for the recorded investigation and source verification.
+Serve `out/` on port 3100 (or run `pnpm dev --port 3100`) and run
+`pnpm browser:check` for route, link, theme, release selector, search, mobile,
+focus, and axe checks. Install Chromium with `pnpm exec playwright install
+chromium`, or set `CHROMIUM_PATH` to an installed Chromium or headless shell. Set
+`DOCS_URL` to test another served artifact and `DOCS_REPORT_DIR` to choose its
+evidence directory. Every incomplete accessibility result needs investigation;
+the script reports these separately from violations.

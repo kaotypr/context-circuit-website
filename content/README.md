@@ -1,38 +1,59 @@
-# Content contract
+# Content
 
-Every website document is an MDX file with strict YAML frontmatter. Unknown
-fields are rejected. Routes are stable and derived from the file tree:
+Every page is an MDX file under this directory, compiled by `fumadocs-mdx`.
+Routes come from the file tree:
 
 | Content path | Route |
 | --- | --- |
 | `index.mdx` | `/` |
 | `docs/<path>.mdx` | `/docs/<path>` |
-| `versions/<track>/<major>/<path>.mdx` | `/docs/<track>/v<major>/<path>` |
+| `docs/<track>/v<major>/<path>.mdx` | `/docs/<track>/v<major>/<path>` |
 | `releases/<track>/<version>.mdx` | `/releases/<track>/<version>` |
-| `changelogs/<track>.mdx` | `/changelog/<track>` |
+| `changelog/<track>.mdx` | `/changelog/<track>` |
 
-`track` is `template` or `cli`. Each selected track requires its own entry in
-`versions`; use `current` only when the page should intentionally move with the
-registry. A page covering both products must select both independently.
+An `index.mdx` stands for its folder. `track` is `template` or `cli`.
 
-Required frontmatter fields are `title`, `description`, `section`, `order`,
-`audience`, `tracks`, and `versions`. Optional fields are `draft`,
-`sidebar_label`, `canonical_url`, `redirects`, `sources`, and `unlisted`.
-Version-pinned sources contain `track`, `repository`, immutable `ref`, and
-repository-relative `path`. They must match the selected release in
-`src/lib/content/releases.ts`.
+## Frontmatter
 
-Nested pages require an index page at their navigation parent. Orders must be
-unique among siblings in a section. Internal Markdown links and heading
-fragments are checked. Draft and unlisted documents are validated but omitted
-from the static production output.
+The schema in `source.config.ts` is the Fumadocs page schema extended with the
+version model. Unknown fields fail the build.
 
+| Field | Required | Meaning |
+| --- | --- | --- |
+| `title` | yes | Page title and `h1` |
+| `description` | no | Summary under the title and in search |
+| `tracks` | yes | `template`, `cli`, or both |
+| `versions` | yes | The release each selected track is written against |
+| `sources` | no | Pinned source evidence, rendered in the page footer |
 
+Each selected track needs its own entry in `versions`, and no other entry is
+allowed. A page covering both products selects both independently. The header
+links each selected version to its release notes.
 
-## Source evidence and scope
+A `sources` entry has `track`, `repository`, an immutable `ref`, and a
+repository-relative `path`. Check product claims against that tag when you write
+them; the build does not verify the links.
 
-Set optional `scope: source` or `scope: website` for source and website pages. Otherwise selected tracks identify the template, CLI, or both. Pages select exact versions independently. Source paths are checked against `src/lib/content/source-inventory.json`, a snapshot of verified tagged Git trees.
+## Sidebar
 
-Use shared `DocCard`, `CardGrid`, `Callout`, and `Circuit` components in MDX. Literal component links are validated like Markdown links. Tables use GFM; code blocks receive a toolbar. Release selectors navigate to exact notes; the v2 guide states its 2.3.0 evidence baseline instead of pretending to be an archived 2.0.0 manual.
+Each folder's `meta.json` names its section (`title`) and orders its pages
+(`pages`, by file or folder name). `docs`, `releases`, and `changelog` are root
+folders (`"root": true`) and appear as sidebar tabs. A page left out of `pages`
+is left out of the sidebar.
 
-After authorized delivery, run `pnpm sources:refresh` with local template/source checkouts and `pnpm sources:verify` to refresh the website snapshot and verify remote paths. New local pages omit an unavailable remote link until that refresh.
+## Components
+
+MDX can use `DocCard` and `CardGrid` (Fumadocs cards), `Callout`, `Topic` and
+`TopicList`, `ReleasePicker`, `InstallLink`, and `HomeIntro`. Tables use GFM.
+A `mermaid` code fence renders as a diagram. Blockquotes on the prompt cookbook
+render as copyable prompts.
+
+## Releases
+
+`src/lib/releases.ts` lists every release of each track and its `current`
+release. Add a release by adding it there, writing
+`releases/<track>/<version>.mdx`, and adding it to the top of
+`changelog/<track>.mdx`. `pnpm test` checks that all three agree.
+
+Redirects for retired URLs live in `public/_redirects`; each target must be a
+content page.

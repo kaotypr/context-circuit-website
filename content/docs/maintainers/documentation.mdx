@@ -18,9 +18,9 @@ sources:
 
 ## Make the content reviewable
 
-Add a page under `content/` with title, description, section, order, audience, scope, product tracks, exact version selections, and pinned sources. Use the shared cards, callouts, tables, and code treatment; avoid page-specific CSS.
+Add a page under `content/`. Its path is its URL: `content/docs/concepts/plans.mdx` publishes at `/docs/concepts/plans`. Frontmatter carries the title, description, product tracks, exact version selections, and optional pinned sources. Sidebar order and section titles live in the folder's `meta.json`. Use the shared cards, callouts, topic lists, and code treatment; avoid page-specific CSS.
 
-Product claims must be checked against the selected tagged source. Update the source inventory from verified Git objects when adding a release. A missing historical guide remains visibly unavailable.
+Product claims must be checked against the selected tagged source when the page is written. Source links render in the page footer; nothing verifies them at build time. A missing historical guide remains visibly unavailable.
 
 ## Run the website checks
 
@@ -28,17 +28,14 @@ Product claims must be checked against the selected tagged source. Update the so
 pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
-pnpm content:check
-pnpm test -- --runInBand
 pnpm theme:check
+pnpm test -- --runInBand
 pnpm build
 pnpm static:check
 ```
 
-Browser checks additionally exercise routes, search, mobile navigation, computed theme colors, reloads, keyboard focus, and accessibility. Review incomplete accessibility results manually.
+The build rejects frontmatter outside the page schema. The static check confirms every content page, release note, changelog, and redirect target was exported, and that search finds titles and body text. Browser checks additionally exercise routes, search, the release selector, mobile navigation, theme switching, keyboard focus, and accessibility. Review incomplete accessibility results manually.
 
 ## Respect the static boundary
 
 The website exports HTML, CSS, JavaScript, and a static search index. It has no CMS, database, authentication, live repository API, or server persistence. Hosted Plausible loads only for an explicitly configured production deployment. Cloudflare Pages configuration is documented; connecting or publishing a production project is a separate action.
-
-New files show their local content path until a committed website revision can provide a valid source link.
