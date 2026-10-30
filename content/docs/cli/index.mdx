@@ -3,11 +3,11 @@ title: "Context Circuit CLI"
 description: "A native tool for dependable bookkeeping and Git mechanics. The agent supplies judgment."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -20,9 +20,9 @@ Each workspace pins a CLI version in `.context-circuit/CLI_VERSION`. Installed v
 ## What you use it for
 
 ```sh
-context-circuit-cli version
-context-circuit-cli help
-context-circuit-cli --workspace . --json status
+sh .context-circuit/cli version
+sh .context-circuit/cli help
+sh .context-circuit/cli --json status
 ```
 
 Normal output is readable YAML. `--json` returns structured values. Errors go to stderr with a nonzero exit status. The agent still does the reasoning; the CLI keeps the files and Git mechanics dependable.

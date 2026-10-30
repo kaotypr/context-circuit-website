@@ -3,11 +3,11 @@ title: "CLI commands"
 description: "Command groups, concrete examples, and the boundary between mechanics and judgment."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -16,10 +16,10 @@ sources:
 Use the executable resolved from the workspace's pin. Global flags precede commands:
 
 ```sh
-context-circuit-cli --workspace . --json status
-context-circuit-cli help
-context-circuit-cli help record
-context-circuit-cli worktree prepare --help
+sh .context-circuit/cli --json status
+sh .context-circuit/cli help
+sh .context-circuit/cli help record
+sh .context-circuit/cli worktree prepare --help
 ```
 
 ## Command groups
@@ -41,14 +41,14 @@ context-circuit-cli worktree prepare --help
 ## Read-only examples
 
 ```sh
-context-circuit-cli member list
-context-circuit-cli repo inspect --id api
-context-circuit-cli context find --query billing
-context-circuit-cli record list
-context-circuit-cli record show --id p0001
-context-circuit-cli record order --intent i001 --mode waves
-context-circuit-cli record order --plan p0001 --mode waves
-context-circuit-cli worktree list --repo api
+sh .context-circuit/cli member list
+sh .context-circuit/cli repo inspect --id api
+sh .context-circuit/cli context find --query billing
+sh .context-circuit/cli record list
+sh .context-circuit/cli record show --id p0001
+sh .context-circuit/cli record order --intent i001 --mode waves
+sh .context-circuit/cli record order --plan p0001 --mode waves
+sh .context-circuit/cli worktree list --repo api
 ```
 
 Replace IDs with those in your workspace. Normal output is readable YAML; `--json` provides structured values. Errors are on stderr and return nonzero status.

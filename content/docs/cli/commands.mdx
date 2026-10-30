@@ -3,21 +3,21 @@ title: "CLI commands"
 description: "Use structured operations for facts and files; leave interpretation to the agent."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
 ## Read the available surface
 
 ```sh
-context-circuit-cli version
-context-circuit-cli help
-context-circuit-cli help worktree
-context-circuit-cli --workspace . --json status
+sh .context-circuit/cli version
+sh .context-circuit/cli help
+sh .context-circuit/cli help worktree
+sh .context-circuit/cli --json status
 ```
 
 Global flags precede the command. Normal output is readable YAML; `--json` returns structured values. Errors go to stderr with a nonzero exit status. A fully resolved command accepts `--help`; groups need a subcommand for flag help.

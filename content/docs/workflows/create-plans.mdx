@@ -3,16 +3,16 @@ title: "Create plans"
 description: "Ground a plan in real code after intent approval or a direct planning request."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -21,16 +21,16 @@ sources:
 After intent approval, or a direct request to plan an already specified outcome, the agent reads relevant code, repository instructions, and setup requirements. It chooses useful plan boundaries, tasks, dependencies, risks, and checks. A planner or narrow explorers may help; the coordinator writes the records.
 
 ```sh
-context-circuit-cli record create --kind plan --slug invoice-api --title "Invoice download API" --intent i001 --repo api
-context-circuit-cli record create --kind plan --slug invoice-web --title "Invoice download UI" --intent i001 --repo web --depends-on p0001
-context-circuit-cli record order --intent i001 --mode waves
+sh .context-circuit/cli record create --kind plan --slug invoice-api --title "Invoice download API" --intent i001 --repo api
+sh .context-circuit/cli record create --kind plan --slug invoice-web --title "Invoice download UI" --intent i001 --repo web --depends-on p0001
+sh .context-circuit/cli record order --intent i001 --mode waves
 ```
 
 For a direct planning request, omit `--intent`. For an exact run, select its plans explicitly:
 
 ```sh
-context-circuit-cli record create --kind plan --slug specified-change --title "Specified change" --repo api
-context-circuit-cli record order --plan p0003 --mode waves
+sh .context-circuit/cli record create --kind plan --slug specified-change --title "Specified change" --repo api
+sh .context-circuit/cli record order --plan p0003 --mode waves
 ```
 
 These IDs are illustrative. Substitute the IDs returned in your workspace. The CLI creates each new plan as a folder with `plan.md`. Link any detail files from that entry and assign them to shared or repository-specific reading.

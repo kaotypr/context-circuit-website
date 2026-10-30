@@ -3,18 +3,18 @@ title: "Diagnostics"
 description: "A finding tells you what needs attention; it does not authorize a repair."
 tracks: [cli]
 versions:
-  cli: 2.3.0
+  cli: 2.5.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
 ## Run an explicit diagnostic
 
 ```sh
-context-circuit-cli --workspace . check
+sh .context-circuit/cli check
 ```
 
 The diagnostic examines structured workspace records, local bindings, links, IDs, dependency cycles, worktree associations, and owned knowledge. It reports an `issue` and a `resolve` for each finding.

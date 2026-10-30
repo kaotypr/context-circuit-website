@@ -3,16 +3,16 @@ title: "Gather project context"
 description: "Turn repository evidence into durable, retrievable understanding."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -28,7 +28,7 @@ Write down the billing rules and the relationship between the two applications.
 ## Retrieve the smallest useful context
 
 ```sh
-context-circuit-cli context find --query billing
+sh .context-circuit/cli context find --query billing
 ```
 
 A query searches local and borrowed catalogs and reports which side a match came from. Read the relevant notes; the search output is a locator, not the knowledge itself.

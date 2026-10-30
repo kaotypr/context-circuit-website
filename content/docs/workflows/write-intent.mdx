@@ -3,16 +3,16 @@ title: "Write and approve an intent"
 description: "Make the understood outcome visible before code investigation."
 tracks: [template, cli]
 versions:
-  template: 2.3.0
-  cli: 2.3.0
+  template: 2.5.0
+  cli: 2.5.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.3.0
+    ref: v2.5.0
     path: AGENTS.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.3.0
+    ref: cli-v2.5.0
     path: product/docs/commands.md
 ---
 
@@ -21,7 +21,7 @@ sources:
 Explain the user-visible outcome and constraints. The agent retrieves relevant product knowledge and writes the goal, non-goals, success criteria, repository scope, and numbered open questions.
 
 ```sh
-context-circuit-cli record create --kind intent --slug invoice-download --title "Download an invoice"
+sh .context-circuit/cli record create --kind intent --slug invoice-download --title "Download an invoice"
 ```
 
 The CLI reserves an ID; the agent writes meaningful content. Use the returned ID, not an example copied from a guide.
