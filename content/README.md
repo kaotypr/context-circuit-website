@@ -52,8 +52,12 @@ render as copyable prompts.
 
 `src/lib/releases.ts` lists every release of each track and its `current`
 release. Add a release by adding it there, writing
-`releases/<track>/<version>.mdx`, and adding it to the top of
-`changelog/<track>.mdx`. `pnpm test` checks that all three agree.
+`releases/<track>/<version>.mdx`, adding the version to the top of
+`releases/<track>/meta.json` so it appears in the sidebar, and adding it to the
+top of `changelog/<track>.mdx`. `pnpm test` checks that all four agree. Page
+`versions` must name a registered release, and each source must name its
+track's repository and a registered release tag; the build rejects anything
+else.
 
 Redirects for retired URLs live in `public/_redirects`; each target must be a
 content page.

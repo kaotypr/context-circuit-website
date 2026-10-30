@@ -61,7 +61,7 @@ async function main() {
       const url = new URL(link.href);
       if (url.origin === new URL(base).origin) {
         const target = url.pathname.replace(/\/$/, "") || "/";
-        if (!routeSet.has(target) && !target.startsWith("/_next") && !/\.\w+$/.test(target)) failures.push(route + ": broken internal route " + target);
+        if (!routeSet.has(target) && !target.startsWith("/_next") && !/\.(txt|json|xml|ico|png|jpe?g|svg|webp|webmanifest|woff2?|css|js|map)$/i.test(target)) failures.push(route + ": broken internal route " + target);
         links.push({ from: route, route: target, hash: decodeURIComponent(url.hash.slice(1)) });
       } else if (/github.com\/kaotypr\/context-circuit/.test(url.href) && /\/(blob|edit)\/main\//.test(url.href)) failures.push(route + ": unpinned source " + url.href);
     }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { CaretDownIcon, CheckCircleIcon } from "@phosphor-icons/react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "fumadocs-ui/components/ui/collapsible";
 import { releaseRegistry, releasesNewestFirst, trackLabels, type Track } from "@/lib/releases";
@@ -18,7 +18,8 @@ export function VersionSelector({ track, value }: { track: Track; value?: string
   const [open, setOpen] = useState(false);
   const selected = releaseFromPath(track, pathname) ?? value ?? releaseRegistry[track].current;
   const name = trackLabels[track];
-  const listId = `release-list-${track}`;
+  // Unique per instance: a page can render the sidebar picker and an MDX one.
+  const listId = `release-list-${track}-${useId().replaceAll(":", "")}`;
 
   return (
     <Collapsible className="release-select" open={open} onOpenChange={setOpen} data-track={track}>

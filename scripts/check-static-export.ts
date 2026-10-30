@@ -78,7 +78,7 @@ async function main(): Promise<void> {
   const selectorFile = artifactPath("/docs/cli/v2/getting-started");
   const selectorPage = await read(selectorFile);
   for (const track of tracks) {
-    requireText(selectorFile, selectorPage, `id="release-list-${track}"`);
+    requireText(selectorFile, selectorPage, `id="release-list-${track}-`);
     for (const release of releasesNewestFirst(track)) {
       const href = `/releases/${track}/${release.version}`;
       if (!selectorPage.includes(`href="${href}"`) && !selectorPage.includes(`href="${href}/"`)) {

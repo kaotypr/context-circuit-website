@@ -18,12 +18,9 @@ export function PageBaseline({ tracks, versions }: { tracks: Track[]; versions: 
 }
 
 /** Source evidence for a page, as plain links to the pinned release. */
-export function PageSources({ sources, versions }: { sources: Source[]; versions: Versions }) {
-  const links = sources.flatMap((source) => {
-    const version = versions[source.track];
-    const href = version ? sourceUrl(source.track, version, source.path) : undefined;
-    return href ? [{ ...source, href }] : [];
-  });
+export function PageSources({ sources }: { sources: Source[] }) {
+  // The link opens exactly the repository and tag the source declares.
+  const links = sources.map((source) => ({ ...source, href: sourceUrl(source.track, source.ref, source.path) }));
   if (links.length === 0) return null;
   return (
     <aside className="page-sources" aria-labelledby="page-sources-title">
