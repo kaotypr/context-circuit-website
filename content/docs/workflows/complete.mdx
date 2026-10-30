@@ -27,9 +27,23 @@ The CLI returns local catalog entries claiming the affected repositories. The ag
 - Update a changed note and its catalog entry together.
 - Move the reviewed date after confirming it against code.
 - Say explicitly when no durable concept changed.
-- Raise borrowed-knowledge corrections upstream.
+- Raise borrowed-knowledge corrections upstream, through that repository's own review, never in `context/`.
 
 For a direct change without a plan, `context find --repo ID` supplies the same reconciliation candidates.
+
+## Answer the commit question
+
+`record complete` returns `commit_recommended` when the plan's files, its intent's file, or the ID files are uncommitted. The agent asks one question: commit and push those files, or commit only. After "commit only", it says other clones cannot see them yet.
+
+## Archive, if you want to
+
+While you have finished records not archived, completion also returns `archive_offer`, and the agent offers to archive them:
+
+```text
+Yes, archive my finished records.
+```
+
+`record archive` moves your completed plans, and approved intents whose plans are all completed, under the `_archive/` beside them. Every ID stays reserved and lookup by ID still finds them. It returns its own `commit_recommended`. Declining the offer changes nothing.
 
 ## Keep the working copies
 

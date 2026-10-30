@@ -26,7 +26,7 @@ You do not need to identify your operating-system package or run the installer y
 2. Detects the operating system and architecture where the agent runs. WSL uses the Linux package.
 3. Uses the bundled `cc-cli` procedure to download the matching release.
 4. Verifies its SHA-256 checksum and reported version.
-5. Keeps the resolved versioned executable for subsequent CLI calls.
+5. Runs every later command through the workspace's launcher, `sh .context-circuit/cli COMMAND …`, or `.context-circuit/cli.ps1` in Windows PowerShell or cmd.
 6. Reports what was installed without printing credentials or private provider data.
 
 The CLI installation changes no project identity, template file, intent, plan, or repository binding.
@@ -36,7 +36,7 @@ flowchart LR
   P[Your prompt] --> A[Agent reads workspace pin]
   A --> E[Detect execution environment]
   E --> I[Install and verify release]
-  I --> V[Use versioned executable]
+  I --> V[Run through the launcher]
   V --> R[Report result]
 ```
 
@@ -56,4 +56,8 @@ Install the pinned CLI from the trusted archive and checksums in <path>. Verify
 both before using the binary.
 ```
 
-Installed versions can coexist. The agent resolves this workspace's versioned executable instead of assuming the shared command on `PATH` is correct. See [version pinning](/docs/cli/version-pinning) for maintenance details.
+## The launcher
+
+Installed versions coexist in the installers' version store. The launcher, `.context-circuit/cli`, runs exactly the version `.context-circuit/CLI_VERSION` pins from that store and never a CLI found on `PATH`, which is whichever version was installed last. When the pinned version is not installed, the launcher refuses, runs nothing, and names the install step, so the agent installs it and runs the command again.
+
+The launcher looks in the installers' default command directory. If you installed with `--bin-dir`, set `CONTEXT_CIRCUIT_BIN_DIR` to that directory so the installers and the launcher agree. See [version pinning](/docs/cli/version-pinning) for maintenance details.

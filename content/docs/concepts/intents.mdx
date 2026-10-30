@@ -22,12 +22,16 @@ An intent records the goal, non-goals, constraints, success criteria, rough repo
 
 ## Approval is a real decision
 
-The agent presents the intent and waits. The original request is not approval of the derived outcome. Approval records the actual words and `approved_at`; neither a field nor a command establishes consent.
+The agent presents the intent in the language you write in, invites answers by number, and waits. The original request is not approval of the derived outcome. Approval records the actual words and `approved_at`; neither a field nor a command establishes consent.
 
 Questions have stable numbers. Answers remain beneath them, so the discussion stays readable. A later question takes the next unused number.
 
 ## What happens next
 
-Approval authorizes code investigation and planning without a second planning permission request. If the outcome or success criteria change materially, return to the intent for renewed approval. A plan cannot quietly resolve a new product question.
+`record approve` returns `planning_recommended`. Approval records the decision and nothing more: the agent says plans are the next step, recommends creating them, and stops. No code is read and no plan ID is reserved.
+
+Planning starts on a request for it. That request may come later, or with the approval: "I approve it. Create the plans." once you have read the intent. Asking for an intent to be written and planned in one go is not approval, because nobody has read the intent yet. Once planning is requested, the agent investigates code and writes plans without asking for approval again. If the outcome or success criteria change materially, return to the intent for renewed approval. A plan cannot quietly resolve a new product question.
+
+Approval also returns `commit_recommended` when the intent or ID files are uncommitted. The agent asks whether to commit and push them, or commit only. A CLI older than 2.4.0 still returns `planning_required`; that CLI is behind the template, and the workspace instructions win over its text.
 
 Follow [write and approve an intent](/docs/workflows/write-intent).

@@ -28,4 +28,8 @@ The plan is intended work; the branch and diff show what happened. Complete only
 
 Borrowed knowledge remains read-only and is not a local obligation. Worktrees and branches remain after completion; removing them needs a separate request.
 
+## Commit, then offer to archive
+
+`record complete` also returns `commit_recommended` when the plan's files, its intent's file, or the ID files are uncommitted. The agent asks one question: commit and push those files, or commit only. While you have finished records not archived, the result also carries `archive_offer`, and the agent offers to archive them. Archiving is optional: `record archive` moves your own finished records under `_archive/`, keeps every ID reserved, and returns its own `commit_recommended`. Declining the offer changes nothing.
+
 Follow [complete plans and update knowledge](/docs/workflows/complete).

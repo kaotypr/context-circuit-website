@@ -21,13 +21,23 @@ sources:
 | Your decision | What may happen next |
 | --- | --- |
 | Request a change | Ground the request and write an intent for you to read. |
-| Approve the written intent | Investigate real code and create linked plans. |
+| Approve the written intent | Record the approval, recommend planning, and stop. |
+| Request plans for an approved intent | Investigate real code and create linked plans. This request may come with the approval, once you have read the intent. |
 | Request a plan for an already specified outcome | Investigate real code and present a standalone plan. |
 | Request execution after plans exist | Prepare worktrees, implement, check, and commit on worktree branches. |
 | Authorize delivery | Perform the push, pull request, merge, or publication you requested. |
 | Request completion | Append the note and reconcile affected durable knowledge. |
 | Request cleanup | Remove selected worktrees or branches with the authorized preservation rules. |
 | Request record deletion | Preview the exact records and released IDs, then delete only after agreement to that list. |
+| Answer the record commit question | Commit the records and ID files that approval, completion, or archiving left uncommitted — and push the workspace's base branch when you said commit and push — that once. |
+
+## Committing workspace records
+
+Workspace records are your working copy too. When `record approve`, `record complete`, or `record archive` leaves records uncommitted, the CLI returns `commit_recommended`, and the agent asks one question: commit and push those files, or commit only. Your answer is the authorization for those files, that once. It never covers a force-push, and a conflict in a record goes to you with both versions. Committing on a prepared worktree's own `cc/*` branch is different: it is implementation, covered by the execution request.
+
+## Setup comes first
+
+Every change in a workspace is made as one of its members. Until the roster lists a member, every member holds a band, and this machine has selected one, the agent declines changing requests and says why; reading and status still work. The roster attributes records and divides ID numbers. A role recorded there says what a member contributes and authorizes nothing.
 
 ## Direct changes
 

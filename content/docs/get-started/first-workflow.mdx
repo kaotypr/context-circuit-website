@@ -27,7 +27,7 @@ rules and audit trail.
 
 The agent retrieves the smallest relevant set of accepted project knowledge. It reads the request against that context, writes an intent with success criteria and numbered open questions, and stops. The CLI allocates the intent ID and maintains the record shape; it does not decide what the outcome means.
 
-## Read the outcome, then approve
+## Read the outcome, approve, then ask for plans
 
 Answer questions by number, then approve only when the written outcome is correct:
 
@@ -41,7 +41,19 @@ Answer questions by number, then approve only when the written outcome is correc
 The intent now matches what I want. I approve it.
 ```
 
-The agent passes your exact approval words to the CLI. Approval authorizes planning only. The agent then investigates real code, decides which repositories are involved, and writes linked plans. The CLI allocates plan IDs and links records; it does not inspect code or author the plan.
+The agent passes your exact approval words to the CLI, which stamps `approved_at` and returns `planning_recommended`. Approval records your decision and nothing more: the agent says that plans are the next step, recommends creating them, and stops. No code is read and no plan ID is reserved yet.
+
+Planning starts when you ask for it:
+
+```text
+Create the plans.
+```
+
+You can also say both at once — "I approve it. Create the plans." — once you have read the intent. The agent then investigates real code, decides which repositories are involved, and writes linked plans without asking for approval again. The CLI allocates plan IDs and links records; it does not inspect code or author the plan.
+
+## Commit the records you changed
+
+Approval and completion leave the records they touched uncommitted, and the CLI reports them as `commit_recommended`. The agent asks you one question: commit and push those files, or commit only. Your answer authorizes that commit, and a push of the workspace's base branch to its upstream, that once. After "commit only", the agent says other clones cannot see the records yet. The CLI never stages, commits, or pushes.
 
 ## Ask to execute after plans exist
 
@@ -70,7 +82,7 @@ The invoice PDF changes have landed. Mark the plans complete with these exact
 words and reconcile any durable knowledge that changed.
 ```
 
-The agent uses ordinary Git and provider tools for delivery. For completion, it gives your exact note to the CLI, then judges whether the accepted project knowledge must change. The CLI records completion but cannot make that knowledge judgment.
+The agent uses ordinary Git and provider tools for delivery. For completion, it gives your exact note to the CLI, then judges whether the accepted project knowledge must change. The CLI records completion but cannot make that knowledge judgment. The agent then asks the commit question for the completed records, and, while you have finished records not archived, offers to move them under `_archive/`. Archiving is optional, keeps every ID, and a no changes nothing.
 
 ```mermaid
 flowchart TB

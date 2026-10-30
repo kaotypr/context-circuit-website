@@ -85,7 +85,7 @@ flowchart TB
   WS -. mounts read-only .-> BK[borrowed knowledge]
 ```
 
-Shared files record logical repository IDs, URLs, default branches, relationships, members, knowledge, intents, and plans. Local files record the active member, checkout paths, and the branch this machine starts work from. A second machine selects an existing member and binds its own checkouts; it does not initialize the workspace again.
+Shared files record logical repository IDs, URLs, default branches, relationships, members, knowledge, intents, and plans. Every workspace lists at least one member, and every member holds an allocation band; a person working alone is a team of one. Local files record the active member, checkout paths, and the branch this machine starts work from. A second machine selects an existing member and binds its own checkouts; it does not initialize the workspace again.
 
 ## The participants
 
@@ -121,6 +121,8 @@ flowchart LR
   A -->|plain-language report| H[Human]
 ```
 
+The agent runs the CLI through the workspace's launcher, `sh .context-circuit/cli COMMAND …` (`.context-circuit/cli.ps1` in Windows PowerShell or cmd), which runs exactly the version `.context-circuit/CLI_VERSION` pins and never a CLI found on `PATH`.
+
 The CLI is model-blind and credential-free. It allocates IDs, edits structured files, resolves bindings, derives dependency order, prepares worktrees, and reports diagnostics. It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or approve anything.
 
 The agent chooses meaningful slugs, writes everything a person reads, decides which repositories matter, judges whether knowledge changed, launches host-native subagents, and explains uncertainty.
@@ -131,12 +133,12 @@ These artifact classes have different lifetimes and must remain separate:
 
 | Location | Meaning | Reading rule |
 | --- | --- | --- |
-| `sources/` | Passive raw evidence and system designs | Read only exact files named by the person or task |
+| `sources/` | Passive raw evidence and system designs | Read only exact files named by the person or task; the shipped `.ignore` keeps it out of ripgrep-based search |
 | `context/` | Durable accepted knowledge owned by this workspace | Retrieve selectively through its catalog |
 | Knowledge repositories | Durable knowledge owned elsewhere | Mount and read; never copy or edit here |
-| `intent/` and `plans/` | What was approved and how work was planned | Resolve by ID; may be archived |
+| `intent/` and `plans/` | What was approved and how work was planned | Resolve by ID; may sit in one level of group folder and be archived under `_archive/` |
 
-A durable note describes the project, not the machinery that produced it. It never names an intent, a plan, or a source file. Repository anchors belong in one `Owner:` block. The catalog entry and note move together. The reviewed date is checked against commits under those anchors, not merely against the calendar.
+Borrowed knowledge is read-only: a wrong borrowed fact is neither copied nor corrected in `context/`, and the fix goes upstream through that repository's own review. A durable note describes the project, not the machinery that produced it. It never names an intent, a plan, or a source file. Repository anchors belong in one `Owner:` block. The catalog entry and note move together. The reviewed date is checked against commits under those anchors, not merely against the calendar.
 
 ```mermaid
 flowchart LR
@@ -164,6 +166,8 @@ sequenceDiagram
   A->>W: Retrieve relevant knowledge
   A->>H: Present intent and numbered questions
   H->>A: Answer and approve the written outcome
+  A->>H: Approval recorded; recommend planning
+  H->>A: Ask for plans
   A->>R: Investigate real code
   A->>H: Present linked plans
   H->>A: Request execution
@@ -175,7 +179,7 @@ sequenceDiagram
   A->>W: Append completion and reconcile knowledge
 ```
 
-An intent approval authorizes planning only. There is no plan approval gate, but execution waits for a request made after the plans exist. Delivery, completion, worktree removal, and branch deletion are separate acts.
+Approving an intent records the decision and nothing more: the agent recommends planning and stops. Planning starts on a request for it, which may come in the same message as the approval once the person has read the intent. There is no plan approval gate, but execution waits for a request made after the plans exist. After approval, completion, or archiving, the agent asks whether to commit and push the records it left uncommitted, or commit only. Delivery, completion, worktree removal, and branch deletion are separate acts.
 
 ## Direct changes
 
@@ -223,7 +227,7 @@ flowchart LR
   W -. separate request .-> B[Branch deletion]
 ```
 
-Independent review is manually requested and never edits code or launches repairs. It does not mechanically gate delivery or completion. Delivery uses ordinary Git and provider tools. Completion appends the person's note and reconciles durable knowledge. Cleanup never happens implicitly.
+Independent review is manually requested and never edits code or launches repairs. It does not mechanically gate delivery or completion. Delivery uses ordinary Git and provider tools. Completion appends the person's note and reconciles durable knowledge, and the agent then offers to archive finished records under `_archive/`. Cleanup never happens implicitly.
 
 ## Products and repositories
 

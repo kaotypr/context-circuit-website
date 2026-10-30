@@ -1,6 +1,6 @@
 ---
 title: "Context Circuit CLI v2"
-description: "The v2 product model, documented against CLI release 2.3.0."
+description: "The v2 product model, documented against CLI release 2.5.0."
 tracks: [cli]
 versions:
   cli: 2.5.0
@@ -21,10 +21,10 @@ The CLI creates and validates workspace records, manages repository bindings, pr
 
 ## Install and use
 
-Follow [CLI installation](/docs/cli/installation), resolve the [workspace version pin](/docs/cli/version-pinning), then read the [command reference](/docs/reference/cli-commands). The shared executable on PATH may point at a different workspace's version.
+Follow [CLI installation](/docs/cli/installation), resolve the [workspace version pin](/docs/cli/version-pinning), then read the [command reference](/docs/reference/cli-commands). A workspace runs its CLI through its launcher, `sh .context-circuit/cli COMMAND …`, which runs exactly the pinned version; the shared executable on PATH may point at a different workspace's version.
 
 ## Version baseline
 
-This major guide is verified against CLI 2.3.0. Read the [2.3.0 release notes](/releases/cli/2.3.0) for solo workspaces and record deletion, or the independent [CLI changelog](/changelog/cli) for each release.
+This major guide is verified against CLI 2.5.0. Read the [2.5.0 release notes](/releases/cli/2.5.0) for the pin hand-off, release lines, and `record archive`, the [2.4.0 release notes](/releases/cli/2.4.0) for schema 3 and banded members, or the independent [CLI changelog](/changelog/cli) for each release.
 
 The native CLI began at 2.0.0. There is no CLI 1.x history, and initialization does not migrate a v1 workspace.

@@ -24,12 +24,23 @@ Explain the user-visible outcome and constraints. The agent retrieves relevant p
 sh .context-circuit/cli record create --kind intent --slug invoice-download --title "Download an invoice"
 ```
 
-The CLI reserves an ID; the agent writes meaningful content. Use the returned ID, not an example copied from a guide.
+The agent runs the CLI through the workspace's launcher. The CLI reserves an ID from the author's band; the agent writes meaningful content in the language recorded for the author, and presents it to you in the language you write in. Use the returned ID, not an example copied from a guide.
 
 ## Answer and approve
 
 Read the written intent, answer by question number, and approve when it matches your outcome. The agent records your actual words with `record approve --id ID --text TEXT`. The command records consent already given; running it is not a substitute for consent.
 
-## Continue into planning
+## Approval stops; planning is its own request
 
-Approval returns `planning_required`. The agent now investigates code and creates linked plans. If investigation reveals a materially different outcome, it returns to the intent instead of hiding the decision inside a plan.
+Approval returns `planning_recommended`. The agent says plans are the next step, recommends creating them, and stops: no code is read and no plan ID is reserved. Ask for plans when you are ready, or approve and ask in one message once you have read the intent:
+
+```text
+1. Include paid and overdue invoices.
+The rest looks right. I approve it. Create the plans.
+```
+
+Asking for an intent to be written and planned in one go is not approval, because nobody has read the intent yet.
+
+Approval may also return `commit_recommended`, naming the intent and ID files left uncommitted. The agent asks whether to commit and push them, or commit only, and commits only on your answer.
+
+If planning reveals a materially different outcome, the agent returns to the intent instead of hiding the decision inside a plan. A CLI older than 2.4.0 returns `planning_required`; it is behind the template, and the agent tells you to install the pinned version.

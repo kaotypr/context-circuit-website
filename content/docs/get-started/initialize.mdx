@@ -1,6 +1,6 @@
 ---
 title: "Initialize a workspace"
-description: "Record your project identity, then work solo or add members."
+description: "Record your project identity and add yourself as the first member."
 tracks: [template, cli]
 versions:
   template: 2.5.0
@@ -24,15 +24,19 @@ billing for small businesses. Add me as Maya. Write my intents and plans in
 Indonesian with a semi-formal tone, while keeping technical terms in English.
 ```
 
-The agent uses the pinned CLI to create the shared workspace structure, adds Maya to the roster, and selects her on this machine. It then refreshes native agent-role definitions for the hosts this workspace supports.
+The agent uses the pinned CLI, through the launcher, to create the shared workspace structure, adds Maya to the roster with an allocation band, and selects her on this machine. It then runs `agent setup`, which refreshes native agent-role definitions for the hosts this workspace supports and turns Claude Code's commit and pull request attribution off in the gitignored `.claude/settings.local.json`.
 
-You can also start solo. Ask the agent to initialize the project without adding a member; the CLI accepts `init` without `--member`. The empty roster needs no local member selection, and records created while solo have no `created_by`. Adding the first member later makes it a team workspace; earlier records remain valid.
+Every workspace has a roster, and every member holds a band, including a person working alone: they are a team of one. A band divides the ID range, so band 1 writes `i100` and `p1000`. The agent suggests band 1 for the first member; band 0 is a band like any other and starts at `i001` and `p0001`. You can also record free-text roles, such as maintainer or docs, which say what a member contributes and authorize nothing. A new workspace starts at schema 3, with one ID file per member under `.context-circuit/ids/`.
+
+## The setup gate
+
+Setup is complete when the roster lists at least one member, every member holds a band, and this machine has selected one of them. Until then the agent declines any request that would change something and says why; reading, questions, and status still work. The CLI reports the same gaps from `status`: `identity_required` when no listed member is selected here, and `band_required`, with a suggested band, when a member holds none. The agent asks who you are — a listed member or someone new to add — or offers the suggested band for you to confirm, then carries out your original request without asking you to repeat it.
 
 The CLI allocates and writes the structured fields. The agent writes the meaningful project description and language preferences. Initialization preserves existing files and refuses to silently reinitialize an active workspace.
 
 ```mermaid
 flowchart LR
-  Q[Name, purpose, optional member] --> A[Agent checks existing state]
+  Q[Name, purpose, first member and band] --> A[Agent checks existing state]
   A -->|fresh workspace| C[CLI initializes structure]
   C --> R[Agent reports identity and local setup]
   A -->|already initialized| S[Stop and explain how to join]
@@ -48,6 +52,6 @@ This is an existing team workspace. Set up this machine for the existing member
 native agent roles without overwriting custom definitions.
 ```
 
-The agent asks you to choose if the member ID is ambiguous, then uses the CLI to create only machine-local bindings. In a team workspace, changing requests wait until this machine has selected someone in the roster; reading and questions still work. Host role definitions are ignored by Git, so a fresh clone needs local setup and the coding host may need to reload them.
+The agent asks you to choose if the member ID is ambiguous, then uses the CLI to create only machine-local bindings. Changing requests wait until this machine has selected someone in the roster; reading and questions still work. Host role definitions and the attribution setting are ignored by Git, so a fresh clone runs `agent setup`, and the coding host may need to reload them.
 
 Then [connect the implementation repositories](/docs/get-started/connect-repositories).

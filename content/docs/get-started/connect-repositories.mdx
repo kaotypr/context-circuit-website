@@ -30,7 +30,7 @@ Clone https://github.com/acme/billing-web.git into repositories/web as `web`.
 Start from `main` and record that `web` consumes the `api`.
 ```
 
-The agent inspects each checkout and remote, then uses the CLI to record the shared repository identity, machine-local checkout path, base branch, and relationship. It reports conflicts or missing facts instead of guessing.
+The agent inspects each checkout and remote, then runs the CLI through the workspace's launcher to record the shared repository identity, machine-local checkout path, base branch, and relationship. It reports conflicts or missing facts instead of guessing.
 
 ```mermaid
 flowchart TB
