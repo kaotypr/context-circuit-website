@@ -3,7 +3,6 @@ import AxeBuilder from "@axe-core/playwright";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { contentRoutes } from "../src/lib/content-routes";
-import { releaseRegistry } from "../src/lib/releases";
 
 const base = process.env.DOCS_URL ?? "http://localhost:3100";
 const output = process.env.DOCS_REPORT_DIR ?? "/tmp/context-circuit-browser";
@@ -115,16 +114,15 @@ async function main() {
   }
   await page.evaluate(() => localStorage.setItem("theme", "light"));
 
-  // Release selector: defaults to the registry's current release and navigates to exact notes.
-  await page.goto(base + "/docs/releases");
-  const sidebar = page.locator("#nd-sidebar");
-  await expect(sidebar.getByRole("button", { name: "Template release", exact: true })).toContainText(releaseRegistry.template.current);
-  await expect(sidebar.getByRole("button", { name: "CLI release", exact: true })).toContainText(releaseRegistry.cli.current);
-  await sidebar.getByRole("button", { name: "Template release", exact: true }).click();
-  await sidebar.getByRole("list", { name: "Template releases" }).getByRole("link", { name: /^2\.0\.0/ }).click();
-  await expect(page).toHaveURL(/releases\/template\/2\.0\.0/);
-  await expect(page.locator("#nd-sidebar").getByRole("button", { name: "Template release", exact: true })).toContainText("2.0.0");
-  await expect(page.locator("#nd-sidebar").getByRole("button", { name: "CLI release", exact: true })).toContainText(releaseRegistry.cli.current);
+  // Changelog: filters by product and version, and links to exact notes.
+  await page.goto(base + "/changelog");
+  const filters = page.getByRole("group", { name: "Filter releases" });
+  await filters.getByRole("radio", { name: "CLI" }).click();
+  await expect(page.locator(".changelog-entry .badge", { hasText: "Template" })).toHaveCount(0);
+  await filters.getByLabel("Version").selectOption("2.0.0");
+  await expect(page.locator(".changelog-release")).toHaveCount(1);
+  await page.getByRole("link", { name: /Read CLI 2\.0\.0 notes/ }).click();
+  await expect(page).toHaveURL(/releases\/cli\/2\.0\.0/);
 
   // Search: titles and body text, with the static index.
   await page.goto(base + "/docs");

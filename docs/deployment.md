@@ -23,7 +23,7 @@ pnpm static:check
 
 Serve `out/` with any static file server when browser review is needed. Review
 home, the documentation landing, a guided page, a reference page, both v2
-guides, release notes, changelogs, the release selector, search, keyboard focus
+guides, release notes, changelogs, the changelog filters, search, keyboard focus
 and shortcuts, and reduced motion. Redirect and header behavior must also be checked on the eventual host;
 they are represented in `public/_redirects` and `public/_headers` and copied into
 the export.
@@ -78,7 +78,7 @@ outside this repository according to the project's operational process.
 ## Browser acceptance
 
 Serve `out/` on port 3100 (or run `pnpm dev --port 3100`) and run
-`pnpm browser:check` for route, link, theme, release selector, search, mobile,
+`pnpm browser:check` for route, link, theme, changelog filters, search, mobile,
 focus, and axe checks. Install Chromium with `pnpm exec playwright install
 chromium`, or set `CHROMIUM_PATH` to an installed Chromium or headless shell. Set
 `DOCS_URL` to test another served artifact and `DOCS_REPORT_DIR` to choose its

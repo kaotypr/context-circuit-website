@@ -44,7 +44,7 @@ is left out of the sidebar.
 ## Components
 
 MDX can use `DocCard` and `CardGrid` (Fumadocs cards), `Callout`, `Topic` and
-`TopicList`, `ReleasePicker`, `InstallLink`, and `HomeIntro`. Tables use GFM.
+`TopicList`, `Changelog`, `InstallLink`, and `HomeIntro`. Tables use GFM.
 A `mermaid` code fence renders as a diagram. Blockquotes on the prompt cookbook
 render as copyable prompts.
 

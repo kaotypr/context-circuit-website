@@ -1,8 +1,9 @@
 {
   "title": "Changelog",
-  "description": "Release history for each product",
+  "description": "Every template and CLI release",
   "root": true,
   "pages": [
+    "index",
     "template",
     "cli"
   ]

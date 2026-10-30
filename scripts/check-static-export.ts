@@ -66,6 +66,7 @@ async function main(): Promise<void> {
     ["/docs/reference/cli-commands", "CLI commands"],
     ["/docs/template/v2/getting-started", "Workspace template v2"],
     ["/docs/cli/v2/getting-started", "Context Circuit CLI v2"],
+    ["/changelog", "Changelog"],
     ["/changelog/template", "Workspace template changelog"],
     ["/changelog/cli", "Context Circuit CLI changelog"],
   ]);
@@ -74,20 +75,24 @@ async function main(): Promise<void> {
     requireText(file, await read(file), text);
   }
 
-  // The release selector lists every registry release for both tracks.
-  const selectorFile = artifactPath("/docs/cli/v2/getting-started");
-  const selectorPage = await read(selectorFile);
+  // The changelog lists every registry release for both tracks, with its filters.
+  const changelogFile = artifactPath("/changelog");
+  const changelogPage = await read(changelogFile);
+  requireText(changelogFile, changelogPage, 'aria-label="Filter releases"');
   for (const track of tracks) {
-    requireText(selectorFile, selectorPage, `id="release-list-${track}"`);
     for (const release of releasesNewestFirst(track)) {
       const href = `/releases/${track}/${release.version}`;
-      if (!selectorPage.includes(`href="${href}"`) && !selectorPage.includes(`href="${href}/"`)) {
-        failures.push(`${selectorFile}: release selector does not list ${href}`);
+      if (!changelogPage.includes(`href="${href}"`) && !changelogPage.includes(`href="${href}/"`)) {
+        failures.push(`${changelogFile}: changelog does not list ${href}`);
       }
     }
   }
-  requireText(selectorFile, selectorPage, 'class="version-baseline"');
-  requireText(selectorFile, selectorPage, `CLI ${releaseRegistry.cli.current}`);
+
+  // Each page names the releases it describes.
+  const baselineFile = artifactPath("/docs/cli/v2/getting-started");
+  const baselinePage = await read(baselineFile);
+  requireText(baselineFile, baselinePage, 'class="version-baseline"');
+  requireText(baselineFile, baselinePage, `CLI ${releaseRegistry.cli.current}`);
 
   const cliChangelogFile = artifactPath("/changelog/cli");
   requireText(cliChangelogFile, await read(cliChangelogFile), "/releases/cli/2.1.0");
