@@ -1,8 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { publishedDocuments } from "../src/lib/content/consumers";
-import { validateContent } from "../src/lib/content/validate";
+import { contentRoutes } from "../src/lib/content-routes";
 
 const root = process.cwd();
 
@@ -14,35 +13,37 @@ describe("delivery configuration", () => {
       "pnpm install --frozen-lockfile",
       "pnpm lint",
       "pnpm typecheck",
-      "pnpm content:check",
+      "pnpm theme:check",
       "pnpm test -- --runInBand",
       "pnpm build",
       "pnpm static:check",
     ]) {
       expect(workflow, command).toContain(`run: ${command}`);
     }
+    expect(workflow).not.toContain("content:check");
     expect(workflow).toContain("contents: read");
     expect(workflow).toContain("NEXT_PUBLIC_DEPLOYMENT_ENV: preview");
     expect(workflow).toContain("actions/upload-artifact@v4");
     expect(workflow).not.toMatch(/cloudflare|wrangler|pages: write|production/i);
   });
 
-  it("keeps static host redirects synchronized with content metadata", async () => {
-    const [graph, redirectsSource] = await Promise.all([
-      validateContent(path.join(root, "content")),
+  it("points every static host redirect at a content page", async () => {
+    const [routes, redirectsSource] = await Promise.all([
+      contentRoutes(path.join(root, "content")),
       fs.readFile(path.join(root, "public/_redirects"), "utf8"),
     ]);
-    const configuredRedirects = redirectsSource
+    const redirects = redirectsSource
       .split("\n")
       .map((line) => line.trim())
-      .filter((line) => line && !line.startsWith("#"));
-    const expectedRedirects = publishedDocuments(graph).flatMap((document) =>
-      document.frontmatter.redirects.map(
-        (redirect) => `${redirect} ${document.routeInfo.route}/ 301`,
-      ),
-    );
+      .filter((line) => line && !line.startsWith("#"))
+      .map((line) => line.split(/\s+/));
 
-    expect(configuredRedirects).toEqual(expectedRedirects);
+    expect(redirects.length).toBeGreaterThan(0);
+    for (const [from, target, status] of redirects) {
+      expect(status, from).toBe("301");
+      expect(routes, `${from} -> ${target}`).toContain(target.replace(/\/$/, "") || "/");
+      expect(routes, `${from} must not shadow a page`).not.toContain(from.replace(/\/$/, ""));
+    }
   });
 
   it("documents the static boundary and publication gate", async () => {

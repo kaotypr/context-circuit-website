@@ -1,4 +1,7 @@
-import type { Track } from "./schema";
+export const tracks = ["template", "cli"] as const;
+export type Track = (typeof tracks)[number];
+
+export const trackLabels: Record<Track, string> = { template: "Template", cli: "CLI" };
 
 export type Release = {
   version: string;
@@ -55,4 +58,11 @@ export function sourceUrl(track: Track, selector: string, path: string): string 
   const release = resolveRelease(track, selector);
   if (!release) return undefined;
   return `${release.sourceBaseUrl}/blob/${release.ref}/${path}`;
+}
+
+/** Every release of a track, newest first. */
+export function releasesNewestFirst(track: Track): Release[] {
+  return Object.values(releaseRegistry[track].releases).sort((left, right) =>
+    right.version.localeCompare(left.version, undefined, { numeric: true }),
+  );
 }

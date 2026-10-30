@@ -20,6 +20,17 @@ const requiredTokens = [
   "--skeleton-bg", "--gradient-brand", "--size-avatar-md", "--placeholder-color",
 ];
 
+/** Fumadocs UI color variables and the kaotypr tokens they must follow. */
+const fumadocsBindings = [
+  ["--color-fd-background", "--background"], ["--color-fd-foreground", "--foreground"],
+  ["--color-fd-muted", "--muted"], ["--color-fd-muted-foreground", "--muted-foreground"],
+  ["--color-fd-popover", "--popover"], ["--color-fd-popover-foreground", "--popover-foreground"],
+  ["--color-fd-card", "--card"], ["--color-fd-card-foreground", "--card-foreground"],
+  ["--color-fd-border", "--border"], ["--color-fd-primary", "--primary"],
+  ["--color-fd-primary-foreground", "--primary-foreground"], ["--color-fd-secondary", "--secondary"],
+  ["--color-fd-secondary-foreground", "--secondary-foreground"], ["--color-fd-ring", "--ring"],
+] as const;
+
 export async function validateTheme(root: string): Promise<string[]> {
   const theme = await fs.readFile(path.join(root, "src/styles/theme.css"), "utf8");
   const fonts = await fs.readFile(path.join(root, "src/styles/fonts.css"), "utf8");
@@ -50,6 +61,16 @@ export async function validateTheme(root: string): Promise<string[]> {
   if (/\brounded-\[[^\]]+\]/.test(components)) errors.push("components: arbitrary radius utility found");
   if (/\bduration-\d+\b/.test(components)) errors.push("components: hard-coded motion utility found");
   const styles = await fs.readFile(path.join(root, "src/styles/site.css"), "utf8");
+  const global = await fs.readFile(path.join(root, "src/app/global.css"), "utf8");
+  for (const stylesheet of ["fumadocs-ui/css/preset.css", "../styles/theme.css", "../styles/fonts.css", "../styles/site.css"]) {
+    if (!global.includes(`@import "${stylesheet}"`)) errors.push("global: missing import " + stylesheet);
+  }
+  const binding = global.slice(global.indexOf(":root,"), global.indexOf("}", global.indexOf(":root,")));
+  if (!/:root,\s*\.dark\s*\{/.test(global)) errors.push("global: Fumadocs colors must be bound for :root and .dark");
+  for (const [fumadocs, token] of fumadocsBindings) {
+    if (!binding.includes(`${fumadocs}: var(${token});`)) errors.push(`global: ${fumadocs} must bind to ${token}`);
+  }
+  if (/(?:#[0-9a-f]{3,8}\b|(?:oklch|rgba?|hsla?)\()/.test(global)) errors.push("global: color literal found; bind to a theme token");
   if (/(?:#[0-9a-f]{3,8}\b|(?:oklch|rgba?|hsla?)\()/.test(styles)) errors.push("styles: component color literal found");
   if (/z-index:\s*\d/.test(styles)) errors.push("styles: numeric z-index found");
   if (/border-radius:(?!\s*var\()[^;]+/.test(styles)) errors.push("styles: nonsemantic radius found");

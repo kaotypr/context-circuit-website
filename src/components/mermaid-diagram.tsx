@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
-import { Expand, Minus, Plus, RotateCcw, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowCounterClockwiseIcon, ArrowsOutIcon, MinusIcon, PlusIcon, XIcon } from "@phosphor-icons/react";
 
 function mermaidColor(value: string): string {
   const canvas = document.createElement("canvas");
@@ -62,7 +61,7 @@ export function MermaidDiagram({ chart }: { chart: string }) {
         }
       } catch (cause) {
         if (active) {
-          setError(cause instanceof Error ? cause.message : "The diagram could not be rendered.");
+          setError(cause instanceof Error ? cause.message : "The diagram source has a syntax error.");
         }
       }
     }
@@ -76,7 +75,7 @@ export function MermaidDiagram({ chart }: { chart: string }) {
   if (error) {
     return (
       <div className="mermaid-error" role="alert">
-        <strong>Diagram unavailable</strong>
+        <strong>This diagram did not render. Its source is below.</strong>
         <pre>{chart}</pre>
       </div>
     );
@@ -120,17 +119,15 @@ export function MermaidDiagram({ chart }: { chart: string }) {
   return (
     <>
       <figure className="mermaid-diagram" aria-label="Diagram">
-        <Button
-          className="diagram-expand"
+        <button
+          className="button diagram-expand"
           type="button"
-          variant="outline"
-          size="sm"
           onClick={openViewer}
           aria-label="Open diagram viewer"
         >
-          <Expand aria-hidden="true" />
+          <ArrowsOutIcon aria-hidden="true" />
           View larger
-        </Button>
+        </button>
         <div className="mermaid-inline" dangerouslySetInnerHTML={{ __html: svg }} />
       </figure>
       <dialog
@@ -146,43 +143,39 @@ export function MermaidDiagram({ chart }: { chart: string }) {
           <div className="diagram-toolbar">
             <strong>Diagram viewer</strong>
             <div className="diagram-controls">
-              <Button
+              <button
+                className="icon-button"
                 type="button"
-                variant="outline"
-                size="icon"
                 onClick={() => setZoom((value) => Math.max(0.5, value - 0.25))}
                 aria-label="Zoom out"
               >
-                <Minus aria-hidden="true" />
-              </Button>
+                <MinusIcon aria-hidden="true" />
+              </button>
               <output aria-live="polite">{Math.round(zoom * 100)}%</output>
-              <Button
+              <button
+                className="icon-button"
                 type="button"
-                variant="outline"
-                size="icon"
                 onClick={() => setZoom((value) => Math.min(3, value + 0.25))}
                 aria-label="Zoom in"
               >
-                <Plus aria-hidden="true" />
-              </Button>
-              <Button
+                <PlusIcon aria-hidden="true" />
+              </button>
+              <button
+                className="icon-button"
                 type="button"
-                variant="outline"
-                size="icon"
                 onClick={() => setZoom(1)}
                 aria-label="Reset zoom"
               >
-                <RotateCcw aria-hidden="true" />
-              </Button>
-              <Button
+                <ArrowCounterClockwiseIcon aria-hidden="true" />
+              </button>
+              <button
+                className="icon-button"
                 type="button"
-                variant="outline"
-                size="icon"
                 onClick={closeViewer}
                 aria-label="Close diagram viewer"
               >
-                <X aria-hidden="true" />
-              </Button>
+                <XIcon aria-hidden="true" />
+              </button>
             </div>
           </div>
           <div

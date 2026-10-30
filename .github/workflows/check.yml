@@ -32,8 +32,6 @@ jobs:
         run: pnpm lint
       - name: Typecheck
         run: pnpm typecheck
-      - name: Validate content
-        run: pnpm content:check
       - name: Validate canonical theme
         run: pnpm theme:check
       - name: Test

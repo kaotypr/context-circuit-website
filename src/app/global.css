@@ -1,0 +1,53 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/lib/default-colors.css";
+@import "fumadocs-ui/css/preset.css";
+@import "../styles/fonts.css";
+@import "../styles/theme.css";
+@import "../styles/site.css" layer(components);
+
+/* Fumadocs UI reads --color-fd-*; bind them to the kaotypr v0.1 tokens in
+ * src/styles/theme.css. The tokens switch with the .dark class, so one binding
+ * serves both modes. */
+:root,
+.dark {
+  --color-fd-background: var(--background);
+  --color-fd-foreground: var(--foreground);
+  --color-fd-muted: var(--muted);
+  --color-fd-muted-foreground: var(--muted-foreground);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
+  --color-fd-card: var(--card);
+  --color-fd-card-foreground: var(--card-foreground);
+  --color-fd-border: var(--border);
+  --color-fd-primary: var(--primary);
+  --color-fd-primary-foreground: var(--primary-foreground);
+  --color-fd-secondary: var(--secondary);
+  --color-fd-secondary-foreground: var(--secondary-foreground);
+  --color-fd-accent: var(--state-hover);
+  --color-fd-accent-foreground: var(--accent-foreground);
+  --color-fd-ring: var(--ring);
+  --color-fd-overlay: var(--overlay);
+  --color-fd-info: var(--info-foreground);
+  --color-fd-warning: var(--warning-foreground);
+  --color-fd-error: var(--destructive-foreground);
+  --color-fd-success: var(--success-foreground);
+  --color-fd-idea: var(--warning-foreground);
+}
+
+#nd-sidebar {
+  --color-fd-background: var(--sidebar);
+  --color-fd-muted: var(--muted);
+  --color-fd-accent: var(--state-hover);
+  --color-fd-accent-foreground: var(--sidebar-accent-foreground);
+  --color-fd-ring: var(--sidebar-ring);
+  background-color: var(--sidebar);
+  color: var(--sidebar-foreground);
+  border-color: var(--sidebar-border);
+}
+
+@theme inline {
+  --font-sans: var(--font-fredoka), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-fredoka), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-schoolbell), cursive;
+  --font-mono: var(--font-fira-code), ui-monospace, monospace;
+}

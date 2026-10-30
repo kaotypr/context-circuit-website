@@ -1,10 +1,9 @@
-import { buildSearchIndex, getContentGraph } from "@/lib/content";
+import { createFromSource } from "fumadocs-core/search/server";
+import { source } from "@/lib/source";
 
 export const dynamic = "force-static";
+export const revalidate = false;
 
-export async function GET() {
-  const graph = await getContentGraph();
-  return Response.json(buildSearchIndex(graph), {
-    headers: { "Cache-Control": "public, max-age=0, must-revalidate" },
-  });
-}
+const search = createFromSource(source);
+
+export const GET = search.staticGET;

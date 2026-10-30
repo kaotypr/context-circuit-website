@@ -1,31 +1,14 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Card, Cards } from "fumadocs-ui/components/card";
+import { Callout } from "fumadocs-ui/components/callout";
 import { InstallLink } from "./install-link";
 import { BrandMark } from "./brand-mark";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 
-export function CardGrid({ children }: { children: ReactNode }) {
-  return <div className="card-grid">{children}</div>;
-}
-
-export function DocCard({
-  href,
-  title,
-  description,
-}: {
-  href: string;
-  title: string;
-  description?: string;
-  number?: string;
-}) {
-  return (
-    <Link className="doc-card" href={href}>
-      <strong>{title}</strong>
-      {description ? <span className="card-description">{description}</span> : null}
-    </Link>
-  );
-}
+/** Content files keep their component names; Fumadocs supplies the implementation. */
+export const CardGrid = Cards;
+export const DocCard = Card;
+export { Callout };
 
 export function TopicList({ children }: { children: ReactNode }) {
   return <dl className="topic-list">{children}</dl>;
@@ -50,25 +33,6 @@ export function Topic({
   );
 }
 
-export function Callout({
-  title,
-  children,
-  variant = "info",
-}: {
-  title: string;
-  children: ReactNode;
-  variant?: "info" | "success" | "warning";
-}) {
-  return (
-    <Alert className="callout" variant={variant}>
-      <div>
-        <AlertTitle>{title}</AlertTitle>
-        <AlertDescription>{children}</AlertDescription>
-      </div>
-    </Alert>
-  );
-}
-
 export function HomeIntro() {
   return (
     <section className="home-intro" aria-labelledby="home-title">
@@ -81,11 +45,9 @@ export function HomeIntro() {
         brings durable knowledge back in line when the work is complete.
       </p>
       <div className="hero-actions">
-        <Button asChild>
-          <InstallLink href="/docs/get-started/install" destination="template">
-            Create a workspace
-          </InstallLink>
-        </Button>
+        <InstallLink className="button button-primary" href="/docs/get-started/install" destination="template">
+          Create a workspace
+        </InstallLink>
         <Link className="text-link" href="/docs/understand">
           Understand the circuit
         </Link>
