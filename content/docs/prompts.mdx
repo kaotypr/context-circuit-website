@@ -16,7 +16,7 @@ sources:
     path: product/docs/how-it-works.md
 ---
 
-You do not need Context Circuit commands, record IDs, branch names, or internal vocabulary. Tell the coordinator the project outcome or decision in ordinary language. It chooses the matching procedure and uses the CLI for exact bookkeeping.
+You do not need Context Circuit commands, record IDs, branch names, or internal vocabulary. Tell the coordinator the project outcome or decision in ordinary language. It chooses the matching procedure and runs the pinned CLI through the workspace's launcher for exact bookkeeping.
 
 This cookbook covers the supported v2 conversation surface. The wording is illustrative: replace names, paths, repositories, branches, providers, and outcomes with your own.
 
@@ -43,7 +43,7 @@ The agent reads workspace identity, relationships, local bindings, and relevant 
 
 > What changes are currently planned or in progress, and which repositories do they affect?
 
-The agent resolves records and checks real branches and diffs before describing implementation state.
+The agent resolves records and checks real branches and diffs before describing implementation state. `status` shows your own work first: intents awaiting approval, approved intents without plans, open plans, and finished records not yet archived.
 
 ### Check workspace consistency
 
@@ -59,7 +59,7 @@ The agent resolves records and checks real branches and diffs before describing 
 
 Initialization happens only on request. Add your preferred language and writing tone if intents and plans should use them.
 
-To work alone without a roster, omit the member request. Records created while solo have no `created_by` and remain valid after members are added.
+Every workspace has at least one member, and every member holds an allocation band, even when you work alone. The agent suggests band 1 for you; say so if you want another, or add roles such as maintainer or docs, which say what you contribute and authorize nothing.
 
 ### Join an existing workspace on another machine
 
@@ -69,19 +69,21 @@ The agent selects the existing member and binds this machine. It does not initia
 
 ### Add a member
 
-> Add Alex to this workspace. Write Alex's intents and plans in Indonesian with a semi-formal tone and keep technical terms in English.
+> Add Alex to this workspace with band 2 and the role docs. Write Alex's intents and plans in Indonesian with a semi-formal tone and keep technical terms in English.
 
-### Select a member before changing a team workspace
+Every member gets a band; without one, the agent offers the next free band. Roles are optional, and the question may be skipped.
+
+### Select a member before changing the workspace
 
 > I am Maya, who is already listed in this workspace. Select me on this machine, then continue the change I requested.
 
-If you are new, say so and ask the agent to add and select you. A team workspace can still answer questions before selection, but it waits for a listed member before making changes. The selection attributes work; it does not verify identity.
+If you are new, say so and ask the agent to add and select you. A workspace can still answer questions before selection, but it waits for a listed member, with a band, before making changes. If a member has no band, the agent offers the band `status` suggests for you to confirm or change. The selection attributes work; it does not verify identity.
 
-### Configure offline allocation
+### Change an allocation band
 
-> Give Maya and Alex separate allocation bands so each can create records from an offline clone without choosing the same IDs.
+> Move Alex to band 3 so Alex's new records start at `i300` and `p3000`.
 
-Bands reduce one collision class; they are not distributed locking. Workspace commits still need synchronization before separate clones allocate.
+Every member holds a distinct band, and each member's reservations live in their own ID file, so members can create records from offline clones without choosing the same IDs. Changing a band never renumbers existing records. Bands reduce one collision class; they are not distributed locking. Workspace commits still need synchronization before separate clones allocate.
 
 ## Connect repositories
 
@@ -126,15 +128,19 @@ flowchart LR
 
 > Install the Context Circuit CLI version this workspace pins and verify the installed binary.
 
+The agent runs every later command through the workspace's launcher, which runs exactly that pinned version.
+
 ### Update only the CLI
 
-> Update the CLI used by this workspace to version `2.3.0`. Do not change the workspace template or existing records.
+> Update the CLI used by this workspace to version `2.5.0`. Do not change the workspace template or existing records.
+
+An update stays on the workspace's own release line.
 
 ### Update the workspace template
 
-> Update this workspace from its recorded template version to `2.3.0`. Show me the upstream delta and preserve our project-owned files and records.
+> Update this workspace from its recorded template version to `2.5.0`. Show me the upstream delta and preserve our project-owned files and records.
 
-The agent applies the version-to-version delta. It does not recopy a release over the workspace.
+The agent applies the version-to-version delta. It does not recopy a release over the workspace, and it reads, rather than applies, a delta that deletes the shared ID file or changes the schema version, because the CLI migrates those. When the upgrade migrates the workspace — the schema 3 ID split, or the 2.5.0 rename of `archive/` to `_archive/` — the agent tells you first: one person on a team makes that change, commits and pushes it, and everyone else installs the new CLI and pulls before changing anything.
 
 ### Configure agent roles
 
@@ -220,7 +226,27 @@ The agent retrieves relevant knowledge, writes the outcome it understood, asks n
 
 > The intent matches what I want. I approve it.
 
-Approval records your exact words and authorizes planning only. The agent then reads real code and writes linked plans without asking for planning permission.
+Approval records your exact words and stops: the agent recommends planning as the next step. No code is read and no plan ID is reserved.
+
+### Ask for plans
+
+> Create the plans for this intent.
+
+The agent then reads real code and writes linked plans without asking for approval again.
+
+### Approve and plan in one message
+
+> The intent matches what I want. I approve it. Create the plans.
+
+Once you have read the intent, approval and the planning request may come together. Asking for an intent to be written and planned in one go is not approval, because nobody has read it yet.
+
+### Answer the commit question
+
+> Commit and push.
+
+> Commit only.
+
+After approval, completion, or archiving, the agent asks whether to commit and push the records and ID files it left uncommitted, or commit only. Your answer authorizes those files, that once. After "commit only", the agent says other clones cannot see them yet. If the push is refused because the remote moved on, the agent rebases the record commits, keeps what Git combines, brings any record conflict to you, and never force-pushes.
 
 ### Request a standalone plan
 
@@ -243,7 +269,8 @@ stateDiagram-v2
   [*] --> GroundedRequest
   GroundedRequest --> IntentPresented
   IntentPresented --> IntentPresented: answer or revise
-  IntentPresented --> Planning: human approves
+  IntentPresented --> Approved: human approves
+  Approved --> Planning: person asks for plans
   Planning --> PlansPresented
   PlansPresented --> Execution: person requests execution
 ```
@@ -405,15 +432,21 @@ Completion is the note plus knowledge reconciliation. Most completions change no
 
 > Preview every intent and plan created by member `maya`, including archived records. Show me the exact list and IDs that would become reusable. Do not confirm deletion yet.
 
-For a solo workspace, ask to preview all records instead. After seeing the list, explicitly agree to that list before deletion. The CLI refuses when another member's record or a local worktree would be left referring to deleted work. Deletion must later be committed and synchronized across clones.
+When the roster lists only you, you can ask to preview all records instead. After seeing the list, explicitly agree to that list before deletion. The CLI refuses when a record outside the selection or a local worktree would be left referring to deleted work, and the agent shows that refusal with the records blocking it. Deletion must later be committed and synchronized across clones.
+
+### Delete specific records
+
+> Preview deleting intent `i104` and its plan `p1007` — I changed my mind about that change. Show me who wrote them, whether they are approved or completed, and any leftover branches. Do not confirm yet.
+
+Deletion by ID reaches exactly the records you name, whoever wrote them, or a reserved number no record holds. A deleted plan is taken out of its intent's list; any other link refuses and names the IDs to add.
 
 ### Archive records
 
+> Yes, archive my finished records.
+
 > Archive the completed recurring-billing intent and plans. Preserve every ID reservation and repair relative links.
 
-> Restore `p0007` from the archive.
-
-Archival is optional organization, not a lifecycle stage.
+After completion the agent offers to archive your finished records under `_archive/`; a no changes nothing. Archival is optional organization, not a lifecycle stage, keeps every ID reserved, and asks the commit question afterwards.
 
 ### Remove a worktree
 
@@ -443,6 +476,12 @@ Worktree removal and branch deletion are separate requests.
 
 > Repair the local worktree association for `p0007` from Git's inventory. Do not reset or recreate its branch.
 
+### Prune stale associations
+
+> I removed the `api` worktree for `p0007` by hand. Drop the stale association.
+
+`worktree prune` drops associations of worktrees Git no longer lists and touches no worktree, branch, or file. Repair is for a checkout Git still lists that only moved.
+
 ### Change this machine's base
 
 > Change the `api` checkout's base branch on this machine to `release/24.4`. Do not change the shared repository default.
@@ -466,7 +505,8 @@ Keep these decisions explicit even if they happen in one conversation:
 | Do not conflate | Why |
 | --- | --- |
 | Initial request and intent approval | The approved object is the written outcome |
-| Intent approval and execution | Approval authorizes planning only |
+| Intent approval and planning | Approval records the decision; planning follows a request, which may come with it |
+| Planning and execution | Execution waits for a request after the plans exist |
 | Execution and independent review | Review is optional and read-only |
 | Execution and delivery | Push, PR, merge, and deploy are outward actions |
 | Delivery and completion | Landing code does not reconcile knowledge |
@@ -475,7 +515,7 @@ Keep these decisions explicit even if they happen in one conversation:
 
 ```mermaid
 flowchart TB
-  A[Approve outcome] --> P[Planning]
+  A[Approve outcome] -->|planning request| P[Planning]
   P -->|separate request| E[Execution]
   E -->|optional request| R[Review]
   E -->|separate authorization| D[Delivery]

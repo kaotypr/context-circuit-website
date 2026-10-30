@@ -13,14 +13,14 @@ sources:
 
 ## Start with identity
 
-`workspace.yaml` describes the project, implementation repositories, relationships, workspace repository, and any borrowed knowledge. `members.yaml` describes the shared roster and record language or tone. An empty roster is a solo workspace; adding the first member makes it a team workspace.
+`workspace.yaml` describes the project, implementation repositories, relationships, workspace repository, and any borrowed knowledge. `members.yaml` describes the shared roster: every member's display name, allocation band, record language and tone, and optional informational roles. Every workspace lists at least one member, and a person working alone is a team of one.
 
 ## Keep the work traceable
 
-Intent and plan files preserve the approved outcome and implementation approach. New plans use folders with `plan.md` entries. The ID ledger keeps reservations after archival or manual file removal; requested record deletion is the operation that releases IDs for reuse. Knowledge notes capture the durable result rather than task history.
+Intent and plan files preserve the approved outcome and implementation approach. New plans use folders with `plan.md` entries. Each member's reservations live in their own ID file, `.context-circuit/ids/<member>.yaml`, so two members creating records on separate clones change different files. Reservations survive archival under `_archive/` and manual file removal; requested record deletion is the operation that releases IDs for reuse. Knowledge notes capture the durable result rather than task history.
 
 ## Resolve local state
 
-`repositories.local.yaml` binds logical IDs to checkout paths and base branches. `member.local.yaml` selects the active member in a team workspace; solo workspaces need no selection. Native role files, worktree associations, locks, and ignored runtime files belong to the machine.
+`repositories.local.yaml` binds logical IDs to checkout paths and base branches. `member.local.yaml` selects the active member on this machine; changing requests wait until one is selected. Native role files, worktree associations, locks, and ignored runtime files belong to the machine.
 
 Use the [configuration reference](/docs/reference/workspace-files) for file-level ownership and [record reference](/docs/reference/records) for frontmatter fields.
