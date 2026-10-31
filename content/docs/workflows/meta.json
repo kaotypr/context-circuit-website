@@ -1,5 +1,6 @@
 {
   "title": "Workflows",
+  "icon": "FlowArrow",
   "pages": [
     "index",
     "gather-context",

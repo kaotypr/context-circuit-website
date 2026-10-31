@@ -16,36 +16,59 @@ sources:
     path: README.md
 ---
 
-<HomeIntro />
+<HomeHero>
 
-## Why it exists
+Context Circuit is a living documentation system for a product or project. It gives coding agents accepted context before they change code, coordinates work across repositories, and brings durable knowledge back in line when the work is complete.
 
-A request can say exactly what to change and still leave out why the current behavior exists, which product rules it must preserve, or what else the change will affect. An agent can follow that prompt faithfully and still produce a locally correct change that is wrong for the product.
+</HomeHero>
 
-Context Circuit makes accepted knowledge available before the outcome is written down. Contradictions and missing decisions become questions for a person. Plans come from real code once that outcome is approved and you ask for them. When implementation changes a durable rule, completion reconciles the knowledge so the next session does not rediscover it.
+<HomeSplit>
 
-It does not prove an agent understood the product, and it does not prevent every mistake. Records make assumptions inspectable. The CLI validates files and Git mechanics. Project judgment stays with the agent. Consequential choices stay with you.
+## The circuit
 
-```mermaid
-flowchart LR
-  K[Living project knowledge] --> R[Relevant context]
-  R --> I[Approved outcome]
-  I --> P[Plans from real code]
-  P --> C[Code changes]
-  C --> X[Knowledge reconciliation]
-  X --> K
-```
+A request can say exactly what to change and still leave out why the current behavior exists. Context Circuit closes that gap on every change, and brings what the change taught back into the project's knowledge.
+
+[Read the full product model](/docs/understand)
+
+<Steps>
+  <Step title="Living knowledge">Architecture, domain rules, decisions, and vocabulary are written down once and read before the next change.</Step>
+  <Step title="An approved outcome">The intended outcome is written in plain language. Contradictions and missing decisions become questions for a person, who approves it.</Step>
+  <Step title="Plans from real code">Plans come from reading the code, once the outcome is approved and you ask for them.</Step>
+  <Step title="Code changes">The coding agent implements the plan in its own worktree and commits there. Pushing and merging wait for you.</Step>
+  <Step title="Knowledge reconciled">When a change alters a durable rule, completion updates the knowledge so the next session does not rediscover it.</Step>
+</Steps>
+
+</HomeSplit>
+
+<HomeCentered>
 
 ## A workspace above your repositories
 
-A workspace holds the project understanding and coordination records shared by a team, including a team of one. Repositories hold implementation. Local bindings say where each checkout lives on this machine. That separation lets one intended outcome coordinate several repositories without storing anyone's machine paths in shared files.
+A workspace holds the understanding and records a team shares, including a team of one. Repositories hold the implementation.
 
-The CLI keeps IDs, structured files, and Git mechanics dependable. The coding agent does the reasoning and implementation. You approve the intended outcome and authorize outward actions.
+<Features>
+  <Feature icon="knowledge" title="Project knowledge" href="/docs/concepts/product-knowledge">Accepted architecture, conventions, decisions, and terminology, cataloged so an agent finds what bears on a change.</Feature>
+  <Feature icon="records" title="Intents and plans" href="/docs/concepts/intents">The outcome you approved and the plans written from code, kept as records anyone on the team can read.</Feature>
+  <Feature icon="repositories" title="Repositories" href="/docs/concepts/relationships">One outcome can coordinate several repositories. Local bindings say where each checkout lives, without storing machine paths in shared files.</Feature>
+</Features>
+
+</HomeCentered>
+
+<HomeCentered>
 
 ## Two products
 
-The **workspace template** supplies the shared project folder: instructions, skills, knowledge, intents, and plans. The **CLI** is the native tool that writes structured records and prepares working copies. This website cites each release independently. They can share a version number without sharing a release identity.
+They are released independently and can share a version number without sharing a release identity. The [changelog](/changelog) lists every release of both.
 
-The [changelog](/changelog) lists every release of both products, newest first.
+<Products>
+  <Product track="template" title="Workspace template">The shared project folder: instructions, skills, knowledge, intents, and plans.</Product>
+  <Product track="cli" title="Context Circuit CLI">The native tool that writes structured records, checks the workspace, and prepares working copies.</Product>
+</Products>
 
-Create a workspace from [template 2.5.0](/docs/get-started/install), read the complete [product model](/docs/understand), or use the [prompt cookbook](/docs/prompts).
+</HomeCentered>
+
+<HomeCallToAction>
+
+It does not prove an agent understood the product, and it does not prevent every mistake. It makes assumptions inspectable and keeps the consequential choices with you.
+
+</HomeCallToAction>

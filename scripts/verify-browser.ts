@@ -34,7 +34,14 @@ async function main() {
   await fs.mkdir(output, { recursive: true });
   const browser = await chromium.launch({ executablePath });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: "light" });
+  await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin: base });
   const page = await context.newPage();
+
+  // The home command box copies the exact install command and announces it.
+  await page.goto(base + "/");
+  await page.getByRole("button", { name: "Copy command" }).click();
+  await expect(page.locator(".command-box [aria-live]")).toHaveText("Copied");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(await page.locator(".command-text").innerText());
   page.on("pageerror", error => failures.push("Page error: " + error.message));
   page.on("console", message => { if (message.type() === "error") failures.push("Console: " + message.text()); });
 
@@ -84,7 +91,7 @@ async function main() {
     await p.reload();
     expect((await colors(p)).background).toBe(manual.background);
     await p.goto(base + "/");
-    await p.locator(".hero-actions").getByRole("link", { name: /Create a workspace/ }).click();
+    await p.locator(".hero-actions").first().getByRole("link", { name: /Create a workspace/ }).click();
     await expect(p).toHaveURL(/get-started\/install/);
     expect((await colors(p)).background).toBe(manual.background);
     observations.push({ system, initial, manual, reloadAndNavigation: "passed" });

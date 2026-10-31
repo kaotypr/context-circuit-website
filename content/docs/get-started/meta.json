@@ -1,5 +1,6 @@
 {
   "title": "Get started",
+  "icon": "RocketLaunch",
   "pages": [
     "index",
     "install",
