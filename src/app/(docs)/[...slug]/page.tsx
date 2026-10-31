@@ -36,7 +36,7 @@ export default async function Page({ params }: RouteProps) {
     <DocsPage toc={page.data.toc} full={page.data.full} id="main-content" tabIndex={-1}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
-      <PageBaseline tracks={page.data.tracks} versions={page.data.versions} />
+      {page.data.baseline === false ? null : <PageBaseline tracks={page.data.tracks} versions={page.data.versions} />}
       <DocsBody>
         <MDX components={components} />
       </DocsBody>

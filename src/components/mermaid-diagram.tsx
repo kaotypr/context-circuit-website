@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { ArrowCounterClockwiseIcon, ArrowsOutIcon, MinusIcon, PlusIcon, XIcon } from "@phosphor-icons/react";
 
 function mermaidColor(value: string): string {
@@ -13,6 +13,12 @@ function mermaidColor(value: string): string {
   context.fillRect(0, 0, 1, 1);
   const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
   return `rgba(${red}, ${green}, ${blue}, ${alpha / 255})`;
+}
+
+/** The diagram's drawn width, so narrow screens can show it at its natural size. */
+function naturalWidth(svg: string): string | undefined {
+  const width = /viewBox="[\d.-]+ [\d.-]+ ([\d.]+)/.exec(svg)?.[1];
+  return width ? `${Math.ceil(Number(width))}px` : undefined;
 }
 
 export function MermaidDiagram({ chart }: { chart: string }) {
@@ -118,7 +124,11 @@ export function MermaidDiagram({ chart }: { chart: string }) {
 
   return (
     <>
-      <figure className="mermaid-diagram" aria-label="Diagram">
+      <figure
+        className="mermaid-diagram"
+        aria-label="Diagram"
+        style={{ "--diagram-width": naturalWidth(svg) } as CSSProperties}
+      >
         <button
           className="button diagram-expand"
           type="button"

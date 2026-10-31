@@ -113,6 +113,11 @@ async function main(): Promise<void> {
   const baselinePage = await read(baselineFile);
   requireText(baselineFile, baselinePage, 'class="version-baseline"');
   requireText(baselineFile, baselinePage, `CLI ${releaseRegistry.cli.current}`);
+  // Pages that list every release carry no single-release badges.
+  for (const route of ["/changelog", "/changelog/template", "/changelog/cli"]) {
+    const file = artifactPath(route);
+    if ((await read(file)).includes('class="version-baseline"')) failures.push(`${file}: lists every release, so it shows no baseline badges`);
+  }
 
   const cliChangelogFile = artifactPath("/changelog/cli");
   requireText(cliChangelogFile, await read(cliChangelogFile), "/releases/cli/2.1.0");
