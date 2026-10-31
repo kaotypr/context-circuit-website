@@ -1,0 +1,7 @@
+# Search engines and AI assistants may read these docs to answer questions;
+# the content may not be used to train models.
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Allow: /
+
+Sitemap: https://context-circuit.kaotypr.com/sitemap.xml

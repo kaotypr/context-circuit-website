@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { isProductionDeployment } from "@/lib/analytics";
+import { siteUrl } from "@/lib/site";
 import { uiTranslations } from "@/lib/translations";
 import "./global.css";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   },
   description:
     "Documentation for Context Circuit, the living documentation system for software projects.",
-  metadataBase: new URL("https://context-circuit.kaotypr.com"),
+  metadataBase: new URL(siteUrl),
   icons: { icon: "/icon.svg" },
 };
 
