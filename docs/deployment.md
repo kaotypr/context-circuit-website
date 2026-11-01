@@ -71,14 +71,7 @@ and Cloudflare adds `noindex` to per-deployment preview hostnames itself.
 The site ships its own `robots.txt`: search engines and AI assistants may read
 the docs, and the `Content-Signal` line forbids training on them. It points at
 `sitemap.xml`, which the build generates from the content source, so a new page
-is listed without editing a second list. Two steps live in the dashboards, not
-in this repository:
-
-1. Turn off Cloudflare's managed `robots.txt` for the `kaotypr.com` zone (AI
-   Crawl Control). While it is on, Cloudflare prepends rules that block AI
-   crawlers to the site's file.
-2. Submit `https://context-circuit.kaotypr.com/sitemap.xml` in Google Search
-   Console once, after the first deployment that contains it.
+is listed without editing a second list.
 
 ## Publication and rollback
 
