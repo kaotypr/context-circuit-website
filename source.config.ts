@@ -3,6 +3,7 @@ import { metaSchema, pageSchema } from "fumadocs-core/source/schema";
 import { remarkMdxMermaid } from "fumadocs-core/mdx-plugins/remark-mdx-mermaid";
 import { z } from "zod";
 import { isRelease, isReleaseRef, trackRepository, tracks } from "./src/lib/releases";
+import { rehypePathBreaks } from "./src/lib/rehype-path-breaks";
 
 const sourceSchema = z
   .object({
@@ -25,6 +26,8 @@ const docsPageSchema = pageSchema
       })
       .strict(),
     sources: z.array(sourceSchema).optional(),
+    // false hides the release badges on pages that list every release.
+    baseline: z.boolean().optional(),
   })
   .strict()
   .superRefine((value, context) => {
@@ -88,5 +91,6 @@ export default defineConfig({
   mdxOptions: {
     // Mermaid fences become <Mermaid chart="..." /> before Shiki sees them.
     remarkPlugins: (plugins) => [remarkMdxMermaid, ...plugins],
+    rehypePlugins: (plugins) => [...plugins, rehypePathBreaks],
   },
 });

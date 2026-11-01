@@ -14,10 +14,11 @@ export function baseOptions(): BaseLayoutProps {
       url: "/",
     },
     themeSwitch: { mode: "light-dark" },
+    // The sidebar tree marks the current page, so the section links carry no active state.
     links: [
-      { text: "Docs", url: "/docs", active: "nested-url" },
+      { text: "Docs", url: "/docs", active: "none" },
       { text: "Release notes", url: `/releases/template/${releaseRegistry.template.current}`, active: "none" },
-      { text: "Changelog", url: "/changelog", active: "nested-url" },
+      { text: "Changelog", url: "/changelog", active: "none" },
     ],
   };
 }

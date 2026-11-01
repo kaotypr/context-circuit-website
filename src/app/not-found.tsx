@@ -9,15 +9,14 @@ export default function NotFound() {
         <p className="eyebrow">Page not found</p>
         <h1>This page wandered off the circuit.</h1>
         <p>
-          The address may have changed, or it names a documentation version that does not exist.
-          Search the docs, or start from one of these pages.
+          The address may have changed. Search the docs, or start from one of these pages.
         </p>
         <div className="hero-actions">
           <Link className="button button-primary" href="/docs">
             Browse documentation
           </Link>
-          <Link className="text-link" href="/docs/releases/major-versions">
-            See available versions
+          <Link className="text-link" href="/changelog">
+            Read the changelog
           </Link>
         </div>
       </div>

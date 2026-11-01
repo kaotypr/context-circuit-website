@@ -37,7 +37,6 @@ export function HomeIntro() {
   return (
     <section className="home-intro" aria-labelledby="home-title">
       <BrandMark className="home-mark" alt="" />
-      <p className="eyebrow">Documentation</p>
       <h1 id="home-title">Keep project knowledge alive across every change.</h1>
       <p className="home-summary">
         Context Circuit is a living documentation system for a product or project. It gives coding
