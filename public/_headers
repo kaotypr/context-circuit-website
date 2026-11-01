@@ -9,3 +9,8 @@
 
 /icon.svg
   Cache-Control: public, max-age=86400
+
+# The production alias serves the same build as the custom domain; keep it out of
+# search results so context-circuit.kaotypr.com is the only indexed host.
+https://context-circuit.pages.dev/*
+  X-Robots-Tag: noindex

@@ -3,6 +3,7 @@ import path from "node:path";
 import { staticClient } from "fumadocs-core/search/client/orama-static";
 import { contentRoutes } from "../src/lib/content-routes";
 import { releaseRegistry, releasesNewestFirst, tracks } from "../src/lib/releases";
+import { pageUrl, siteUrl } from "../src/lib/site";
 
 const root = process.cwd();
 const contentDirectory = path.join(root, "content");
@@ -45,7 +46,26 @@ async function main(): Promise<void> {
     if (html && (html.match(/<h1[\s>]/g) ?? []).length !== 1) {
       failures.push(`${file}: expected exactly one h1`);
     }
+    // Each page names itself on the custom domain, so duplicate hosts defer to it.
+    const canonicals = [...html.matchAll(/<link rel="canonical" href="([^"]*)"/g)].map((match) => match[1]);
+    if (html && (canonicals.length !== 1 || canonicals[0] !== pageUrl(route))) {
+      failures.push(`${file}: expected one canonical link to ${pageUrl(route)}, found ${JSON.stringify(canonicals)}`);
+    }
   }
+
+  // The sitemap lists exactly the exported content pages, on the custom domain.
+  const sitemapFile = "out/sitemap.xml";
+  const sitemap = await read(sitemapFile);
+  const listed = [...sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)].map((match) => match[1]).sort();
+  const expected = routes.map(pageUrl).sort();
+  for (const url of expected) if (!listed.includes(url)) failures.push(`${sitemapFile}: missing ${url}`);
+  for (const url of listed) if (!expected.includes(url)) failures.push(`${sitemapFile}: lists ${url}, which is not a content page`);
+
+  // The site's own robots.txt: readable by AI assistants, not for training, and pointing at the sitemap.
+  const robotsFile = "out/robots.txt";
+  const robots = await read(robotsFile);
+  requireText(robotsFile, robots, "ai-train=no");
+  requireText(robotsFile, robots, `Sitemap: ${siteUrl}/sitemap.xml`);
 
   // Public URLs named by the intent's constraints.
   const required = new Set<string>(["/", "/docs", "/docs/get-started", "/docs/reference/cli-commands"]);
@@ -112,6 +132,13 @@ async function main(): Promise<void> {
   const headers = await read(headersFile);
   requireText(headersFile, headers, "X-Content-Type-Options: nosniff");
   requireText(headersFile, headers, "Cache-Control: public, max-age=31536000, immutable");
+  // Only the pages.dev alias is kept out of the index; the custom domain must stay indexable.
+  const headerBlock = (pattern: string) =>
+    headers.split(/\n\s*\n/).find((block) => block.split("\n").some((line) => line.trim() === pattern));
+  const aliasBlock = headerBlock("https://context-circuit.pages.dev/*");
+  if (!aliasBlock?.includes("X-Robots-Tag: noindex")) failures.push(`${headersFile}: the pages.dev alias needs X-Robots-Tag: noindex`);
+  const globalBlock = headerBlock("/*");
+  if (globalBlock?.includes("X-Robots-Tag")) failures.push(`${headersFile}: X-Robots-Tag must not apply to every host`);
 
   const homeFile = "out/index.html";
   const home = await read(homeFile);

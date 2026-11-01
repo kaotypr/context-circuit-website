@@ -11,7 +11,7 @@ function homePage() {
 
 export function generateMetadata(): Metadata {
   const page = homePage();
-  return { title: { absolute: page.data.title }, description: page.data.description };
+  return { title: { absolute: page.data.title }, description: page.data.description, alternates: { canonical: "/" } };
 }
 
 export default function HomePage() {

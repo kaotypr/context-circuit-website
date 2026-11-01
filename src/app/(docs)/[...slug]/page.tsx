@@ -18,7 +18,8 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   const { slug } = await params;
   const page = source.getPage(slug);
   if (!page) notFound();
-  return { title: page.data.title, description: page.data.description };
+  // Exported URLs end in a slash (trailingSlash), so the canonical does too.
+  return { title: page.data.title, description: page.data.description, alternates: { canonical: `${page.url}/` } };
 }
 
 export default async function Page({ params }: RouteProps) {
