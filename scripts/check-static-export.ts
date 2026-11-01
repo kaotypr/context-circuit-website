@@ -80,7 +80,7 @@ async function main(): Promise<void> {
   }
 
   const representative = new Map([
-    ["/", "Why it exists"],
+    ["/", "The circuit"],
     ["/docs", "Understand Context Circuit"],
     ["/docs/get-started", "Setup Context Circuit"],
     ["/docs/reference/cli-commands", "CLI commands"],

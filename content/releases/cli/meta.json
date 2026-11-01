@@ -1,5 +1,6 @@
 {
   "title": "CLI releases",
+  "icon": "Tag",
   "defaultOpen": true,
   "pages": [
     "2.5.0",

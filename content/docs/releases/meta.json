@@ -1,5 +1,6 @@
 {
   "title": "Releases",
+  "icon": "Tag",
   "pages": [
     "index",
     "major-versions"
