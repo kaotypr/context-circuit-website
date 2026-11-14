@@ -16,7 +16,7 @@ sources:
 | Path | Purpose |
 | --- | --- |
 | `workspace.yaml` | Identity, repositories, relationships, optional borrowed knowledge and registry. |
-| `members.yaml` | Roster of at least one member, each with an allocation band, optional language and tone, and optional informational roles. |
+| `members.yaml` | Roster of at least one member, each with an allocation band, optional language and tone, and optional informational roles. A tone is one line: a preset's, or one of the team's own. A member with no tone is written for as `colleague`. |
 | `.context-circuit/VERSION` | Template version received. |
 | `.context-circuit/CLI_VERSION` | Expected CLI executable version. |
 | `.context-circuit/cli`, `.context-circuit/cli.ps1` | The launcher, which runs exactly the pinned CLI from the installers' version store; `cli.ps1` is for Windows PowerShell or cmd. |
@@ -27,6 +27,17 @@ sources:
 | `.ignore` | Keeps `/sources/` out of ripgrep-based search. |
 | `.claude/settings.json` | Allows both launcher commands in Claude Code; a workspace merges new entries into its own file entry by entry. |
 | `context/` | Durable knowledge, optional index, and glossary. |
+
+## Tone presets
+
+`member presets` lists the four presets, and `member tone --id ID --preset NAME` records the chosen preset's line in `members.yaml`. The line starts with the preset's name, so an agent recognizes the preset even after its wording changes.
+
+| Preset | Line recorded in `members.yaml` |
+| --- | --- |
+| `colleague` | `colleague: semi-formal, the way you'd explain it to a teammate; technical terms as the team says them` |
+| `casual` | `casual: chat register, short and relaxed; still complete sentences` |
+| `formal` | `formal: for managers or people outside the team; no slang or contractions, still plain` |
+| `non-technical` | `non-technical: for readers who don't read code; goal, non-goals and questions say what people will see or can do, and the rest stays technical for the team` |
 
 ## Local and ignored
 

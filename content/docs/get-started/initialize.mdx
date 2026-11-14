@@ -21,10 +21,10 @@ sources:
 ```text
 Initialize this as the “Acme Billing” workspace. Its purpose is subscription
 billing for small businesses. Add me as Maya. Write my intents and plans in
-Indonesian with a semi-formal tone, while keeping technical terms in English.
+Indonesian with the colleague tone.
 ```
 
-The agent uses the pinned CLI, through the launcher, to create the shared workspace structure, adds Maya to the roster with an allocation band, and selects her on this machine. It then runs `agent setup`, which refreshes native agent-role definitions for the hosts this workspace supports and turns Claude Code's commit and pull request attribution off in the gitignored `.claude/settings.local.json`.
+The agent uses the pinned CLI, through the launcher, to create the shared workspace structure, adds Maya to the roster with an allocation band, and selects her on this machine. It records her language and the `colleague` preset's tone line, which keeps technical terms as the team says them; without a tone, it would write for her as `colleague` anyway. Run `member presets` to see the four presets, `colleague`, `casual`, `formal`, and `non-technical`, or describe a register of your own. It then runs `agent setup`, which refreshes native agent-role definitions for the hosts this workspace supports and turns Claude Code's commit and pull request attribution off in the gitignored `.claude/settings.local.json`.
 
 Every workspace has a roster, and every member holds a band, including a person working alone: they are a team of one. A band divides the ID range, so band 1 writes `i100` and `p1000`. The agent suggests band 1 for the first member; band 0 is a band like any other and starts at `i001` and `p0001`. You can also record free-text roles, such as maintainer or docs, which say what a member contributes and authorize nothing. A new workspace starts at schema 3, with one ID file per member under `.context-circuit/ids/`.
 

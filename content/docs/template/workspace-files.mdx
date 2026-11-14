@@ -15,6 +15,8 @@ sources:
 
 `workspace.yaml` describes the project, implementation repositories, relationships, workspace repository, and any borrowed knowledge. `members.yaml` describes the shared roster: every member's display name, allocation band, record language and tone, and optional informational roles. Every workspace lists at least one member, and a person working alone is a team of one.
 
+A tone is the register a member's records are written in, and it covers the conversation around a record as well as the record. It is one line: one of the four presets, `colleague`, `casual`, `formal`, and `non-technical`, or a line of the team's own. A member with no tone is written for as `colleague`. The [workspace files reference](/docs/reference/workspace-files#tone-presets) lists the line each preset records.
+
 ## Keep the work traceable
 
 Intent and plan files preserve the approved outcome and implementation approach. New plans use folders with `plan.md` entries. Each member's reservations live in their own ID file, `.context-circuit/ids/<member>.yaml`, so two members creating records on separate clones change different files. Reservations survive archival under `_archive/` and manual file removal; requested record deletion is the operation that releases IDs for reuse. Knowledge notes capture the durable result rather than task history.
