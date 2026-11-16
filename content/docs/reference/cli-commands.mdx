@@ -37,6 +37,7 @@ sh .context-circuit/cli worktree prepare --help
 | `record` | `create`, `approve`, `show`, `list`, `dependencies`, `complete`, `archive`, `order`, `delete`. |
 | `worktree` | `prepare`, `list`, `inspect`, `move`, `repair`, `remove`, `prune`. |
 | `agent` | `settings`, `configure`, `setup`, `dispatch`. |
+| `extension` | `list`, `add`, `update`, `remove`, `enable`, `disable`, `sync`, `hooks`, and `allow` and `override` on request, for the extensions in `extensions.yaml`. |
 | `template export` | Write the exact blank embedded seed to a new directory. |
 
 ## Read-only examples
@@ -53,6 +54,17 @@ sh .context-circuit/cli record order --intent i001 --mode waves
 sh .context-circuit/cli record order --plan p0001 --mode waves
 sh .context-circuit/cli worktree list --repo api
 ```
+
+In a workspace that lists extensions:
+
+```sh
+sh .context-circuit/cli extension list
+sh .context-circuit/cli extension hooks --stage implement --when before --plan p0001 --repo api
+sh .context-circuit/cli extension add --id parity --path extensions/parity --repo api
+sh .context-circuit/cli extension sync
+```
+
+`extension hooks` resolves one hook point for a stage the agent fires (intent, plan, implement, review, deliver) and returns an `extensions` list: the instruction files to follow, every extension skipped and why, and `stopped`, which goes to the person. `record approve`, `worktree prepare`, `record complete`, and `record archive` return the same list for their own stage, and `hooks` refuses their `after` point. Commands that change `extensions.yaml` happen only on request and return no `commit_recommended`. See [Extensions](/docs/template/extensions).
 
 Replace IDs with those in your workspace. Normal output is readable YAML; `--json` provides structured values. Errors are on stderr and return nonzero status; a flag a command does not take exits 2 with that command's signature.
 

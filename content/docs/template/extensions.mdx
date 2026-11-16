@@ -1,0 +1,268 @@
+---
+title: "Extensions"
+description: "Add a team's own work before and after each stage without changing the stages or their gates."
+tracks: [template, cli]
+versions:
+  template: 2.6.0
+  cli: 2.6.0
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.6.0
+    path: .context-circuit/docs/extensions.md
+  - track: template
+    repository: context-circuit
+    ref: v2.6.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.6.0
+    path: product/docs/commands.md
+---
+
+## Why extensions exist
+
+Teams add their own steps to the same work: a parity check when a service is rebuilt, a ticket kept in step with a plan, a checklist before review. Written into `AGENTS.md` or a skill, such a step is lost at the next template update, and copied between workspaces it drifts.
+
+An extension carries that step in a folder of its own, and the workspace lists the extensions it uses. An extension adds work before and after a stage. It wraps the stage and never replaces it: the stage, its gates, and what it writes stay as `AGENTS.md` describes them. A workspace that lists no extensions has no `extensions.yaml`, and nothing on this page applies to it.
+
+## The extension folder
+
+An extension is a folder holding an `extension.yaml` manifest and the instruction files it names:
+
+```text
+parity/
+  extension.yaml
+  README.md                 # for people deciding whether to enable it
+  instructions/
+    after-plan.md
+    after-implement.md
+```
+
+Only `extension.yaml` has a fixed name. Every other path is whatever the manifest names, relative to the folder, and the CLI refuses one that leaves the folder.
+
+```yaml
+id: parity
+version: 1.2.0              # informative; what a workspace pins is the commit or the folder
+name: Behavior parity checks
+summary: Checks that a rebuilt service behaves like the one it replaces.
+members: required           # required | default-on | opt-in
+settings:                   # keys this extension reads from extensions.yaml
+  reference: { required: true, summary: Logical repository or URL of the previous app }
+hooks:
+  - at: after plan
+    instructions: instructions/after-plan.md
+  - at: after implement
+    instructions: instructions/after-implement.md
+```
+
+- `at` is `before` or `after` and a stage from the [hook points](#hook-points). Each point appears at most once per extension.
+- `instructions` is a Markdown file the agent follows at that point, as part of the stage.
+- `settings` declares the keys a workspace passes in. They never hold a credential; credentials stay on the machine.
+- The manifest is decoded strictly, so an unknown key is an error that names the manifest. A manifest written for a newer CLI declares `requires_cli`, such as `">=2.7.0"`, and an older CLI reports that the extension needs a newer CLI instead of failing to read it.
+
+## Two kinds of source
+
+An extension lives in one of two places:
+
+- **A folder in the workspace,** named by `path`. It is committed with the workspace and changes when the workspace does.
+- **A Git repository,** named by `url`, the `ref` it follows, the `commit` the CLI resolved that ref to, and an optional `path` to a subfolder. The CLI fetches exactly that commit into the ignored `.context-circuit/local/extensions/<id>/<commit>/`, so every machine reads the same content even if the tag moves later.
+
+A registry of extensions is an ordinary Git repository with one folder per extension. Nothing about it is special: a workspace adds one of its folders with `--url`, `--ref`, and `--subpath`, and an organization shares its extensions by publishing that repository.
+
+A `ref` that moves upstream is reported by `extension sync` and never followed. Recording the move is `extension update`, on request.
+
+## `extensions.yaml`
+
+`extensions.yaml` sits at the workspace root, beside `workspace.yaml`, and lists the extensions this workspace uses. Their order is the order their hooks run at each point.
+
+```yaml
+extensions:
+  - id: parity
+    source: { path: extensions/parity }
+    repositories: [orders-service]
+    settings:
+      reference: legacy-orders
+  - id: ticket-sync
+    source:
+      url: https://git.example.com/platform/cc-extensions.git
+      ref: v3.0.0
+      commit: 9f2c41e8a0d3b7c5e1f4a6d2b8c0e9f1a3b5c7d9
+      path: ticket-sync
+    members:
+      maya: off
+```
+
+| Key | Meaning |
+| --- | --- |
+| `id` | The extension's name in this workspace. |
+| `source` | `path` for a folder, or `url`, `ref`, `commit`, and an optional `path` for a Git repository. |
+| `repositories` | The repositories it is limited to. None means every one. |
+| `settings` | Values passed to its instructions. Never a credential. |
+| `members` | `on` or `off` for a member, over the manifest's default. |
+
+`extensions.yaml` is the workspace's data, like `workspace.yaml`. A template update never creates or changes it, and the `extension` commands that change it return no commit recommendation: committing it is the person's call, as for any shared file. Settings are edited by hand, and `check` validates them.
+
+## Member switches
+
+The manifest's `members` sets the default for everyone:
+
+- `required`: on for every member, and it cannot be switched off.
+- `default-on`: on unless a member is switched off.
+- `opt-in`: off unless a member is switched on.
+
+`extension enable` and `extension disable` record a member's switch in `extensions.yaml`, for the active member or the one named with `--member`. `extension disable` is refused for a `required` extension. A hook that does not apply because the extension is off for the member is reported as a skip, never as a hook that ran.
+
+## Repository scope
+
+An extension with `repositories` applies only to work in those repositories. A point that fires for a plan is scoped to the plan's repositories, and `--repo` narrows it to one. A direct change has no plan, so the agent names the bound checkout with `--repo`.
+
+An intent names no repositories: it states an outcome before anyone has decided where the code lives. So only workspace-wide extensions, the ones with no `repositories`, fire on the intent and approve stages. An extension limited to `orders-service` cannot know whether an intent touches it, and staying silent there is the honest answer.
+
+## Hook points
+
+Every stage has a `before` and an `after` point. Four stages are fired by the CLI command that carries them out; the agent fires the other five itself.
+
+| Stage | Fired by |
+| --- | --- |
+| `intent` | the agent: before writing an intent body, and once it is written |
+| `approve` | `record approve` |
+| `plan` | the agent: before planning, and once every plan folder is written |
+| `prepare` | `worktree prepare` |
+| `implement` | the agent: before the first change in a worktree, and after its last commit |
+| `review` | the agent: before a requested review, and once its findings exist |
+| `deliver` | the agent: after the person authorized delivery, and after it |
+| `complete` | `record complete` |
+| `archive` | `record archive` |
+
+For a stage the agent fires, it asks the CLI for the point:
+
+```sh
+sh .context-circuit/cli extension hooks --stage intent --when after --intent i001
+sh .context-circuit/cli extension hooks --stage implement --when after --plan p0001 --repo api
+```
+
+`record approve`, `worktree prepare`, `record complete`, and `record archive` return the same `extensions` list for their own stage in their result, and `extension hooks` refuses their `after` point because the command already returned it. When an extension applies to implementing in a worktree, `worktree prepare` also returns the two `extension hooks --stage implement` commands to run there as `next`.
+
+`before deliver` runs only after the person has authorized the delivery. It adds work around a delivery somebody asked for and never stands in for asking.
+
+## What a point returns
+
+```yaml
+extensions:
+  - point: after implement
+    instructions:
+      - id: parity
+        file: extensions/parity/instructions/after-implement.md
+        settings: { reference: legacy-orders }
+    skipped:
+      - id: ticket-sync
+        reason: off for member maya
+```
+
+- `instructions` names each file to follow, as a workspace path, with the settings to apply. The agent opens it and does what it says as part of the stage.
+- `skipped` names every extension that did not apply, and why: off for this member, outside the repositories it is limited to, or unavailable on this machine. Skips are reported with the stage's result.
+- `stopped: true`, with `resolve`, means the stage does not go on until the person decides, for example because an extension that may be required could not be read on this machine.
+
+A command's result carries the list only where something applied or was skipped. No `extensions` key means nothing applied.
+
+## Following an instruction
+
+- An instruction adds to the stage it is attached to. It never replaces a step of that stage or skips one.
+- Results go into the agent's report, and later the completion note. The plan record is not edited during execution, whatever an instruction says.
+- A failing check that an instruction asks for is reported like a failing test. The agent fixes it where that is the work, but does not rerun the hook in a loop until it passes.
+
+### Report a skip, never invent
+
+A record made without the extension, such as a plan written while it was off, may hold nothing for the instruction to act on. The agent reports that as a skip with its reason. It never fills the gap by inventing what the record lacks. A parity check that finds no list of behaviors to compare says so; it does not make up a list after the fact and check the code against it.
+
+## Instructions reach dispatched roles
+
+A dispatched planner, worker, or reviewer receives the instructions for its stage, plan, implement, or review, in an `# Extensions` section of its brief, after the task. A planner works before plans name repositories, so instructions limited to repositories are marked with the repositories they are for. The section is left out where nothing applies.
+
+The coordinator still runs the stage's hooks itself and reads their results. A shipped role's definition file never carries extension instructions, so enabling an extension never makes a role definition stale.
+
+## The line no extension crosses
+
+These rules hold whatever an extension says. An instruction that asks for one of them is not followed, the person is told what it asked for, and the rest of the extension still applies.
+
+- Pushing, opening a pull or merge request, merging into a base branch, deploying, deleting workspace data, and committing in a bound checkout need the person's explicit authorization.
+- Approving an intent is a person's answer to it as written. No hook supplies or implies approval, and no hook starts planning or execution.
+- The plan record is not edited during execution.
+- No independent verification is started during execution, no reviewer is triggered by risk classification, and no automatic repair loop runs, unless this workspace allowed the extension to override that default.
+- No agent attribution in commits, pull requests, reviews, or comments.
+- No secrets in workspace records, in `extensions.yaml`, or in a manifest.
+- Borrowed knowledge stays read-only.
+
+<Callout title="An extension adds work; it does not grant permission">An instruction that says "push the branch" or "approve the intent" is reported to the person and not followed. The same request from the person is what makes the action allowed.</Callout>
+
+## A worked example
+
+A team is rebuilding an orders service and wants every change checked against the behavior of the old one. It writes a `parity` extension in the workspace, with instructions only:
+
+```text
+extensions/parity/
+  extension.yaml
+  instructions/
+    after-plan.md
+    after-implement.md
+```
+
+`instructions/after-plan.md`:
+
+```md
+For each plan touching the orders service, add a "Parity" section to the plan's
+Details listing the behaviors of the service in `reference` that the change must
+keep, one per line, each with how to observe it.
+```
+
+`instructions/after-implement.md`:
+
+```md
+Read the plan's "Parity" section. For each behavior, compare what the new code
+does with what the `reference` service does, and report each as kept, changed,
+or not checked, with the evidence. If the plan has no "Parity" section, report
+the hook as skipped because the plan was written without this extension. Do not
+write a parity list now.
+```
+
+Someone on the team asks for it to be added, limited to the service:
+
+```sh
+sh .context-circuit/cli extension add --id parity --path extensions/parity --repo orders-service
+```
+
+They set `reference: legacy-orders` under its `settings` by hand, run `check`, and commit `extensions.yaml` with the folder. From then on, planning a change to `orders-service` ends with a parity list in the plan, and implementing it ends with a parity report beside the test results. A plan for another repository, and every intent, sees nothing from `parity`.
+
+## Commands
+
+```sh
+sh .context-circuit/cli extension list
+sh .context-circuit/cli extension add --id parity --path extensions/parity --repo api
+sh .context-circuit/cli extension add --id ticket-sync --url GIT_URL --ref v3.0.0 --subpath ticket-sync
+sh .context-circuit/cli extension update --id ticket-sync --ref v3.1.0
+sh .context-circuit/cli extension disable --id ticket-sync
+sh .context-circuit/cli extension enable --id ticket-sync --member maya
+sh .context-circuit/cli extension sync
+sh .context-circuit/cli extension sync --prune
+sh .context-circuit/cli extension remove --id ticket-sync
+sh .context-circuit/cli extension hooks --stage plan --when after --plan p0001
+```
+
+| Command | What it does |
+| --- | --- |
+| `extension list` | Each extension's state for this member on this machine. |
+| `extension add` | Validates the manifest and lists the extension; a remote is pinned to the commit its ref names and fetched. |
+| `extension update` | Moves a remote to a new ref and its commit. |
+| `extension remove` | Unlists the extension; cached commits stay until `sync --prune`. |
+| `extension enable`, `extension disable` | Switches it on or off for a member, the active one by default. |
+| `extension sync` | Fetches every recorded commit this machine lacks and reports a ref that moved upstream. |
+| `extension hooks` | Resolves one hook point for a stage the agent fires. |
+
+Add, update, remove, enable, and disable each happen only on a person's request. `status` reports `extensions`, with how many are listed and on for you. `check` reports what is wrong in `extensions.yaml` and each manifest, with what clears it, and lists a remote this machine has not fetched under `unchecked` with `extension sync` as the next step.
+
+## Beyond instructions
+
+A hook may also run a script beside its instructions, or instead of them. A script is someone else's code running with the member's own permissions, so it runs only after the member using the machine allows that exact version, and what it may do beyond the machine is declared and consented to. Scripts, trust, and consent are described separately.
+
+A manifest may also add agent roles and skills of its own, and a workspace may allow an extension to override one of four defaults: repair loops, verification during execution, risk-triggered review, and delegation. The workspace's own `.context-circuit/docs/extensions.md` and `.context-circuit/docs/customization.md` are the full reference for 2.6.0.

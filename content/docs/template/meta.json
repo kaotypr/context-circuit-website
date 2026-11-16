@@ -6,6 +6,7 @@
     "contents",
     "agents",
     "skills",
+    "extensions",
     "workspace-files",
     "local-shared",
     "v2"

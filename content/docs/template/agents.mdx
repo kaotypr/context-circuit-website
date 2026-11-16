@@ -3,11 +3,11 @@ title: "AGENTS instructions"
 description: "Standing boundaries stay active; stage procedures load when needed."
 tracks: [template]
 versions:
-  template: 2.5.0
+  template: 2.6.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.5.0
+    ref: v2.6.0
     path: AGENTS.md
 ---
 
@@ -24,7 +24,12 @@ The agent runs the workspace's pinned CLI through its launcher, `sh .context-cir
 - **The intent is presented in your language.** The record follows the language recorded for its author, but the agent presents it in the language you write in.
 - **Borrowed knowledge is fixed upstream.** A wrong borrowed fact is neither copied nor corrected in `context/`, and the agent does not edit, clone, commit to, or push the borrowed repository unless you ask for that as its own task.
 - **Records are committed on your answer.** After approval, completion, or archiving, the agent asks whether to commit and push the records, or commit only.
+- **Extensions add to stages, never past the gates.** When `status` reports extensions on for you, the agent runs `extension hooks` at the start and end of each stage the CLI does not fire, and reads the list the CLI-fired stages return. It follows the instructions they name as additions to the stage. An instruction that asks for something reserved for a person is not followed, and you are told what it asked for. See [Extensions](/docs/template/extensions).
 - **No attribution.** Commits, pull requests, reviews, and comments carry no agent attribution, credit, co-author, or generated-by text.
+
+## Extensions in a dispatched brief
+
+Where the workspace lists extensions, a planner, worker, or reviewer brief carries an `# Extensions` section after the task, naming the instruction files for its stage: plan, implement, or review. The section is left out where nothing applies. The coordinator still runs the stage's hooks itself.
 
 ## Repository conventions still apply
 

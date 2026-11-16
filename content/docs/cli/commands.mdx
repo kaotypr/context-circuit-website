@@ -3,11 +3,11 @@ title: "CLI commands"
 description: "Use structured operations for facts and files; leave interpretation to the agent."
 tracks: [cli]
 versions:
-  cli: 2.5.0
+  cli: 2.6.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.5.0
+    ref: cli-v2.6.0
     path: product/docs/commands.md
 ---
 
@@ -33,6 +33,8 @@ A member may carry free-text roles, set with `member add --role`, `init --member
 `status` opens with `my_work`: your intents awaiting approval, approved intents without plans, open plans, and the count of finished records not archived. `record list` lists your own records; `--member ID` lists another member's, `--all` every record, and `--archived` adds archived ones. `record archive` moves your finished records under `_archive/`, or exactly the records named with repeatable `--id`.
 
 New plans use folders with `plan.md`; `record order --plan ID` selects an exact run. `record approve` returns `planning_recommended`, and approval, completion, and archiving return `commit_recommended` for the records and ID files they left uncommitted. `record delete --member ID` previews one member's records, `--id ID` (repeatable) previews exactly the named records or a reservation no record holds, and `--all` previews every record only while the roster lists exactly one member. Nothing is deleted until the requested preview is confirmed with `--confirm`; a refusal still shows the preview.
+
+A workspace may list [extensions](/docs/template/extensions) in `extensions.yaml`. The `extension` group adds, updates, removes, switches, and fetches them, all on a person's request, and `extension hooks --stage STAGE --when before|after` returns the instructions for a stage the agent fires. `record approve`, `worktree prepare`, `record complete`, and `record archive` return the same `extensions` list for their own stage. A remote extension is pinned to the commit its ref named, and `extension sync` reports a ref that moved without following it.
 
 It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review.
 
