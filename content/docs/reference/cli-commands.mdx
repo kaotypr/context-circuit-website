@@ -64,7 +64,18 @@ sh .context-circuit/cli extension add --id parity --path extensions/parity --rep
 sh .context-circuit/cli extension sync
 ```
 
-`extension hooks` resolves one hook point for a stage the agent fires (intent, plan, implement, review, deliver) and returns an `extensions` list: the instruction files to follow, every extension skipped and why, and `stopped`, which goes to the person. `record approve`, `worktree prepare`, `record complete`, and `record archive` return the same list for their own stage, and `hooks` refuses their `after` point. Commands that change `extensions.yaml` happen only on request and return no `commit_recommended`. See [Extensions](/docs/template/extensions).
+`extension hooks` resolves one hook point for a stage the agent fires (intent, plan, implement, review, deliver), runs the scripts allowed there, and returns an `extensions` list: the instruction files to follow, the scripts that ran under `ran`, each `each-time` script waiting for the person under `confirmation_required`, every extension skipped and why, and `stopped`, which goes to the person. `record approve`, `worktree prepare`, `record complete`, and `record archive` return the same list for their own stage and run its scripts themselves, and `hooks` refuses their `after` point. A `before` script that stops one of those commands leaves it unrun, exiting 1. Commands that change `extensions.yaml` happen only on request and return no `commit_recommended`. See [Extensions](/docs/template/extensions).
+
+Scripts, on the person's request or answer:
+
+```sh
+sh .context-circuit/cli extension allow --id parity
+sh .context-circuit/cli extension hooks --stage deliver --when after --plan p0001 --repo api --confirm clickup-sync
+```
+
+`extension allow --id ID` shows the extension's source, version, and each script hook with its command, `on_failure`, consent, and action, and allows that exact version to run for the active member on this machine. It runs nothing and writes only the ignored `.context-circuit/local/extension-trust.yaml`. The version is the commit of a remote source, or a hash of a folder source's files, and any change asks again. It is run only at the person's request; no flag skips it.
+
+`extension hooks … --confirm ID` runs one `each-time` script listed under `confirmation_required`, passing it `confirmed: true`. It is run only on the person's yes to the action that entry names. A `standing` script needs no confirmation: allowing its version authorizes the one action its manifest names for that hook, and nothing else.
 
 Replace IDs with those in your workspace. Normal output is readable YAML; `--json` provides structured values. Errors are on stderr and return nonzero status; a flag a command does not take exits 2 with that command's signature.
 
