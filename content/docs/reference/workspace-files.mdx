@@ -16,6 +16,7 @@ sources:
 | Path | Purpose |
 | --- | --- |
 | `workspace.yaml` | Identity, repositories, relationships, optional borrowed knowledge and registry. |
+| `extensions.yaml` | Extensions this workspace uses, in hook order: source, repository scope, settings, and member switches. Absent when none are used; never written by a template update. See [Extensions](/docs/template/extensions). |
 | `members.yaml` | Roster of at least one member, each with an allocation band, optional language and tone, and optional informational roles. A tone is one line: a preset's, or one of the team's own. A member with no tone is written for as `colleague`. |
 | `.context-circuit/VERSION` | Template version received. |
 | `.context-circuit/CLI_VERSION` | Expected CLI executable version. |
@@ -47,6 +48,7 @@ sources:
 | `repositories.local.yaml` | Workspace and repository paths, base branches, borrowed checkout paths. |
 | `.context-circuit/role-tiering.local.yaml` | Machine-specific model and effort overrides. |
 | `.context-circuit/local/worktrees.yaml` | Optional plan-to-worktree associations. |
+| `.context-circuit/local/extensions/<id>/<commit>/` | Fetched remote extensions, one folder per pinned commit; `extension sync` fills it and `--prune` drops unlisted commits. |
 | `.context-circuit/local/write.lock` | OS-managed local write lock. |
 | `repositories/`, `.worktrees/` | Local Git working copies. |
 | Native host agent directories | Generated role definitions; run `agent setup` on a new host. |
