@@ -3,11 +3,11 @@ title: "CLI commands"
 description: "Use structured operations for facts and files; leave interpretation to the agent."
 tracks: [cli]
 versions:
-  cli: 2.5.0
+  cli: 2.6.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.5.0
+    ref: cli-v2.6.0
     path: product/docs/commands.md
 ---
 
@@ -33,6 +33,10 @@ A member may carry free-text roles, set with `member add --role`, `init --member
 `status` opens with `my_work`: your intents awaiting approval, approved intents without plans, open plans, and the count of finished records not archived. `record list` lists your own records; `--member ID` lists another member's, `--all` every record, and `--archived` adds archived ones. `record archive` moves your finished records under `_archive/`, or exactly the records named with repeatable `--id`.
 
 New plans use folders with `plan.md`; `record order --plan ID` selects an exact run. `record approve` returns `planning_recommended`, and approval, completion, and archiving return `commit_recommended` for the records and ID files they left uncommitted. `record delete --member ID` previews one member's records, `--id ID` (repeatable) previews exactly the named records or a reservation no record holds, and `--all` previews every record only while the roster lists exactly one member. Nothing is deleted until the requested preview is confirmed with `--confirm`; a refusal still shows the preview.
+
+`repo sync` and `workspace sync` bring this machine's base branches up to date after a merge, beside `repo fetch` and `knowledge sync`. `repo sync` fetches, then fast-forwards the base branch of each repository named with repeatable `--id`, or of every bound one, to its upstream or `origin/<base>`. It never switches a checked-out branch, merges, rebases, resets, stashes, or discards. Each repository reports one status: `updated`, `current`, `ahead`, `diverged`, `blocked`, `checked-out-elsewhere`, `no-local-branch`, `no-upstream`, `unreachable`, or `unbound`. Only `updated` moves anything, and only the base branch; every other status leaves the local branch and working files as they were and says why in `detail`. One repository's status never stops the rest, and the command exits 0 whenever it ran; an unknown `--id` refuses the whole call before anything is fetched.
+
+`workspace sync` does the same for the workspace's own repository, more strictly: any uncommitted path, tracked or untracked, reports `dirty` with the paths and fetches nothing. Once it moved the workspace it returns `check_recommended`, and `cli_version_changed` (`from`, `to`) when the pinned CLI version moved with it.
 
 It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review.
 

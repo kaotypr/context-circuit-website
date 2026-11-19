@@ -3,15 +3,15 @@ title: "Repository and worktree operations"
 description: "Resolve bindings, choose a starting point, and preserve existing work."
 tracks: [cli]
 versions:
-  cli: 2.5.0
+  cli: 2.6.0
 sources:
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.5.0
+    ref: cli-v2.6.0
     path: product/docs/worktrees.md
   - track: cli
     repository: context-circuit-source
-    ref: cli-v2.5.0
+    ref: cli-v2.6.0
     path: product/docs/commands.md
 ---
 
@@ -24,7 +24,9 @@ sh .context-circuit/cli record order --intent i001 --mode waves
 sh .context-circuit/cli worktree prepare --repo api --plan p0001 --copy-mode auto
 ```
 
-Use actual returned IDs. A dependent plan in the same repository requires an explicit `--start`; the refusal identifies the predecessor. An explicit start is honored. No implicit fetch occurs. The result reports `start`, what the worktree actually started from, beside `base_branch`, this machine's delivery target. A local start branch behind or diverged from its fetched remote is still used, and `sync_required` gives the counts, the remedy (`--start origin/<branch>`, or update the local branch first), and that `repo fetch` refreshes the remote ref.
+Use actual returned IDs. A dependent plan in the same repository requires an explicit `--start`; the refusal identifies the predecessor. An explicit start is honored. No implicit fetch occurs. The result reports `start`, what the worktree actually started from, beside `base_branch`, this machine's delivery target. A local start branch behind or diverged from its fetched remote is still used, and `sync_required` gives the counts, the remedy (`--start origin/<branch>`, or update the local branch first with `repo sync`), and that the remote ref is only as recent as the last `repo fetch` or `repo sync`.
+
+To close a stale start, run `repo sync`: it fetches, then fast-forwards the repository's base branch to its upstream or `origin/<base>`, and nothing more. It never switches a checked-out branch, merges, rebases, resets, stashes, or discards, and it reports `blocked`, `diverged`, or `checked-out-elsewhere` rather than forcing the move. Then prepare the worktree again.
 
 ## Understand reuse
 
