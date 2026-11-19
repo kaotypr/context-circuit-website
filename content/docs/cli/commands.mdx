@@ -36,6 +36,8 @@ New plans use folders with `plan.md`; `record order --plan ID` selects an exact 
 
 A workspace may list [extensions](/docs/template/extensions) in `extensions.yaml`. The `extension` group adds, updates, removes, switches, and fetches them, all on a person's request, and `extension hooks --stage STAGE --when before|after` returns the instructions for a stage the agent fires. `record approve`, `worktree prepare`, `record complete`, and `record archive` return the same `extensions` list for their own stage. A remote extension is pinned to the commit its ref named, and `extension sync` reports a ref that moved without following it.
 
-It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review.
+A hook may run a script. A script runs only after `extension allow --id ID`, which only the person asks for, allowed its exact version for the active member on this machine; `allow` shows the scripts and runs nothing, and any change to the version asks again. A script declares `on_failure` (`stop` or `report`) and `consent`: `none`, `standing`, where allowing it authorizes the one action its manifest names for that hook and nothing else, or `each-time`, which `extension hooks … --confirm ID` runs after the person's yes.
+
+It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review. An extension script it runs is the extension's own code, running with the member's permissions, and only after that member allowed its exact version.
 
 Read the [command reference](/docs/reference/cli-commands) for each group and concrete examples.
