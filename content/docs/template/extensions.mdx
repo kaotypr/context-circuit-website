@@ -1,0 +1,670 @@
+---
+title: "Extensions"
+description: "Add a team's own work before and after each stage without changing the stages or their gates."
+tracks: [template, cli]
+versions:
+  template: 2.6.0
+  cli: 2.6.0
+sources:
+  - track: template
+    repository: context-circuit
+    ref: v2.6.0
+    path: .context-circuit/docs/extensions.md
+  - track: template
+    repository: context-circuit
+    ref: v2.6.0
+    path: .context-circuit/docs/customization.md
+  - track: template
+    repository: context-circuit
+    ref: v2.6.0
+    path: AGENTS.md
+  - track: cli
+    repository: context-circuit-source
+    ref: cli-v2.6.0
+    path: product/docs/commands.md
+---
+
+## Why extensions exist
+
+Teams add their own steps to the same work: a parity check when a service is rebuilt, a ticket kept in step with a plan, a checklist before review. Written into `AGENTS.md` or a skill, such a step is lost at the next template update, and copied between workspaces it drifts.
+
+An extension carries that step in a folder of its own, and the workspace lists the extensions it uses. An extension adds work before and after a stage. It wraps the stage and never replaces it: the stage, its gates, and what it writes stay as `AGENTS.md` describes them. A workspace that lists no extensions has no `extensions.yaml`, and nothing on this page applies to it.
+
+## The extension folder
+
+An extension is a folder holding an `extension.yaml` manifest and the instruction files and scripts it names:
+
+```text
+parity/
+  extension.yaml
+  README.md                 # for people deciding whether to enable it
+  instructions/
+    after-plan.md
+    after-implement.md
+```
+
+Only `extension.yaml` has a fixed name. Every other path is whatever the manifest names, relative to the folder, and the CLI refuses one that leaves the folder.
+
+```yaml
+id: parity
+version: 1.2.0              # informative; what a workspace pins is the commit or the folder
+name: Behavior parity checks
+summary: Checks that a rebuilt service behaves like the one it replaces.
+members: required           # required | default-on | opt-in
+settings:                   # keys this extension reads from extensions.yaml
+  reference: { required: true, summary: Logical repository or URL of the previous app }
+hooks:
+  - at: after plan
+    instructions: instructions/after-plan.md
+  - at: after implement
+    instructions: instructions/after-implement.md
+```
+
+- `at` is `before` or `after` and a stage from the [hook points](#hook-points). Each point appears at most once per extension.
+- `instructions` is a Markdown file the agent follows at that point, as part of the stage.
+- `script`, optional, is a program the CLI runs at that point, beside the instructions or instead of them. See [Scripts](#scripts).
+- `roles`, `role_additions`, `overrides`, and `skills`, all optional, add agent roles, add to the shipped ones, ask to change a default, and ship skills. See [Roles](#roles), [Overriding a default](#overriding-a-default), and [Skills and named stages](#skills-and-named-stages).
+- `settings` declares the keys a workspace passes in. They never hold a credential; credentials stay on the machine.
+- The manifest is decoded strictly, so an unknown key is an error that names the manifest. A manifest written for a newer CLI declares `requires_cli`, such as `">=2.7.0"`, and an older CLI reports that the extension needs a newer CLI instead of failing to read it.
+
+## Two kinds of source
+
+An extension lives in one of two places:
+
+- **A folder in the workspace,** named by `path`. It is committed with the workspace and changes when the workspace does.
+- **A Git repository,** named by `url`, the `ref` it follows, the `commit` the CLI resolved that ref to, and an optional `path` to a subfolder. The CLI fetches exactly that commit into the ignored `.context-circuit/local/extensions/<id>/<commit>/`, so every machine reads the same content even if the tag moves later.
+
+A registry of extensions is an ordinary Git repository with one folder per extension. Nothing about it is special: a workspace adds one of its folders with `--url`, `--ref`, and `--subpath`, and an organization shares its extensions by publishing that repository.
+
+A `ref` that moves upstream is reported by `extension sync` and never followed. Recording the move is `extension update`, on request.
+
+## `extensions.yaml`
+
+`extensions.yaml` sits at the workspace root, beside `workspace.yaml`, and lists the extensions this workspace uses. Their order is the order their hooks run at each point.
+
+```yaml
+extensions:
+  - id: parity
+    source: { path: extensions/parity }
+    repositories: [orders-service]
+    settings:
+      reference: legacy-orders
+  - id: ticket-sync
+    source:
+      url: https://git.example.com/platform/cc-extensions.git
+      ref: v3.0.0
+      commit: 9f2c41e8a0d3b7c5e1f4a6d2b8c0e9f1a3b5c7d9
+      path: ticket-sync
+    members:
+      maya: off
+```
+
+| Key | Meaning |
+| --- | --- |
+| `id` | The extension's name in this workspace. |
+| `source` | `path` for a folder, or `url`, `ref`, `commit`, and an optional `path` for a Git repository. |
+| `repositories` | The repositories it is limited to. None means every one. |
+| `settings` | Values passed to its instructions. Never a credential. |
+| `members` | `on` or `off` for a member, over the manifest's default. |
+
+`extensions.yaml` is the workspace's data, like `workspace.yaml`. A template update never creates or changes it, and the `extension` commands that change it return no commit recommendation: committing it is the person's call, as for any shared file. Settings are edited by hand, and `check` validates them.
+
+## Member switches
+
+The manifest's `members` sets the default for everyone:
+
+- `required`: on for every member, and it cannot be switched off.
+- `default-on`: on unless a member is switched off.
+- `opt-in`: off unless a member is switched on.
+
+`extension enable` and `extension disable` record a member's switch in `extensions.yaml`, for the active member or the one named with `--member`. `extension disable` is refused for a `required` extension. A hook that does not apply because the extension is off for the member is reported as a skip, never as a hook that ran.
+
+## Repository scope
+
+An extension with `repositories` applies only to work in those repositories. A point that fires for a plan is scoped to the plan's repositories, and `--repo` narrows it to one. A direct change has no plan, so the agent names the bound checkout with `--repo`.
+
+An intent names no repositories: it states an outcome before anyone has decided where the code lives. So only workspace-wide extensions, the ones with no `repositories`, fire on the intent and approve stages. An extension limited to `orders-service` cannot know whether an intent touches it, and staying silent there is the honest answer.
+
+## Hook points
+
+Every stage has a `before` and an `after` point. Four stages are fired by the CLI command that carries them out; the agent fires the other five itself.
+
+| Stage | Fired by |
+| --- | --- |
+| `intent` | the agent: before writing an intent body, and once it is written |
+| `approve` | `record approve` |
+| `plan` | the agent: before planning, and once every plan folder is written |
+| `prepare` | `worktree prepare` |
+| `implement` | the agent: before the first change in a worktree, and after its last commit |
+| `review` | the agent: before a requested review, and once its findings exist |
+| `deliver` | the agent: after the person authorized delivery, and after it |
+| `complete` | `record complete` |
+| `archive` | `record archive` |
+
+For a stage the agent fires, it asks the CLI for the point:
+
+```sh
+sh .context-circuit/cli extension hooks --stage intent --when after --intent i001
+sh .context-circuit/cli extension hooks --stage implement --when after --plan p0001 --repo api
+```
+
+`record approve`, `worktree prepare`, `record complete`, and `record archive` return the same `extensions` list for their own stage in their result, and `extension hooks` refuses their `after` point because the command already returned it. When an extension applies to implementing in a worktree, `worktree prepare` also returns the two `extension hooks --stage implement` commands to run there as `next`.
+
+`before deliver` runs only after the person has authorized the delivery. It adds work around a delivery somebody asked for and never stands in for asking.
+
+## What a point returns
+
+```yaml
+extensions:
+  - point: after implement
+    instructions:
+      - id: parity
+        file: extensions/parity/instructions/after-implement.md
+        settings: { reference: legacy-orders }
+    ran:
+      - id: parity
+        status: failed          # ok | failed | skipped
+        on_failure: stop
+        summary: "exited with status 1: 2 of 14 behaviors differ"
+    confirmation_required:
+      - id: chat-notify
+        action: Post the pull request to the team channel
+        confirm: extension hooks --stage implement --when after --plan p0001 --repo api --confirm chat-notify
+    skipped:
+      - id: ticket-sync
+        reason: off for member maya
+    stopped: true
+    resolve: "take this to the person before the stage goes on: parity failed at after implement …"
+```
+
+- `instructions` names each file to follow, as a workspace path, with the settings to apply. The agent opens it and does what it says as part of the stage.
+- `ran` is each script that ran: `ok`, `failed`, or `skipped` by the script itself, with its `on_failure` and a summary. Each result is reported with the stage's.
+- `confirmation_required` is each `each-time` script waiting for the person. The agent asks them about its `action` in one question and runs its `confirm` command only on their yes. A no is reported, and nothing runs.
+- `skipped` names every extension or hook that did not apply, and why: off for this member, outside the repositories it is limited to, unavailable on this machine, a script not allowed on this machine, or a hook with no Windows command. Skips are reported with the stage's result, and a skipped hook is never treated as one that ran.
+- `stopped: true`, with `resolve`, means the stage does not go on until the person decides: an extension that may be required could not be read on this machine, a required extension's script is not allowed here, or a script whose `on_failure` is `stop` failed.
+
+A command's result carries the list only where something applied or was skipped. No `extensions` key means nothing applied.
+
+## Following an instruction
+
+- An instruction adds to the stage it is attached to. It never replaces a step of that stage or skips one.
+- Results go into the agent's report, and later the completion note. The plan record is not edited during execution, whatever an instruction says.
+- A failing check that an instruction or a script runs is reported like a failing test. The agent fixes it where that is the work, but does not rerun the hook in a loop until it passes.
+
+### Report a skip, never invent
+
+A record made without the extension, such as a plan written while it was off, may hold nothing for the instruction to act on. The agent reports that as a skip with its reason. It never fills the gap by inventing what the record lacks. A parity check that finds no list of behaviors to compare says so; it does not make up a list after the fact and check the code against it.
+
+## Instructions reach dispatched roles
+
+A dispatched planner, worker, or reviewer receives the instructions for its stage, plan, implement, or review, in an `# Extensions` section of its brief, after the task. A planner works before plans name repositories, so instructions limited to repositories are marked with the repositories they are for. The section is left out where nothing applies.
+
+The coordinator still runs the stage's hooks itself and reads their results. A shipped role's definition file never carries extension instructions, so enabling an extension never makes a role definition stale.
+
+## Scripts
+
+A hook may run a script beside its instructions, or instead of them. Instructions are read and followed by the agent; a script is a program the CLI starts itself when the point fires.
+
+```yaml
+hooks:
+  - at: after implement
+    instructions: instructions/after-implement.md
+    script:
+      run: [sh, scripts/parity-run.sh]
+      run_windows: [powershell, -NoProfile, -File, scripts/parity-run.ps1]
+      on_failure: stop      # stop | report
+      consent: none         # none | standing | each-time
+      action: ""            # required unless consent is none
+      timeout: 10m
+```
+
+### Writing a script
+
+What a script can rely on:
+
+- **Launch.** `run` starts with no shell. The first element is the program and the rest are its arguments. A relative path among them is resolved inside the extension folder and may not leave it.
+- **Windows.** On Windows the CLI starts `run_windows` instead, with the same rules. A hook with no `run_windows` is skipped on Windows, and the skip says so.
+- **Environment.** The member's own, minus the Git variables that would point a Git command at another repository.
+- **Working directory.** The worktree, for a `prepare`, `implement`, `review`, or `deliver` point that fires for one repository. Otherwise the workspace root.
+- **Input.** One JSON object on stdin, described below.
+- **Exit code.** 0 is success; anything else is failure.
+- **Output.** Stdout may end with one JSON object, `{"status": "ok" | "skipped", "summary": "…", "details_path": "…"}`. Stdout over 64 KiB is cut and reported as cut, and stderr is kept for a failure's summary.
+- **Time.** `timeout` defaults to 10 minutes. A script still running then is stopped and reported as failed.
+- **Lock.** Scripts run outside the workspace lock, so a script may call the CLI itself. A script after a command reads what the command wrote, never what it was about to write.
+
+The input on stdin:
+
+| Key | What it holds |
+| --- | --- |
+| `point` | The hook point that fired. |
+| `workspace_root` | The workspace root. |
+| `member` | The active member on this machine. |
+| `extension` | The extension's `id` and its `settings` from `extensions.yaml`. |
+| `record` | The record the point fired for, with its `id`, `kind`, `path`, and `repositories`, or null. |
+| `worktrees` | Each repository's worktree, as an absolute path. |
+| `confirmed` | True only when an `each-time` script runs after the person's yes. |
+| `records` | Only at `archive`: every record the command moved. |
+
+A record made without the extension, such as a plan written while it was off, may hold nothing for the script to act on. The script reports that as `{"status": "skipped"}` with the reason. It never fills the gap.
+
+A command that fires its own stage (`record approve`, `worktree prepare`, `record complete`, `record archive`) runs that stage's scripts itself: the `before` point's before it writes, the `after` point's once it has. Asking `extension hooks` for such a `before` point returns its instructions only; its scripts run when the command fires it. A dispatched planner, worker, or reviewer never runs a script. The coordinator does, through `extension hooks`.
+
+### Failure
+
+`on_failure` says what a failed script means for the stage:
+
+| Outcome | `on_failure: report` | `on_failure: stop` |
+| --- | --- | --- |
+| A `before` script fails | The stage goes ahead; the failure is in `ran`. | The stage does not happen. A CLI command exits 1 having written nothing. |
+| An `after` script fails | Reported. | Reported as `stopped`. What the stage wrote stays, and the person decides before the next stage. |
+| A script is skipped: off, not allowed, unavailable, no Windows command | Reported as skipped. | Reported as skipped, except a `required` extension whose script is not allowed, which stops. |
+
+A stop is never a loop. The agent reports it and the person decides. The hook is not rerun until it passes, and a failure the script found is reported like a failing test.
+
+### Trust
+
+A script is someone else's code running with the member's own permissions. So it runs only after the member using this machine has allowed that exact version:
+
+```sh
+sh .context-circuit/cli extension allow --id parity
+```
+
+- **What it shows.** The source, the version, and each script hook with its command, `on_failure`, consent, and action. It runs nothing.
+- **What it records.** The allow, in the ignored `.context-circuit/local/extension-trust.yaml`. Nothing shared changes.
+- **What a version is.** The commit, for a remote source. For a folder source, a SHA-256 over the folder's files, their paths and contents, with line endings normalized.
+- **Why a change asks again.** Any change to that version, a new commit or one edited file, means code nobody on this machine has read. The script is not allowed until someone allows the new version, and a changed action is read again.
+- **Whose allow it is.** One member's, on one machine. Another member, or the same member on another machine, allows separately.
+
+`extension list` shows each extension with scripts as `allowed`, `not allowed`, or `changed since allowed`. A script that is not allowed is skipped, with that reason and the command that clears it. A `required` extension whose script is not allowed stops the stage.
+
+No flag or setting skips the allow, and the CLI never allows anything by itself. The agent runs `extension allow` only when the person asks for it. A skip that names it is reported to the person, not cleared by the agent.
+
+### Consent
+
+`consent` is the author's statement of what a script does beyond this machine, made to the person who allows it.
+
+- **`none`** is for a script that acts only locally: it reads, checks, or writes inside the worktree. A script that publishes anything while declaring `none` is the author's defect, and an extension the workspace should remove.
+- **`each-time`** asks the person every time. The script does not run when its point fires. It is listed under `confirmation_required` with its `action`, the agent asks the person, and on a yes runs its `confirm` command, `extension hooks … --confirm ID`, which passes `confirmed: true`. A no is reported and nothing runs. A command that fires its own stage cannot stop to ask anyone, so an `each-time` script at `approve`, `prepare`, `complete`, or `archive` is skipped with that reason.
+- **`standing`** runs when its point fires, without asking. Enabling the extension and allowing this version after reading its `action` is consent ahead of time to that one action, for that one hook. It is the only place configuration stands in for a person's answer, and it covers only the action the manifest names for that hook: not another action of the same script, not another hook, and not anything the agent does.
+
+`standing` and `each-time` need an `action`, and a manifest without one is a `check` finding.
+
+<Callout title="The one exception, stated narrowly">Every action reserved for a person, such as pushing, publishing, or deleting, still needs that person's request. The single exception is a `standing` script taking the one action its manifest names for its hook, after this machine's member allowed that version. It is not a grant to the agent, it does not extend to anything else the script or the agent might do, and a new version needs a new allow before it runs again.</Callout>
+
+### Credentials
+
+A script that reaches a service reads its credential from the machine: an environment variable or the operating system's credential store. A credential never goes in `extensions.yaml`, in `settings`, or in the manifest, because those are shared with everyone who clones the workspace or the extension. `settings` carries what is safe to share, such as a list ID or a channel name, and `check` validates them.
+
+The script inherits the member's own environment, so each member supplies their own credential on their own machine, and a script acts as that member.
+
+## The line no extension crosses
+
+These rules hold whatever an extension says. An instruction that asks for one of them is not followed, the person is told what it asked for, and the rest of the extension still applies.
+
+- Pushing, opening a pull or merge request, merging into a base branch, deploying, deleting workspace data, and committing in a bound checkout need the person's explicit authorization. The one exception is a `standing` script's own named action, for its own hook, described under [Consent](#consent).
+- Approving an intent is a person's answer to it as written. No hook supplies or implies approval, and no hook starts planning or execution.
+- The plan record is not edited during execution.
+- No independent verification is started during execution, no reviewer is triggered by risk classification, and no automatic repair loop runs, unless this workspace allowed the extension to override that default.
+- No agent attribution in commits, pull requests, reviews, or comments.
+- No secrets in workspace records, in `extensions.yaml`, or in a manifest.
+- Borrowed knowledge stays read-only.
+
+<Callout title="An extension adds work; it does not grant permission">An instruction that says "push the branch" or "approve the intent" is reported to the person and not followed. The same request from the person is what makes the action allowed. A `standing` script's one named action is the only thing a person can consent to ahead of time, and only by allowing that version after reading the action.</Callout>
+
+## A worked example
+
+A team is rebuilding an orders service and wants every change checked against the behavior of the old one. It writes a `parity` extension in the workspace, with instructions only:
+
+```text
+extensions/parity/
+  extension.yaml
+  instructions/
+    after-plan.md
+    after-implement.md
+```
+
+`instructions/after-plan.md`:
+
+```md
+For each plan touching the orders service, add a "Parity" section to the plan's
+Details listing the behaviors of the service in `reference` that the change must
+keep, one per line, each with how to observe it.
+```
+
+`instructions/after-implement.md`:
+
+```md
+Read the plan's "Parity" section. For each behavior, compare what the new code
+does with what the `reference` service does, and report each as kept, changed,
+or not checked, with the evidence. If the plan has no "Parity" section, report
+the hook as skipped because the plan was written without this extension. Do not
+write a parity list now.
+```
+
+Someone on the team asks for it to be added, limited to the service:
+
+```sh
+sh .context-circuit/cli extension add --id parity --path extensions/parity --repo orders-service
+```
+
+They set `reference: legacy-orders` under its `settings` by hand, run `check`, and commit `extensions.yaml` with the folder. From then on, planning a change to `orders-service` ends with a parity list in the plan, and implementing it ends with a parity report beside the test results. A plan for another repository, and every intent, sees nothing from `parity`.
+
+### Adding a script
+
+Comparing behaviors by hand is slow, and the orders service already has a parity runner that replays recorded requests against both services. The team adds a script to the `after implement` hook, beside its instructions:
+
+```text
+extensions/parity/
+  extension.yaml
+  instructions/
+    after-plan.md
+    after-implement.md
+  scripts/
+    parity-run.sh
+```
+
+```yaml
+hooks:
+  - at: after plan
+    instructions: instructions/after-plan.md
+  - at: after implement
+    instructions: instructions/after-implement.md
+    script:
+      run: [sh, scripts/parity-run.sh]
+      on_failure: stop
+      consent: none
+      timeout: 15m
+```
+
+`scripts/parity-run.sh`:
+
+```sh
+#!/bin/sh
+# Runs in the orders-service worktree. The hook input arrives on stdin.
+input=$(cat)
+reference=$(printf '%s' "$input" | jq -r '.extension.settings.reference')
+report="${TMPDIR:-/tmp}/parity-$$.txt"
+
+# The service's own parity runner, in the worktree.
+if ./tools/parity --against "$reference" >"$report" 2>&1; then
+  printf '{"status": "ok", "summary": "every recorded request matches %s", "details_path": "%s"}\n' \
+    "$reference" "$report"
+else
+  tail -n 20 "$report" >&2
+  exit 1
+fi
+```
+
+The script only reads and runs code on the machine, so its consent is `none`. It stops on failure, because a change that breaks parity should reach the person before anyone delivers it. Committing the script changes the folder's hash, so every member who wants it to run on their machine allows it once:
+
+```sh
+sh .context-circuit/cli extension allow --id parity
+```
+
+Until they do, `extension hooks` reports the script as skipped because it is not allowed, and names that command. The agent reports the skip; it does not run `allow` unasked. After the allow, the `after implement` point returns the instructions and the script's result under `ran`. A failed run comes back as `stopped`, and the person decides what happens next; the hook is not rerun until it passes. The hook has no `run_windows`, so a teammate on Windows sees it skipped with that reason and follows the instructions alone.
+
+### Adding a verifier and a repair loop
+
+The team wants a failed parity comparison caught before the agent reports, without anyone having to ask for a review each time. It adds a read-only role and declares the repair loop in the same manifest:
+
+```yaml
+roles:
+  - id: parity-verifier
+    description: Compares a change with the reference service and reports what differs.
+    access: read-only
+    stages: [implement]
+    like: reviewer
+    instructions: roles/parity-verifier.md
+    returns: [Verdict, Findings, Not checked]
+overrides:
+  - default: repair-loop
+    instructions: instructions/repair-loop.md
+    verifier: parity-verifier
+    rounds: 3
+```
+
+Declaring it changes nothing. After `agent setup` writes `cc-x-parity-parity-verifier` on each machine, the role can be dispatched on request, but no loop runs, because the workspace has not allowed one. When a person asks for the allowance itself, the loop is limited to what they allow:
+
+```sh
+sh .context-circuit/cli extension override --id parity --allow repair-loop --rounds 2
+```
+
+From then on, the `after implement` point for a plan in `orders-service` returns the `repair-loop` override. The coordinator dispatches the verifier with `--override repair-loop --round 1`; findings go to a worker as the task for one fix, and the verifier checks again in round 2. Findings left at the limit go to the person. The report says it was clean after one round, or names the findings left and each fix's commit. Approvals, pushes and the plan record stay exactly as they were: the loop never touches them, and revoking the allowance with `--revoke repair-loop` returns the workspace to the default.
+
+## A `standing` example
+
+This example is illustrative. A team that tracks work in ClickUp wants the task linked to a plan moved to Done when the plan is completed, without being asked each time, and the pull request link posted to the task only when someone says yes. It writes its own `clickup-sync` extension; Context Circuit does not ship one.
+
+```yaml
+id: clickup-sync
+version: 1.0.0
+name: ClickUp task sync
+summary: Keeps the ClickUp task linked to a plan in step with it.
+members: opt-in
+settings:
+  list: { required: true, summary: ClickUp list the plans' tasks live in }
+hooks:
+  - at: after complete
+    script:
+      run: [node, scripts/complete-task.mjs]
+      on_failure: report
+      consent: standing
+      action: Move the ClickUp task linked to the completed plan to Done and add the completion note as a comment
+  - at: after deliver
+    script:
+      run: [node, scripts/post-pr-link.mjs]
+      on_failure: report
+      consent: each-time
+      action: Post the pull request link as a comment on the plan's ClickUp task
+```
+
+- **Credentials.** Both scripts read `CLICKUP_API_TOKEN` from the member's environment. The token is in neither `extensions.yaml` nor the manifest; `settings` holds only the list.
+- **The `standing` hook.** A member who enables `clickup-sync` and allows this version, after `extension allow` has shown them the action, has agreed ahead of time to that one action. When they ask for a plan to be completed, `record complete` writes the completion and then runs the script, which moves that task and comments on it. That is all the consent covers. It does not cover the other hook, any other ClickUp change the script might make, or anything the agent does, and it does not make completing a plan any less the person's request.
+- **The `each-time` hook.** After a delivery the person asked for, the `after deliver` point lists the script under `confirmation_required` with its action. The agent asks, and runs the `confirm` command only on a yes:
+
+  ```sh
+  sh .context-circuit/cli extension hooks --stage deliver --when after --plan p0001 --repo api --confirm clickup-sync
+  ```
+
+- **A new version.** When the team changes either script or its action, the new commit or hash is not allowed on anyone's machine until each member allows it again, after reading the action again.
+- **Failures.** Both hooks `report`. A ClickUp outage is reported with the stage's result and stops nothing; the completion is already written.
+
+## Commands
+
+```sh
+sh .context-circuit/cli extension list
+sh .context-circuit/cli extension allow --id parity
+sh .context-circuit/cli extension add --id parity --path extensions/parity --repo api
+sh .context-circuit/cli extension add --id ticket-sync --url GIT_URL --ref v3.0.0 --subpath ticket-sync
+sh .context-circuit/cli extension update --id ticket-sync --ref v3.1.0
+sh .context-circuit/cli extension disable --id ticket-sync
+sh .context-circuit/cli extension enable --id ticket-sync --member maya
+sh .context-circuit/cli extension sync
+sh .context-circuit/cli extension sync --prune
+sh .context-circuit/cli extension override --id parity --allow repair-loop --rounds 2
+sh .context-circuit/cli extension override --id parity --revoke repair-loop
+sh .context-circuit/cli extension remove --id ticket-sync
+sh .context-circuit/cli extension hooks --stage plan --when after --plan p0001
+sh .context-circuit/cli extension hooks --stage deliver --when after --plan p0001 --repo api --confirm ticket-sync
+```
+
+| Command | What it does |
+| --- | --- |
+| `extension list` | Each extension's state for this member on this machine. |
+| `extension add` | Validates the manifest and lists the extension; a remote is pinned to the commit its ref names and fetched. |
+| `extension update` | Moves a remote to a new ref and its commit. |
+| `extension remove` | Unlists the extension; cached commits stay until `sync --prune`. |
+| `extension enable`, `extension disable` | Switches it on or off for a member, the active one by default. |
+| `extension sync` | Fetches every recorded commit this machine lacks and reports a ref that moved upstream. |
+| `extension allow` | Shows an extension's scripts and allows its exact version to run for the active member on this machine. Runs nothing. |
+| `extension override` | Allows (`--allow NAME`, with `--rounds N` to lower a repair loop's limit) or revokes (`--revoke NAME`) one of the four overridable defaults for an extension that declares it. |
+| `extension hooks` | Resolves one hook point for a stage the agent fires, and runs its allowed scripts. |
+| `extension hooks --confirm ID` | Runs one `each-time` script listed under `confirmation_required`, after the person's yes. |
+
+Add, update, remove, enable, disable, allow, and override each happen only on a person's request, and `--confirm` only on the person's yes to the action it names. `allow` is the one that changes nothing shared: it writes this machine's trust file. `status` reports `extensions`, with how many are listed and on for you. `check` reports what is wrong in `extensions.yaml` and each manifest, with what clears it, including a `standing` or `each-time` hook without an `action`, and lists a remote this machine has not fetched under `unchecked` with `extension sync` as the next step.
+
+## Roles
+
+A manifest may add agent roles of its own, and add to the four shipped ones: the explorer, planner, worker, and reviewer.
+
+```yaml
+roles:
+  - id: parity-verifier
+    description: Checks a rebuilt service behaves like the one it replaces.
+    access: read-only          # read-only | edit
+    stages: [implement]        # whose hook instructions its brief carries
+    like: reviewer             # the shipped role whose model and effort it takes
+    instructions: roles/parity-verifier.md
+    returns: [Verdict, Findings, Not checked]
+role_additions:
+  - role: worker
+    instructions: roles/worker-parity.md
+    returns: [Parity]
+```
+
+- **Names.** A role's full name is `x-<extension>-<role>`, here `x-parity-parity-verifier`. No shipped role starts with `x-`, so an extension role never replaces or shadows one.
+- **Definitions.** `agent setup` writes a definition for each role of each extension that is on for the active member, beside the shipped four, as `cc-x-<extension>-<role>` for every host. Codex invokes it as `cc_x_<extension>_<role>`. These files are gitignored like the shipped ones, so a clone carries none and each machine runs `agent setup`. A definition a person edited is kept. One whose extension was removed or switched off is deleted only when nobody edited it, and setup lists what it `written`, `removed`, and `kept`.
+- **Starting one.** A role starts only through `agent dispatch --role x-parity-parity-verifier`, which returns the brief. A host may list the definition among its agents and spawn it directly, so each description ends by saying so and each body opens with a guard: given a prompt that is not the dispatched brief, the role changes nothing and names the dispatch command to run.
+- **Access.** A `read-only` role gets the host's read-only tools or sandbox and is dispatched like the explorer, with `--task` or a `--plan` to read. It takes `--repo` only as one of that plan's repositories, which changes nothing. An `edit` role is dispatched like the worker: it needs `--plan`, takes `--repo`, owns the worktree it is given, and commits only on that branch.
+- **Model and effort.** `role-tiering.yaml`, or its local override, may name the role by its full name. Where neither does, the role takes the setting of the shipped role named by `like`, and inherits without one. An older CLI refuses a tiering file that names an `x-` role, so an extension that declares roles sets `requires_cli`.
+- **The brief.** The brief has the same sections as a shipped role's, and an `# Extensions` section for the stages the role declares. "What to return" carries the role's instructions, its `returns` headings in order, and limits no instruction lifts: the role authorizes no outward action, gives no approval, starts neither planning nor execution, and launches no other agent. The dispatch result also carries a `report` line saying to pass the role's result on to the person under those headings, in order.
+- **Additions.** A `role_additions` entry reaches a shipped role through its brief only. Its instruction file is listed in the `# Extensions` section, and its `returns` headings follow the role's own at the end of "What to return". The role's definition and access do not change, so an addition never needs `agent setup`. A heading may not repeat one of the role's core headings, such as a planner's `Verdict` or `Approach`, and two extensions adding the same heading to one role is a `check` finding.
+
+A role runs on a person's request or for a stage it declares, under the same rules as a shipped role. It runs nothing on its own.
+
+### After an extension change
+
+Roles and skills are files on each machine, so changing which extensions are on leaves them behind. `extension add`, `update`, `remove`, `enable`, `disable`, `sync`, and `status` return `setup_required` with the `agent setup` call when this machine's definitions no longer match. Run it, and reload the host's agents and skills if it does not pick them up mid-session; a dispatch reports `definition_installed` either way. `check` reports a role or addition that is not valid as written.
+
+## Overriding a default
+
+The workspace's rules are of two kinds. The fixed rules in [The line no extension crosses](#the-line-no-extension-crosses) hold whatever an extension says. Four defaults are different: an extension may change one only where its manifest declares the override **and** a person allowed it for this workspace. The CLI holds that line. An allowed override reaches the agent only through `extension hooks`, and a dispatch that needs one is accepted only with `agent dispatch --override NAME` naming an allowed one.
+
+| Override | Without it | With it |
+| --- | --- | --- |
+| `repair-loop` | No automatic repair loops. | Implement, verify, and fix until clean or the round limit. |
+| `verify-during-execution` | Verification only on a person's request. | A named read-only role checks each implementation once and reports. |
+| `risk-review` | No review triggered by risk classification. | The extension's instructions say when a change warrants review, and the reviewer runs then. |
+| `delegation` | Delegating is a judgment about size. | A named stage always goes to a named role. |
+
+`repair-loop` includes the verification it needs, so it does not also need `verify-during-execution`.
+
+**What stays fixed.** Approving an intent, pushes, pull requests, merges, deployment, deletion and commits in a bound checkout, starting planning and execution, leaving the plan record alone, no attribution, no secrets in records, and read-only borrowed knowledge are not on the list. A manifest that names any of them as an override is invalid, and `extension override` refuses it.
+
+### Declaring one
+
+```yaml
+overrides:
+  - default: repair-loop
+    instructions: instructions/repair-loop.md   # what counts as clean, what to fix first
+    verifier: parity-verifier                   # a read-only role this extension declares, or reviewer
+    rounds: 3                                   # 1 to 10
+  - default: risk-review
+    instructions: instructions/risk-review.md   # when a change warrants review
+  - default: delegation
+    stage: implement                            # plan, implement, or review
+    role: worker
+```
+
+A verifier is read-only: the shipped `reviewer`, or a role the extension declares with `access: read-only`. A manifest declaring an override changes nothing by itself.
+
+### Allowing one
+
+Only a person allows an override, and only by asking for the allowance itself. The agent never allows one. A request to run a loop, a review, or a verifier that is not allowed is not that request: the agent runs nothing, says the override is not allowed in this workspace, and gives the person the command.
+
+```sh
+sh .context-circuit/cli extension override --id parity --allow repair-loop --rounds 2
+sh .context-circuit/cli extension override --id parity --revoke repair-loop
+```
+
+The allowance is written under the extension's entry in `extensions.yaml`, keeping the file's comments, so it belongs to the workspace and is shared like the rest of that file. `--rounds` may lower the manifest's rounds and never raise them, and the command refuses a default the manifest does not declare. An allowance applies to a stage only where the extension is on for the member whose agent runs it and its repositories cover the plan. `status` lists each allowed override with its extension, its rounds, and whether it is on for you. Without an allowance, nothing changes.
+
+### Where an override arrives
+
+`extension hooks` returns an `overrides` block at the point where each applies:
+
+```json
+"overrides": [
+  {"default": "repair-loop", "extension": "parity", "rounds": 2,
+   "verifier": "x-parity-parity-verifier",
+   "instructions": "extensions/parity/instructions/repair-loop.md"}
+]
+```
+
+| Override | Point that returns it | What it unlocks |
+| --- | --- | --- |
+| `repair-loop` | `after implement` | The verifier, then a worker with `--task` carrying the findings. |
+| `verify-during-execution` | `after implement` | The verifier, once. |
+| `risk-review` | `after implement` | The reviewer, when the instructions say the change warrants it. |
+| `delegation` | `before <stage>` | Nothing new: the stage goes to the named role, dispatched as usual. |
+
+Each unlocked dispatch names the override, and its round where it has one:
+
+```sh
+sh .context-circuit/cli --json agent dispatch --host HOST --role x-parity-parity-verifier \
+  --plan p0001 --override repair-loop --round 1 --path WORKTREE
+sh .context-circuit/cli --json agent dispatch --host HOST --role worker \
+  --plan p0001 --task 'FINDINGS' --override repair-loop --round 1 --path WORKTREE
+```
+
+Any other use of `--override` is refused, naming what is missing. Without `--override`, a reviewer still needs a real request from a person.
+
+### The repair loop
+
+1. The worker implements and commits, and `after implement` returns `repair-loop`.
+2. The coordinator dispatches the verifier with `--override repair-loop --round 1`.
+3. Clean: the agent reports "clean after N rounds".
+4. Findings, with rounds left: a worker is dispatched with the findings as `--task` and the same round, then the verifier again with the next round.
+5. Findings in the last round: the loop stops and the findings go to the person.
+
+- **The coordinator runs every step.** The verifier never dispatches the worker, and the worker never dispatches the verifier.
+- **A round is one verification.** Round 1 checks the first implementation, so `rounds: 2` allows one fix.
+- **Fixes are commits.** Each is committed on the worktree branch like any worker commit. The plan record is not edited; the rounds go in the report.
+- **Outcome questions go to the person.** A finding outside the plan's outcome is reported, not fixed, and one that bears on the outcome goes to the person.
+- **Independence holds.** The coordinator may make a fix itself when it implemented the plan itself, but the verifier is still dispatched, because it must not be the session that wrote the code. Where the host cannot spawn an agent, the loop does not run and the agent says the override needs a host that can.
+
+The report says which override ran, from which extension, how many rounds, and how it ended: clean after N rounds, or the findings left at the limit. It names each fix's commit. `verify-during-execution` and `risk-review` report the verifier's or reviewer's result with the implementation's.
+
+### What `check` reports
+
+Each of these needs a person: an override in a manifest outside the closed list, an allowance the manifest does not declare, an allowance on an extension whose source cannot be read, `rounds` above the manifest's value or outside 1 to 10, a `verifier` that is not read-only or names a role nobody declares, and two extensions allowing `delegation` for the same stage with different roles.
+
+## Skills and named stages
+
+A manifest may ship skills:
+
+```yaml
+skills:
+  - id: qa
+    path: skills/qa             # a folder holding SKILL.md and what it references
+    stage: qa                   # optional: declares the named stage qa-pass/qa
+```
+
+- **Names.** A skill is installed as `x-<extension>-<skill>`, here `x-qa-pass-qa` for the `qa` skill of an extension `qa-pass`. No shipped skill starts with `x-`, so an extension skill never replaces or shadows one, and no template version ships an `x-` path, so a template update never writes or removes one.
+- **Installation.** `agent setup` copies each skill of each extension that is on for the active member to `.agents/skills/x-<extension>-<skill>/`, with `name` in its `SKILL.md` frontmatter set to the installed name, and writes a one-line wrapper under `.claude/skills/` and `.cursor/skills/`. The copy is shared by every host, so naming one host still writes it. All of it is gitignored and regenerated on each machine from the extension. A copied file a person edited is kept, and a skill whose extension was removed or switched off is deleted only when nobody edited it. The workspace's `.gitignore` carries the `x-*` paths, so a workspace upgrading to 2.6.0 adds them.
+- **When a skill runs.** On a person's request, or when a core stage's hook instruction names it. It never starts on its own and starts neither planning nor execution: work that needs either goes through the core path first. The host may need a reload to see a skill installed mid-session.
+- **The `SKILL.md`.** Its frontmatter carries `name` and `description`, as a shipped skill's does, and the description is what a request is matched against.
+
+### Named stages
+
+A skill that declares `stage: qa` gives other extensions two hook points, `before qa-pass/qa` and `after qa-pass/qa`:
+
+```yaml
+hooks:
+  - at: after qa-pass/qa
+    instructions: instructions/after-qa.md
+```
+
+Running the points is the skill's own job: its text runs `extension hooks --stage qa-pass/qa --when before` before its work and `--when after` after it, with `--plan` or `--repo` where the work has one, and follows what each returns as for a core stage. A script at a named stage runs in the worktree when the point fires for one.
+
+A point whose extension is not listed, cannot be read, is off for the member, or does not declare that stage returns no instructions and one skip with that reason. A named stage never joins the lifecycle: `record order`, the entry instruction, and the core skills never fire it, and a core point never carries its hooks.
+
+`status` lists the extension skills on for you under `extension_skills`, with whether each is installed on this machine, and their stages under `named_stages`. `check` reports a skill that is not valid as written, and a hook at a named stage no listed extension declares.
+
+## `status` and extensions
+
+`status` opens with `my_work`. Under each open plan it lists the worktrees this machine prepared for it, with each one's repository, path, and branch, which tells an agent where a plan's work is. For extensions it reports how many are listed and on for you, each allowed override with its extension, rounds, and whether it is on for you, the extension skills and named stages, and `setup_required` when this machine's role and skill files no longer match.
+
+## Before the agent reports an implementation
+
+Where an extension applies to implementing in a worktree, `worktree prepare` returns the two `extension hooks --stage implement` commands as `next`. The agent runs the first before the first change and the second after the last commit, and does not report the implementation until it has run the second and read each instruction file and override it returned. An allowed override is carried out as described above and its result goes in the report. Anything an instruction asks that needs a person, such as a push, a pull request, or a merge, is not done: the report names it as waiting on them.

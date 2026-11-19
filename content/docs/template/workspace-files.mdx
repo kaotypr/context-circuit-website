@@ -23,6 +23,14 @@ Intent and plan files preserve the approved outcome and implementation approach.
 
 ## Resolve local state
 
-`repositories.local.yaml` binds logical IDs to checkout paths and base branches. `member.local.yaml` selects the active member on this machine; changing requests wait until one is selected. Native role files, worktree associations, locks, and ignored runtime files belong to the machine.
+`repositories.local.yaml` binds logical IDs to checkout paths and base branches. `member.local.yaml` selects the active member on this machine; changing requests wait until one is selected. Native role files, worktree associations, locks, the cache of fetched extensions under `.context-circuit/local/extensions/`, the extension trust file, and ignored runtime files belong to the machine.
+
+## List the extensions you use
+
+`extensions.yaml`, beside `workspace.yaml`, lists the [extensions](/docs/template/extensions) this workspace uses, in the order their hooks run, with each one's source, repository scope, settings, and member switches. A workspace without extensions has no such file. It is the workspace's own data: a template update never creates or changes it.
+
+An override a person allowed is recorded in it, under the extension's entry, so it is shared; the roles and skills an extension adds are not, and live as gitignored `cc-x-*` and `x-*` files that each machine regenerates with `agent setup` after an extension change.
+
+Which extension scripts may run is not in it. That is `.context-circuit/local/extension-trust.yaml`, ignored by Git, where `extension allow` records each exact version a member allowed on this machine. Another member, or another machine, allows separately, and any change to an extension's version asks again.
 
 Use the [configuration reference](/docs/reference/workspace-files) for file-level ownership and [record reference](/docs/reference/records) for frontmatter fields.
