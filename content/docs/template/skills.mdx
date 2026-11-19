@@ -3,15 +3,15 @@ title: "Skills"
 description: "Load the procedure needed for the current stage without expanding authorization."
 tracks: [template]
 versions:
-  template: 2.5.0
+  template: 2.6.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.5.0
+    ref: v2.6.0
     path: AGENTS.md
   - track: template
     repository: context-circuit
-    ref: v2.5.0
+    ref: v2.6.0
     path: .agents/skills/cc-dispatch/SKILL.md
 ---
 
@@ -29,7 +29,7 @@ sources:
 
 ## Skills and native roles differ
 
-A skill is a procedure read by an agent. A native role definition is a host-local configuration for a subagent. `agent setup` creates ignored role files for the supported hosts; it does not execute a skill or launch a worker.
+A skill is a procedure read by an agent. A native role definition is a host-local configuration for a subagent. `agent setup` creates ignored role files for the supported hosts; it does not execute a skill or launch a worker. It also installs the roles and skills of extensions that are on for you, as `cc-x-<extension>-<role>` and `x-<extension>-<skill>`; the `x-` prefix keeps them apart from the shipped ones, and a template update never touches them. See [Extensions](/docs/template/extensions#roles).
 
 ## What changed in 2.4.0–2.5.0
 
