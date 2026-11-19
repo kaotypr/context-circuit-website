@@ -3,17 +3,19 @@ title: "Workspace files"
 description: "Readable records separate project facts from this machine\u2019s working state."
 tracks: [template]
 versions:
-  template: 2.5.0
+  template: 2.6.0
 sources:
   - track: template
     repository: context-circuit
-    ref: v2.5.0
+    ref: v2.6.0
     path: .context-circuit/docs/workspace.md
 ---
 
 ## Start with identity
 
 `workspace.yaml` describes the project, implementation repositories, relationships, workspace repository, and any borrowed knowledge. `members.yaml` describes the shared roster: every member's display name, allocation band, record language and tone, and optional informational roles. Every workspace lists at least one member, and a person working alone is a team of one.
+
+A tone is the register a member's records are written in, and it covers the conversation around a record as well as the record. It is one line: one of the four presets, `colleague`, `casual`, `formal`, and `non-technical`, or a line of the team's own. A member with no tone is written for as `colleague`. The [workspace files reference](/docs/reference/workspace-files#tone-presets) lists the line each preset records.
 
 ## Keep the work traceable
 
