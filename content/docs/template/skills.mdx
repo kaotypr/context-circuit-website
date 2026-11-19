@@ -24,8 +24,10 @@ sources:
 | Outcome and plan | `cc-intent`, `cc-plan` |
 | Execution | `cc-worktree`, `cc-dispatch`, `cc-stacked` |
 | Requested review | `cc-review` |
-| Delivery and closure | `cc-deliver`, `cc-complete` |
+| Delivery and closure | `cc-deliver`, `cc-complete`, `ff` |
 | Explicit direct work | `cc-direct` |
+
+`ff` is the one shipped skill without the `cc-` prefix, on purpose: it is a command a person types, `/ff`, so the short name is the point. It fast-forwards this machine's base branches to their remotes, and it only moves a branch that can move cleanly. When a person says their merge request merged, the agent makes one offer in a single reply: sync the delivered repositories and mark the delivered plans completed. Nothing happens until the person answers, and one yes covers both. Saying "merged" completes nothing by itself.
 
 ## Skills and native roles differ
 

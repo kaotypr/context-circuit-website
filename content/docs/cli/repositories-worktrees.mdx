@@ -26,6 +26,8 @@ sh .context-circuit/cli worktree prepare --repo api --plan p0001 --copy-mode aut
 
 Use actual returned IDs. A dependent plan in the same repository requires an explicit `--start`; the refusal identifies the predecessor. An explicit start is honored. No implicit fetch occurs. The result reports `start`, what the worktree actually started from, beside `base_branch`, this machine's delivery target. A local start branch behind or diverged from its fetched remote is still used, and `sync_required` gives the counts, the remedy (`--start origin/<branch>`, or update the local branch first), and that `repo fetch` refreshes the remote ref.
 
+To close a stale start, run `repo sync`: it fast-forwards a repository's base branch to its remote without touching anything else, and reports `blocked`, `diverged`, or `checked-out-elsewhere` rather than forcing it. Then prepare the worktree again.
+
 ## Understand reuse
 
 Preparing again for the same plan resumes its worktree. Without `--reuse`, a worktree or branch left from an earlier plan that held the same number is refused, and the refusal names how to remove it. A plan branch already checked out in another working copy is refused with where it is and the safe next steps. `--reuse` selects an existing branch or association without resetting it. `--copy-mode` accepts `auto`, `required`, `copy`, or `off`. Ignored dependencies are skipped when tracked setup inputs differ; existing destination files are preserved.

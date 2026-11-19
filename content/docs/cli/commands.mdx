@@ -34,6 +34,8 @@ A member may carry free-text roles, set with `member add --role`, `init --member
 
 New plans use folders with `plan.md`; `record order --plan ID` selects an exact run. `record approve` returns `planning_recommended`, and approval, completion, and archiving return `commit_recommended` for the records and ID files they left uncommitted. `record delete --member ID` previews one member's records, `--id ID` (repeatable) previews exactly the named records or a reservation no record holds, and `--all` previews every record only while the roster lists exactly one member. Nothing is deleted until the requested preview is confirmed with `--confirm`; a refusal still shows the preview.
 
+`repo sync` and `workspace sync` fast-forward base branches to their remotes, beside `repo fetch` and `knowledge sync`. `repo sync` covers every bound repository, or only those named with repeatable `--id`; `workspace sync` covers the workspace's own repository. Each repository reports one status: `updated`, `current`, `ahead`, `diverged`, `blocked`, `checked-out-elsewhere`, `dirty` (workspace only), `no-upstream`, `unreachable`, or `unbound`. Only `updated` moves anything, and only the base branch, by fast-forward; a report other than `updated` or `current` names the next step and is not a failure, so one repository never hides another. `workspace sync` refuses to fetch while the workspace has any change, and when it moves the workspace it recommends running `check`. Both exit 1 only for a usage error.
+
 It does not call a model, execute a plan, run application setup, commit, push, merge, deploy, or start an independent review.
 
 Read the [command reference](/docs/reference/cli-commands) for each group and concrete examples.
