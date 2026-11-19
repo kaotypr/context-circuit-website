@@ -13,6 +13,10 @@ sources:
     repository: context-circuit
     ref: v2.6.0
     path: .agents/skills/cc-dispatch/SKILL.md
+  - track: template
+    repository: context-circuit
+    ref: v2.6.0
+    path: .agents/skills/ff/SKILL.md
 ---
 
 ## Skill families
@@ -24,14 +28,20 @@ sources:
 | Outcome and plan | `cc-intent`, `cc-plan` |
 | Execution | `cc-worktree`, `cc-dispatch`, `cc-stacked` |
 | Requested review | `cc-review` |
-| Delivery and closure | `cc-deliver`, `cc-complete` |
+| Delivery and closure | `cc-deliver`, `cc-complete`, `ff` |
 | Explicit direct work | `cc-direct` |
+
+`ff` is the one shipped skill without the `cc-` prefix, on purpose: it is a command a person types, `/ff`. It runs `repo sync` then `workspace sync`, or only what is named: `/ff api web` syncs those repositories and `/ff workspace` only the workspace. The workspace is skipped, with the uncommitted paths listed, when it holds any uncommitted file, and the code repositories are still synced. The agent reports one row per repository: what moved, and what it left alone and why. In Codex, ask in words instead of typing `/ff`.
+
+When a person says their merge request merged, they have not asked for anything yet. The agent offers, in one reply, to sync the delivered repositories' base branches and to mark the delivered plans completed. One yes covers both, and a yes to only one does only that one. Saying "merged" changes nothing by itself.
 
 ## Skills and native roles differ
 
 A skill is a procedure read by an agent. A native role definition is a host-local configuration for a subagent. `agent setup` creates ignored role files for the supported hosts; it does not execute a skill or launch a worker. It also installs the roles and skills of extensions that are on for you, as `cc-x-<extension>-<role>` and `x-<extension>-<skill>`; the `x-` prefix keeps them apart from the shipped ones, and a template update never touches them. See [Extensions](/docs/template/extensions#roles).
 
-## What changed in 2.4.0–2.5.0
+## What changed in 2.4.0–2.6.0
+
+- 2.6.0 adds `ff`, with `/ff` to fast-forward this machine's base branches through `repo sync` and `workspace sync`, and a single offer to sync and complete the delivered plans once a person says their merge request merged.
 
 - `cc-cli` installs within the workspace's own release line, explains a release-candidate pin such as `2.5.0-rc.1`, and names the `<label>-context-circuit-cli` command a variant installs.
 - `cc-workspace` asks for a band, suggesting band 1, and optional roles for every member it adds, and completes the setup gate before carrying on.
